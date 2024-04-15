@@ -5,7 +5,7 @@ import SupportIcon from "../../asserts/menu-icons/filter-search.png";
 import { EyeSlash } from "@styled-icons/bootstrap/EyeSlash";
 import { Star } from "@styled-icons/boxicons-solid/Star";
 import { StarOutline } from "@styled-icons/material/StarOutline";
-import CommonFooter from "../../components/commonelement/CommonFooter";
+import CommonFooter from "../../components/common-element/CommonFooter";
 import Web3 from 'web3';
 import contract from '../../contracts/contract.json';
 import config from '../../config/config.json';

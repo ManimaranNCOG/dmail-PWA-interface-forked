@@ -18,12 +18,11 @@ const TwitterOutlineIcon = styled(TwitterOutline)`${iconStyles}`;
 
 
 
-function InitialFoot() {
+function InitialFooter() {
     
     return (        
             <>         
                 <div className='initial-footer-comp-element'>
-
                     <span> © Web3 mail All Rights Reserved. </span>
                     <span> English </span>
                     <span> Privacy Policy </span>
@@ -39,4 +38,4 @@ function InitialFoot() {
     );
 }
 
-export default InitialFoot;
+export default InitialFooter;

@@ -8,7 +8,7 @@ import Web3 from 'web3';
 import contract  from '../../contracts/contract.json';
 import config  from '../../config/config.json';
 import { ConnectWallet} from "../modal-popup/CommonAlert";
-import { web3Constant } from "../../constant/consant";
+import { web3Constant } from "../../constant/constant";
 
 const iconStyles = `
 color: #0D67FE;

@@ -1,7 +1,7 @@
 import React, { useState , useEffect } from 'react';
 import { Outlet } from "react-router-dom";
 import Sidebar from "../sidebar/Sidebar";
-import InitialFoot from "../commonelement/InitialFoot";
+import InitialFooter from "../common-element/InitialFooter";
 import Profile from '../../pages/profile-section/Profile';
 import styled from "styled-components";
 import { Menu } from "@styled-icons/entypo/Menu";
@@ -66,7 +66,7 @@ const AppLayout = () => {
                 }
                 {/* <Sidebar className={false} /> */}
                 <Outlet />
-                {!isButtonRender && <InitialFoot /> }                
+                {!isButtonRender && <InitialFooter /> }                
             </div>
             );
     }
