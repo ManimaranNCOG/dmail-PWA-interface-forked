@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+::selection{
+  background: #4158d0;
+  color: #fff;
+}
+.wrapper {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0px 15px 20px rgba(0,0,0,0.1);
+    width: 656.08px;
+    height: 500px;
+    margin: 0 auto;
+}
+.wrapper .title{
+  font-size: 35px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 65px;
+  user-select: none;
+  border-radius: 15px 15px 0 0;
+}
+.wrapper form{
+    padding: 10px 130px 50px 130px;
+}
+.wrapper form .field{
+  height: 50px;
+  width: 100%;
+  margin-top: 30px;
+  position: relative;
+}
+.wrapper form .field input{
+  height: 100%;
+  width: 100%;
+  outline: none;
+  font-size: 17px;
+  padding-left: 20px;
+  border: 1px solid lightgrey;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+.wrapper form .field input:focus,
+form .field input:valid{
+  border-color: #4158d0;
+}
+.wrapper form .field label{
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  color: #999999;
+  font-weight: 400;
+  font-size: 17px;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+}
+form .field input:focus ~ label,
+form .field input:valid ~ label{
+  top: 0%;
+  font-size: 16px;
+  color: #4158d0;
+  background: #fff;
+  transform: translateY(-50%);
+}
+form .content{
+  display: flex;
+  width: 100%;
+  height: 50px;
+  font-size: 16px;
+  align-items: center;
+  justify-content: space-around;
+}
+form .content .checkbox{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+form .content input{
+  width: 15px;
+  height: 15px;
+  background: red;
+}
+form .content label{
+  color: #262626;
+  user-select: none;
+  padding-left: 5px;
+}
+form .content .pass-link{
+  color: "";
+}
+form .field input[type="submit"]{
+  color: #fff;
+  border: none;
+  padding-left: 0;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  background: #0D67FE;
+  transition: all 0.3s ease;
+}
+form .field input[type="submit"]:active{
+  transform: scale(0.95);
+}
+form .signup-link {
+  color: #262626;
+  margin-top: 50px;
+  text-align: center;
+}
+form .pass-link a,
+form .signup-link a{
+  color: #4158d0;
+  text-decoration: none;
+}
+form .pass-link a:hover,
+form .signup-link a:hover{
+  text-decoration: underline;
+}
+
+.field.submit-btn-form {
+    margin-bottom: 30px;
+}
+
+.connect-wallet-btn {
+    color: #0D67FE;
+    border: 1px solid #0D67FE;
+    margin-top: 20px;
+    width: 100%;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    cursor : pointer;
+    gap: 10px;
+}
+
+.action-btn-form-signin button {
+    background: transparent;
+    border-radius: 15px;
+    border: 1px solid #0D67FE;
+}
+
+.action-btn-form-signin {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 20px 0px;
+    height: 6rem;
+    grid-gap: 20px;
+}
+
+.Login-wallet-btn {
+    color: #fff;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    background: #0D67FE;
+    transition: all 0.3s ease;
+    height: 50px;
+    outline: none;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.btn-ring:after {
+	content: "";
+	display: block;
+	width: 25px;
+	height: 25px;
+	margin: 8px;
+	border-radius: 50%;
+	border: 3px solid #fff;
+	border-color: #fff transparent #fff transparent;
+	animation: ring 1.2s linear infinite;
+	margin: -3px 0 0 0;
+  }
+  @keyframes ring {
+	0% {
+	  transform: rotate(0deg);
+	}
+	100% {
+	  transform: rotate(360deg);
+	}
+  }
+
+
+  .field.submit-btn-form button {
+    color: #fff;
+    border: none;
+    padding-left: 0;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    background: #0D67FE;
+    transition: all 0.3s ease;
+    height: 100%;
+    width: 100%;
+    outline: none;
+    font-size: 17px;
+    border: 1px solid lightgrey;
+    border-radius: 15px;
+}
+
+span.btn-ring {
+    display: flex;
+    justify-content: center;
+    /* background: wheat; */
+}
+
+.title.login-value {
+    padding-top: 30px;
+}
+
+.initial-footer-comp-element {
+  display: grid;
+  grid-template-columns: 1.5fr 0.5fr 0.8fr 0.5fr 0.3fr 0.3fr 0.3fr 0.3fr 0.3fr 0.3fr;
+  grid-gap: 20px;
+  padding: 40px 90px 90px 90px;
+}
+
+
+.initial-footer-comp-element span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.signup-link.sign-in-link-ele {
+  margin-top: 30px;
+}
+
+span.error-value {
+  position: absolute;
+  padding-top: 30px;
+  color: red;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: normal;
+  overflow-wrap: break-word;
+  text-align: inherit;
+  color: rgb(215, 40, 40);
+  font-weight: 380;
+  font-family: "Sans Text", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  text-rendering: optimizelegibility;
+  -webkit-font-smoothing: antialiased;
+  font-size: 13px;
+  line-height: 130%;
+  letter-spacing: 0em;
+}
+
+.error-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.connect-wallet-btn.wallet {
+  border: 1px solid rgb(215, 40, 40);
+  color: rgb(215, 40, 40);
+}
+
+.connect-wallet-btn.wallet svg {
+  color: rgb(215, 40, 40) !important;
+}
+
+form .field.user input~ label, form .field.user input {
+  border-color: rgb(215, 40, 40);
+  color: rgb(215, 40, 40);
+}
+
+

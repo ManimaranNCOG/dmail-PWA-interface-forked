@@ -1,0 +1,258 @@
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 0px;
+    background-color: #27295D;
+    transition: width 0.5s ease;
+}
+
+.sidebar__logo {
+    place-items: center;
+    height: 120px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: 'Mochiy Pop P one', sans-serif;
+    padding: 50px   ;
+    color: white;
+}
+
+.sidebar__menu {
+    position: relative;
+    max-height: 25rem;
+    overflow-y: auto;
+    height: 30rem;
+    padding-top: 20px;
+    user-select: none;
+}
+
+.sidebar__menu__item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 1.02rem;
+    font-weight: 500;
+    color: #555555;
+    transition: color 0.3s ease-in-out;
+    cursor: pointer;
+    height: 50px;
+    padding-left: 40px;
+}
+
+.sidebar__menu__item.active {
+    color: #fff;
+}
+
+.sidebar__menu__item__icon {
+    margin-right: 1rem;
+}
+
+.sidebar__menu__item__icon i {
+    font-size: 1.75rem;
+}
+
+.sidebar__menu__indicator {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: calc(100% - 40px);
+    border-radius: 10px;
+    background-color: #d3e3f8;
+    z-index: -1;
+    transform: translateX(-50%);
+    transition: 0.3s ease-in-out;
+}
+
+span.email-span-sidebar {
+    color: #0086ff;
+}
+.sidebar__menu__item__text {
+    color: white;
+}   
+
+.child {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px;
+}
+
+.child.keys-sidebar {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+}
+
+/* .chil-div-sidbar {
+    padding-left: 90px;
+} */
+
+span.custom-btn-add-fav {
+    color: #0086ff;
+    font-style: normal;
+}
+
+.child.keys-sidebar span {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.child.keys-sidebar {
+    padding-left: 90px;
+}
+
+.parent-hover-key-div .child.keys-sidebar {
+    padding-left: 40px;
+    padding-top: 8px;
+}
+
+.parent-hover-key-div {
+    height: 50px;
+    background: #d3e3f8;
+    width: 230px;
+    margin-left: 50px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.default-text-sidebar-key {
+    color: white;
+}
+
+.compose-email-btn {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.compose-email-btn button {
+    width: 230px;
+    height: 54.37px;
+    background: #56587f;
+    border: 1px solid #56587f;
+    box-shadow: 0px 0px 34px rgba(0, 0, 0, 0.08);
+    border-radius: 27.184px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button span.compose {
+    color: white;
+    opacity: 100%;
+    padding-left: 10px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.sidebar-logout-section {
+    display: flex;
+    justify-content: center;
+}
+
+.sidebar-logout-section button {
+    width: 135.28px;
+    height: 37.46px;
+    /* left: 49.56px; */
+    top: 969.72px;
+    background: #595b82;
+    /* opacity: 44%; */
+    box-shadow: 0px 0px 34px rgba(0, 0, 0, 0.08);
+    border-radius: 27.184px;
+    color: #ffffff;
+    outline: none;
+    border: none;
+    cursor : pointer;
+}
+
+.sidebar__menu__item.parent-hover-key-div {
+    padding: 0;
+    margin-bottom: 0;
+}
+
+.sidebar__menu__item.parent-hover-key-div .sidebar__menu__item__text {
+    color: #686c70;
+}
+
+/* CSS for sidebar collapse transition */
+.sidebar-expanded {
+    display: block;
+    transition: width 0.5s ease; /* Adjust duration and timing function as needed */
+    width : 320px
+  }
+  /* Adjust other styles as needed */
+  
+  .user-name-profile-name {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #cdc0c0;
+  }
+
+
+.parent-hover-key-div.child-value-render {
+    margin-bottom: 8px;
+    height: 45px;
+}
+
+.default-text-sidebar-key .child.keys-sidebar {
+    padding-bottom: 12px;
+}
+
+
+.sidebar.sidebar-unexpanded {
+    z-index: 2;
+}
+
+.sidebar.sidebar-expanded {
+    animation: mymove 0.5s ;
+}
+
+@keyframes mymove {
+     to{left: 0px;}
+     from {left: -400px;}
+}
+
+.sidebar.sidebar-unexpanded {
+    animation: mymmove 1s ;
+}
+
+@keyframes mymmove {
+    from{left: 0px;}
+     to {left: -400px;}
+}
+
+
+.chil-div-sidbar {
+    position: relative;
+    top: 0;
+  }
+  
+  .chil-div-sidbar.active {
+    animation: dropmove 0.3s;
+  }
+  
+  @keyframes dropmove {
+    from {
+      top: -10px;
+    }
+    to {
+      top: 0;
+    }
+  }
+
+  svg.sv-fb-loader {
+    padding-left: 50px;
+}
+
+.no-menu-top-header.absolute {
+    position: absolute;
+    top: 0px;
+    left: 0;
+}
+
+button.open-btn-menu-home.absolute {
+    background: transparent;
+    display: flex;
+}

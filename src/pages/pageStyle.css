@@ -1,0 +1,214 @@
+.search {
+    width: 100%;
+    position: relative;
+    display: flex;
+  }
+  
+  .searchTerm {
+    width: 100%;
+    border: 1px solid #d9d9d9;
+    border-right: none;
+    padding: 5px 5px 5px 35px;
+    height: 50px;
+    border-radius: 25px;
+    outline: none;
+    background: #eff5fd;
+}
+  
+  
+  .searchButton {
+    width: 40px;
+    height: 30px;
+    border: none;
+    background: transparent;
+    text-align: center;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-size: 20px;
+    position: absolute;
+    top: 10px;
+}
+
+.header-inbox-common {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+button.search-filter-btn {
+    background: transparent;
+    border: none;
+    position: absolute;
+    right: 30px;
+    height: 10px;
+    top: 15px;
+}
+
+.header-inbox-div button {
+    background: transparent;
+    border: none;
+}
+
+button.search-filter-btn img.profile-drop-img {
+    height: 20px;
+}
+
+.container-inbox-section {
+    margin-top: 30px;
+}
+
+.header-inbox-div {
+    display: grid;
+    grid-template-columns: 0.3fr 2fr 0.3fr;
+    height: 50px;
+    background: white;
+    align-items: center;
+    border-radius: 10px 10px 0 0;
+}
+
+button.action-inbox-btn-specific {
+    padding-left: 50px;
+    cursor: pointer;
+}
+
+.msg-row-inbox {
+    display: grid;
+    grid-template-columns: 0.1fr 0.2fr 0.4fr 1fr 0.3fr 0.1fr;
+    height: 50px;
+    padding: 15px 0 35px 5px;
+    border-bottom: 0.1px solid #e8dede;
+    align-items: center;
+    justify-content: center;
+    border-left: 10px solid #ffffff;
+}
+
+.msg-row-inbox.starred-msg {
+    color: black;
+    font-weight: 600;
+    background: #E7F1FC;
+    border-left: 10px solid #030382;
+}
+
+.btn-inbox , .check-box {
+    padding-left: 15px;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 10px;
+}
+ 
+::-webkit-scrollbar-track {
+    background-color: #ffffff   ;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: #c4c4c4; 
+}
+
+.inbox-msg-check.messages-web {
+    border-bottom: 1px solid #e8dede;
+    background: white;
+    overflow: auto;
+    overflow-y: scroll;
+    max-height: 70vh;
+    max-height: calc(75vh - 30px);
+}
+
+button.common-compose-footer-btn {
+    position: absolute;
+    right: 50px;
+    top: 60vh;
+    height: 50px;
+    width: 175px;
+    border-radius: 28px;
+    border: none;
+    background: #0086ff;
+    color: white;
+    box-shadow: 0 8px 16px 0 rgba(0, 134, 255, 0.5), 0 6px 20px 0 rgb(185 218 247 / 50%);
+    cursor : pointer;
+}
+
+.ant-modal.modal-send-email-header {
+    width: 90% !important; /* Adjust the percentage as needed */
+    max-width: 920px; /* Set a maximum width if necessary */
+    margin: 0 auto; /* Center horizontally */
+    margin-left: 30rem; /* Add a margin on the left if required */
+}
+
+.box-elememt {
+    border: 1px solid;
+    width: 70px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+}
+
+.to-element {
+    display: flex;
+}
+.to-element input {
+    border: none;
+    border-bottom: 1px solid #bbbbbb;
+    width: 40rem;
+    padding-left: 5px;
+    margin-left: 10px;
+    outline : none
+}
+
+.to-element .cc, .to-element .bcc {
+    color: #4b7dc0;
+    padding-left: 15px;
+}
+
+input.input-class-common {
+    border: none;
+    border-bottom: 1px solid #bbbbbb;
+    width: 50rem;
+    padding-left: 5px;
+    margin-left: 10px;
+    padding-top: 30px;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+    outline: none;
+}
+
+button.send-btn-mail {
+    height: 50px;
+    width: 175px;
+    border-radius: 28px;
+    border: none;
+    background: #0086ff;
+    color: white;
+    box-shadow: 0 8px 16px 0 rgba(0, 134, 255, 0.5), 0 6px 20px 0 rgb(185 218 247 / 50%);
+    cursor: pointer;
+}
+
+.common-footer-ele.btn-footer-email-compose {
+    display: flex;
+    justify-content: right;
+    margin: 30px 0 15px 0;
+}
+
+.ql-editor {
+    height: 12rem !important;
+}
+
+button.open-btn-menu-home {
+    height: 2rem;
+    width: 8rem;
+    border-radius: 10px;
+    border: none;
+    /* position: absolute; */
+    top: 10px;
+}
+
+.common-footer-ele {
+    position: relative;
+}

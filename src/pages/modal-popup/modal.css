@@ -1,0 +1,82 @@
+
+.modal-wrap-button {
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.button-submit-modal {
+  width:140px;
+  height:45px;
+  font-family:'Roboto',sans-serif;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:2.5px;
+  font-weight:500;
+  color:#000;
+  background-color:#fff;
+  border:none;
+  border-radius:45px;
+  box-shadow:0px 8px 15px rgba(0,0,0,0.1);
+  transition:all 0.3s ease 0s;
+  cursor:pointer;
+  outline:none;
+  margin-top:30px;
+}
+.button-submit-modal:hover {
+  background-color:#0D67FE;
+  box-shadow:0px 15px 20px rgba(46,229,157,0.4);
+  color:#fff;
+  transform:translateY(-7px);
+}
+.ant-modal.css-dev-only-do-not-override-djtmh8.modal-alert-header.connect-wallet-account {
+  margin-top:10% !important;
+}
+.label-title-metamask {
+  text-align: start !important;
+  color: rgb(0, 0, 0);
+  font-weight: 500;
+  font-size: 17px;
+}
+
+button.wallet-connect-btn {
+  position: relative;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.08);
+  height: 35px;
+  padding: 0px 16px;
+  border-radius: 14px;
+  color: rgb(0, 0, 0);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.send-alert-body-content div {
+  text-align: center;
+  padding: 10px;
+}
+
+span.metamask-icon svg {
+  height: 20px;
+  width: 20px;
+}
+
+span.metamask-icon {
+  padding-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button.wallet-connect-btn.Connecting.MetaMask {
+  opacity: 50%;
+}
