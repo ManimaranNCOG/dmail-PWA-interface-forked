@@ -83,19 +83,9 @@ const ConnectWallet =(params) => {
 
 const SendEmailLoader =(params) => {
 
-    
-    if(params.isOpen){
-        const modalParentDiv = document.querySelector('.with-sidebar-comp');        
-        if (modalParentDiv) modalParentDiv.classList.add('SendEmailLoader');  
-        // const modalMask = document.querySelector('.ant-modal-mask');
-        // if (modalMask) modalMask.classList.add('SendEmailLoader');
-        
-    
-    }
-
     return (
         <div>
-            <Modal className="modal-alert-header connect-wallet-account email-loader-send" open={true}  closable={false} footer={null} >
+            <Modal className="modal-alert-header connect-wallet-account email-loader-send" open={params.isOpen}  closable={false} footer={null} >
                 <div className='send-alert-body-content connect-wallet-account-div send-email'>
                     <div className='label-title-metamask email-send-div'> 
 
@@ -106,15 +96,10 @@ const SendEmailLoader =(params) => {
 
                     {params.msg != "Message Sent" && 
                         <div class="loader-value"></div>
-                        // <div class="chain-img-loader">
-                        //     {/* <div class="spinner"></div> */}
-                        // </div>                   
-                    
                     }
 
                     { params.msg === "Message Sent" &&
-                        <VerifiedIcon/>
-                        
+                        <VerifiedIcon/>                        
                     }
                     
                      </div>
