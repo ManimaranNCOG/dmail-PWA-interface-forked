@@ -95,7 +95,7 @@ const SendEmailLoader =(params) => {
 
     return (
         <div>
-            <Modal className="modal-alert-header connect-wallet-account email-loader-send" open={params.isOpen}  closable={false} footer={null} >
+            <Modal className="modal-alert-header connect-wallet-account email-loader-send" open={true}  closable={false} footer={null} >
                 <div className='send-alert-body-content connect-wallet-account-div send-email'>
                     <div className='label-title-metamask email-send-div'> 
 
@@ -105,8 +105,7 @@ const SendEmailLoader =(params) => {
                     
 
                     {params.msg != "Message Sent" && 
-                            <img className="profile-drop-imgchain" src={chain} />
-
+                        <div class="loader-value"></div>
                         // <div class="chain-img-loader">
                         //     {/* <div class="spinner"></div> */}
                         // </div>                   
