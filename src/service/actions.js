@@ -1,8 +1,8 @@
 // apiActions.js
 import axios from 'axios';
 import {commonHeaders} from './commonHeader';
-const BASE_URL = 'https://dev-api.bmail.earth';
-
+import config  from '../config/config.json';
+const BASE_URL = config.json.EMAIL_API;
 
 commonHeaders();
 

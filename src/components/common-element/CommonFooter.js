@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Compose } from "@styled-icons/fluentui-system-regular/Compose";
 import { Button, Modal } from 'antd';
 import 'react-quill/dist/quill.snow.css';
-import MessageSend from "../../pages/messages/MessageSend.js";
+import SendEmail from "../../pages/messages/SendEmail.js";
 const iconStyles = `color: #ffffff; width: 20px; height: 20px;`;
 const ComposeIcon = styled(Compose)`${iconStyles}`;
 
@@ -44,7 +44,7 @@ function CommonFooter() {
 
                 <Modal className="modal-send-email-header" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} >
                         <div className='send-email-body-content'>
-                              <MessageSend placeholder="Write something..." handleCancel={handleCancel} reRenderIt={reload} />
+                              <SendEmail placeholder="Write something..." handleCancel={handleCancel} reRenderIt={reload} />
                         </div>             
                 </Modal>
             </>

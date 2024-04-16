@@ -1,8 +1,9 @@
 {
     "json" : {
-        "CONTRACT" : "-" ,
-        "NETWORK_ID" : "-" , 
-        "KEY" : "-",
-        "DEFAULT_SENDER" : "-" 
+        "CONTRACT" : "0x45b6a91F49e5A6AC2C250Bc4d566c3822358302d" ,
+        "NETWORK_ID" : "https://api-test.ncogchain.earth/" , 
+        "KEY" : "0x4293301d9507888d97fc4eedbd56c2179c34dc13fa858c67f3cdd5eb2be86458",
+        "DEFAULT_SENDER" : "0xE3F9f135e39d15f221490e8427b916aae9B12739",
+        "EMAIL_API" : "http://localhost:3020"
     }
 }
