@@ -22,7 +22,13 @@ const iconStyles = `
   height: 30px;
 `;
 
-const MenuIcon = styled(Menu)`${iconStyles}`;
+const menuIconStyles = `
+  color: #4a88c5;
+  width: 30px;
+  height: 35px;
+`;
+
+const MenuIcon = styled(Menu)`${menuIconStyles}`;
 const ArrowDropDownIcon = styled(ArrowDropDown)`${iconStyles}`;
 const InboxIcon = styled(Inbox)`${iconStyles}`;
 const SendIcon = styled(Send)`${iconStyles}`;
@@ -136,11 +142,11 @@ const Sidebar = (props) => {
   return (
     <div className={props.className ? 'sidebar sidebar-expanded' : 'sidebar sidebar-unexpanded'} style={{ transition: 'width 0.5s ease' }} >
       <div style={{ display: props.className ? 'block' : 'none' }} >
-      <div className="sidebar__logo" onClick={()=> {
+      <div className="sidebar__logo">
+          <MenuIcon className="hamburgur-icon" onClick={()=> {
         const updateEvent = new CustomEvent('isMenuClicked', { detail: { data: true} });
         window.dispatchEvent(updateEvent);
-      }}>
-          <MenuIcon className="hamburgur-icon" /> <span className="web-3-tag-sidebar"> Web3 </span>  <span className="email-span-sidebar"> Emails </span>
+      }}  /> <span className="web-3-tag-sidebar"> B </span>  <span className="email-span-sidebar"> Mails </span>
       </div>
 
       <div className="compose-email-btn">
