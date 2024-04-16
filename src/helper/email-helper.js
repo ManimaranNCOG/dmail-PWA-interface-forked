@@ -63,12 +63,14 @@ export const sendEmailOnSameChain = async (emailObject, encryptedMessage, accoun
             sender: userName
         };
         await window.ethereum.request({ method: 'eth_sendTransaction', params: [transactionParameters] });
+        props(true)
         await sendEmailOnSame(requestObject);
     } else {
         const contractMethodsData = new web3.eth.Contract(contract.storageContract, contactAddressFromName);
         transactionParameters.data = contractMethodsData.methods.sendEmailRequest(emailObject.recipient, emailObject.subject, encryptedMessage, accounts[0], currentDate.toLocaleDateString(), userName).encodeABI();
 
         await window.ethereum.request({ method: 'eth_sendTransaction', params: [transactionParameters] });
+        props(true)
         const requestObjectValue = {
             contractAddressValue: contactAddressFromName,
             senderAddress: accounts[0],
@@ -79,9 +81,6 @@ export const sendEmailOnSameChain = async (emailObject, encryptedMessage, accoun
         };
         await saveEmailForDifferentHost(requestObjectValue);
     }
-    props.reRenderIt();
-    props.handleCancel();
-    localStorage.setItem("sendingEmail", "");
     return true;
 }
 
@@ -103,6 +102,7 @@ export const sendEmailOnDifferentChain = async (emailObject, encryptedMessage, a
   
     try {
       await window.ethereum.request({ method: 'eth_sendTransaction', params: [transactionParameters] });
+      props(true)
       
     } catch (error) {
       console.log(error);
@@ -132,9 +132,7 @@ export const sendEmailOnDifferentChain = async (emailObject, encryptedMessage, a
       poolContract: poolContractAddress
     };
   
-    saveEmailOnPool(requestBody); // Saving Email on The pool contract
-    props.reRenderIt();
-
+    await saveEmailOnPool(requestBody); // Saving Email on The pool contract
     return true;
   };
   

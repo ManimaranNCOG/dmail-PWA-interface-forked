@@ -17,3 +17,11 @@ a {
     text-decoration: none;
     color: unset;
 }
+
+.with-sidebar-comp.SendEmailLoader {
+    opacity: 20%;
+}
+
+.ant-modal-mask {
+    backdrop-filter: blur(2.5px);
+}

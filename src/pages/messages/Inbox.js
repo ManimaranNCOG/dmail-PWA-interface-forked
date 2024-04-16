@@ -19,7 +19,6 @@ import db from '../../db/dbService.js';
 import { returnEmailRecords } from '../../db/dbHelper.js';
 import FbLoader from '../../components/loader/FbLoader.js';
 
-
 const cookies = new Cookies();
 
 const contractAddress = config.json.CONTRACT;
@@ -212,12 +211,15 @@ const Inbox = () => {
     if (message) {
       if (accounts.length) {
         if (!msg.isRead) {
-
           try {
             web3.eth.accounts.wallet.add(config.json.KEY);
-            contractMethods.methods.markEmailAsRead(userName, msg.id, token).send({ from: config.json.DEFAULT_SENDER, gas: '1000000', gasPrice: 1000000000 });
+            const estimatedGas = await contractMethods.methods.markEmailAsRead(userName, msg.id, token).estimateGas({ from: config.json.DEFAULT_SENDER });
+                
+            // Get current gas price
+            const gasPrice = await web3.eth.getGasPrice();
+            await contractMethods.methods.markEmailAsRead(userName, msg.id, token).send({ from: config.json.DEFAULT_SENDER, gas: parseInt(estimatedGas), gasPrice: parseInt(gasPrice) });
           } catch (error) {
-              console.log(error)
+              console.log(error);
           }
         }
       }
@@ -326,7 +328,6 @@ const Inbox = () => {
         </div>
 
       </div>
-
       < CommonFooter />
 
       <Modal className="modal-send-email-header" open={isModalOpen} onOk={handleOk} onCancel={handleOk} footer={null} >

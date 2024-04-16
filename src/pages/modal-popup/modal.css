@@ -80,3 +80,70 @@ span.metamask-icon {
 button.wallet-connect-btn.Connecting.MetaMask {
   opacity: 50%;
 }
+
+.loader {
+  display: ruby;
+}
+
+.spinner {
+  height: 5vh;
+  width: 5vh;
+  border: 6px solid rgba(0, 174, 239, 0.2);
+  border-top-color: rgba(0, 174, 239, 0.8);
+  border-radius: 100%;
+  animation: rotation 0.6s infinite linear 0.25s;
+
+  /* the opacity is used to lazyload the spinner, see animation delay */
+  /* this avoid the spinner to be displayed when visible for a very short period of time */
+  opacity: 0;
+}
+
+@keyframes rotation {
+  from {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(359deg);
+  }
+}
+
+.modal-alert-header.connect-wallet-account.email-loader-send .ant-modal-content {
+  background: transparent;
+  box-shadow: none;
+}
+
+.send-alert-body-content.connect-wallet-account-div.send-email .label-title-metamask {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+}
+
+.send-alert-body-content.send-email div {
+  margin-left: 10px
+}
+
+.label-title-metamask.email-send-div {
+  color: white;
+}
+
+.ant-modal-mask.SendEmailLoader {
+  background-color: rgb(201 198 198 / 45%);
+}
+
+.profile-drop-imgchain{
+  animation: key1 .3s ease infinite alternate;
+}
+
+
+@keyframes key1{
+  0% {transform: translateY(0px);}
+  100% {transform: translateY(-10px);}
+}
+
+img.profile-drop-imgchain {
+  height: 75px;
+  width: 75px;
+}

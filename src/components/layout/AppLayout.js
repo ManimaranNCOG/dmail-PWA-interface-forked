@@ -39,7 +39,7 @@ const AppLayout = () => {
 
     if(isModalOpen){
         return (    
-        <div style={{  padding: '25px 50px 0px 370px' ,transition: 'padding 0.5s ease 0s' }}>
+        <div className='with-sidebar-comp' style={{  padding: '25px 50px 0px 370px' ,transition: 'padding 0.5s ease 0s' }}>
             <Sidebar className={true}  />
             <Outlet />
         </div>
