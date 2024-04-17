@@ -144,8 +144,8 @@ button.wallet-connect-btn.Connecting.MetaMask {
 }
 
 img.profile-drop-imgchain {
-  height: 75px;
-  width: 75px;
+  height: 200px;
+  width: 200px;
 }
 
 /* HTML: <div class="loader"></div> */
@@ -177,4 +177,24 @@ img.profile-drop-imgchain {
 }
 @keyframes l16 { 
   100%{transform: rotate(1turn)}
+}
+
+img.profile-drop-lock-loader {
+  height: 250px;
+}
+
+.send-alert-body-content.connect-wallet-account-div.send-email .label-title-metamask.email-send-div , .send-alert-body-content.connect-wallet-account-div.send-email .img-key-lock {
+  padding: 0;
+  height: 110px;
+}
+
+
+.send-alert-body-content.connect-wallet-account-div.send-email .label-title-metamask.email-send-div.key , .send-alert-body-content.connect-wallet-account-div.send-email .img-key-lock.key {
+  padding: 0;
+  height: 70px;
+}
+
+img.profile-drop-imgchain.key {
+  height: 100px;
+  width: 100px;
 }

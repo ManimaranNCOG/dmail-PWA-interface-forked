@@ -41,12 +41,11 @@ const ComposeIcon = styled(Compose)`${iconStyles}`;
   useEffect(() => {
 
     async function fetchData(){
-
-            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
             try {
-                const settingsJson = await contractMethods.methods.getAccountSettings(userName , accounts[0]).call();
+                const settingsJson = await contractMethods.methods.getAccountSettings(userName , token).call();
                 setAccountSettings(JSON.parse(settingsJson));                    
             } catch (error) {
+                console.log("error" , error)
                 return true;
             }
     }
@@ -90,11 +89,10 @@ const ComposeIcon = styled(Compose)`${iconStyles}`;
 
     const data = await getEncryptedValue(msg,publicKey);
     const encryptedMessage = data.returnValu;
-
     web3.eth.accounts.wallet.add(hexPrivateKey);
     
     try {
-      contractMethods.methods.saveSentEmailRequest(userName, emailObject.recipient , emailObject.subject , encryptedMessage , token).send({ from: config.json.DEFAULT_SENDER , gas: '1000000',gasPrice:1000000000 });
+      await contractMethods.methods.saveSentEmailRequest(userName, emailObject.recipient , emailObject.subject , encryptedMessage , token).send({ from: config.json.DEFAULT_SENDER , gas: '1000000',gasPrice:1000000000 });
     } catch (error) {
       logout();
     }
@@ -106,7 +104,7 @@ const ComposeIcon = styled(Compose)`${iconStyles}`;
   async function sendEmail(emailObject){
 
     setManageState(true);
-    
+   
     const isSavedOn = accountSettings.find(item => item.id === 1)?.value;    
     const domain = await contractMethods.methods.constDomain().call();    
     const receiptDomain = emailObject.recipient.split("@")[1];  
