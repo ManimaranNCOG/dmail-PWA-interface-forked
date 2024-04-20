@@ -21,7 +21,7 @@ async function fetchAPI(endpoint, method, body) {
     }
 }
 export async function getEncryptedValue(msg, key) {
-    return await fetchAPI('getEncrypValue', 'POST', { msg, key });
+    return await fetchAPI('getEncryptValue', 'POST', { msg, key });
 }
 
 export async function login(username, connectedAddress, signature) {

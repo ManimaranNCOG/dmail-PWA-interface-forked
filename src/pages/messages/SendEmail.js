@@ -133,7 +133,7 @@ useEffect(() => {
     const publicKey = key.publicKey;
 
     const data = await getEncryptedValue(msg,publicKey);
-    const encryptedMessage = data.returnValu;
+    const encryptedMessage = data.returnValue;
 
     const transaction = await contract.methods.saveSentEmailRequest(userName, emailObject.recipient , emailObject.subject , encryptedMessage , token ).send({ from: account });
     const receipt = await web3.eth.getTransactionReceipt(transaction.transactionHash);              
@@ -182,7 +182,7 @@ useEffect(() => {
       const msg = JSON.stringify(emailObject);
       const data = await getEncryptedValue(msg,key);
       
-      const encryptedMessage = data.returnValu;
+      const encryptedMessage = data.returnValue;
 
       props.handleCancel();
 
