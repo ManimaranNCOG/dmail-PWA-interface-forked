@@ -1,7 +1,7 @@
 import React, { useState , useEffect} from 'react';
 import './settings.css'; // Import CSS file for styling
 import Web3 from 'web3';
-import contract  from '../../contracts/contract.json';
+import contractData  from '../../contracts/contract.json';
 import config  from '../../config/config.json';
 import styled from "styled-components";
 import { Tick } from "@styled-icons/typicons/Tick";
@@ -15,7 +15,7 @@ const iconStyles = `color: #ffffff; width: 20px; height: 20px;`;
 
 const ComposeIcon = styled(Tick)`
   ${iconStyles}
-`;
+`;  
 
 const accountSettings = [
     { label: "Save all sent emails", value: false  , id : 1},
@@ -30,29 +30,63 @@ const Settings = () => {
     const [buttonText, setButtonText] = useState('Save Settings');
     const [buttonClass, setButtonClass] = useState('');
     const [user] = useState(cookies.get("userObject"));
+    const [web3Value, setWeb3] = useState(null);
+    const [isConnected, setIsConnected] = useState(false);
+    const [account, setAccount] = useState('');
+    const [contract, setContract] = useState(null);
+
     const darkMode = useDarkMode(false);
 
-
     const networkId = config.json.NETWORK_ID;
-    const web3 = new Web3(networkId);
-    const contractMethods = new web3.eth.Contract(contract.storageContract, contractAddress);
+    const web3 = new Web3(window.ethereum);
     const userName = user && user.name; 
     const token = user && user.token;
+    
+    useEffect(() => {
+        // Check if MetaMask is installed
+        if (window.ethereum) {
+        const web3Instance = new Web3(window.ethereum);
+        setWeb3(web3Instance);
+
+        // Check if user is already connected
+        window.ethereum
+            .request({ method: 'eth_accounts' })
+            .then(accounts => {
+            if (accounts.length > 0) {
+                setIsConnected(true);
+                setAccount(accounts[0]);
+            }
+            })
+            .catch(err => console.error(err));
+
+        // Listen for account changes
+        window.ethereum.on('accountsChanged', accounts => {
+            setIsConnected(accounts.length > 0);
+            setAccount(accounts[0] || '');
+        });
+        } else {
+        console.log('MetaMask is not installed');
+        }
+    }, []);
+
 
     useEffect(() => {
-
-        async function fetchData(){            
-                try {
-                    // update
-                    const settingsJson = await contractMethods.methods.getAccountSettings(userName , token).call();
-                    setSettings(JSON.parse(settingsJson));                    
-                } catch (error) {
-                    return true;
-                }
+        async function fetchdata(){
+          // Initialize contract instance
+          const contractInstance = new web3.eth.Contract(contractData.storageContract, config.json.CONTRACT);      
+          setContract(contractInstance);
+          try {
+                const settingsJson = await contractInstance.methods.getAccountSettings(userName , token).call();
+                setSettings(JSON.parse(settingsJson));                    
+            } catch (error) {
+                return true;
+            }
         }
+        if (web3Value) {
+            fetchdata();
+        }
+      }, [web3Value]);
 
-        fetchData()
-      }, []); 
 
 
 
@@ -60,27 +94,21 @@ const Settings = () => {
 
         setButtonText("Processing...");
         setButtonClass('loading');
+
         if (buttonClass === "success") return;
+        const transaction = await contract.methods.createAndUpdateSettings(userName, JSON.stringify(settings), token ).send({ from: account });
+        const receipt = await web3.eth.getTransactionReceipt(transaction.transactionHash);              
+        const txHash = receipt.transactionHash;
 
-        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-        if(accounts.length){
-            web3.eth.accounts.wallet.add(config.json.KEY);
+        if(txHash){
+            setButtonClass("success");
+            setButtonText("Saved");
 
-            try {            
-                await contractMethods.methods.createAndUpdateSettings(userName, JSON.stringify(settings), token).send({ from: config.json.DEFAULT_SENDER , gas: '1000000',gasPrice:1000000000 });
-            } catch (error) {
-                logout();
-            }
+                setTimeout(function() {
+                    setButtonClass("")
+                    setButtonText("Save Settings")
+                }, 1000);
         }
-        setButtonClass("success");
-        setButtonText("Saved");
-
-        setTimeout(function() {
-            setButtonClass("")
-            setButtonText("Save Settings")
-        }, 1000);
-
-
     };
 
     const handleChange = async (index) => {

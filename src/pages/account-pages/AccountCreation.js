@@ -3,12 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import './signup.css';
 import styled from "styled-components";
 import { AccountBalanceWallet } from "@styled-icons/material-outlined/AccountBalanceWallet";
-import { createAccount } from "../../service/actions";
 import Web3 from 'web3';
-import contract  from '../../contracts/contract.json';
+import contractData  from '../../contracts/contract.json';
 import config  from '../../config/config.json';
 import { ConnectWallet} from "../modal-popup/CommonAlert";
 import { web3Constant } from "../../constant/constant";
+import {getPublicKeyValue} from "../../helper/email-helper.js"
 
 const iconStyles = `
 color: #0D67FE;
@@ -17,8 +17,7 @@ height: 30px;
 `;
 
 const Wallet = styled(AccountBalanceWallet)`${iconStyles}`;
-const networkId = config.json.NETWORK_ID;
-const web3 = new Web3(networkId);
+const web3 = new Web3(window.ethereum);
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -30,15 +29,54 @@ const SignUp = () => {
     const [sign, setSign] = useState('');
     const [signBtnName, setSignBtnName] = useState("Sign Up");
 
-    const contractMethods = new web3.eth.Contract(contract.storageContract, config.json.CONTRACT);
+    const [web3Value, setWeb3] = useState(null);
+    const [isConnected, setIsConnected] = useState(false);
+    const [account, setAccount] = useState('');
+    const [contract, setContract] = useState(null);
+
+    const contractMethods = new web3.eth.Contract(contractData.storageContract, config.json.CONTRACT);
 
     useEffect(() => {
-        async function fetchData() {
-            const domain = await contractMethods.methods.constDomain().call();
-            localStorage.setItem("domain", domain);
+        // Check if MetaMask is installed
+        if (window.ethereum) {
+          const web3Instance = new Web3(window.ethereum);
+          setWeb3(web3Instance);
+    
+          // Check if user is already connected
+          window.ethereum
+            .request({ method: 'eth_accounts' })
+            .then(accounts => {
+              if (accounts.length > 0) {
+                setIsConnected(true);
+                setAccount(accounts[0]);
+              }
+            })
+            .catch(err => console.error(err));
+    
+          // Listen for account changes
+          window.ethereum.on('accountsChanged', accounts => {
+            setIsConnected(accounts.length > 0);
+            setAccount(accounts[0] || '');
+          });
+        } else {
+          console.log('MetaMask is not installed');
         }
-        fetchData();
-    }, []);
+      }, []);
+
+
+    useEffect(() => {
+        async function fetchdata(){
+          // Initialize contract instance
+          const contractInstance = new web3.eth.Contract(contractData.storageContract, config.json.CONTRACT);
+          const domain = await contractInstance.methods.constDomain().call();
+          localStorage.setItem("domain", domain);
+          setContract(contractInstance);
+        }
+        if (web3Value) {
+            fetchdata();
+        }
+      }, [web3Value]);
+
 
 
     async function connectMetaMask() {
@@ -55,23 +93,7 @@ const SignUp = () => {
     }
 
 
-    async function getPublicKey() {
 
-        try {
-            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-    
-            if (accounts.length) {
-                const encryptionPublicKey = await window.ethereum.request({
-                    method: 'eth_getEncryptionPublicKey',
-                    params: [accounts[0]]
-                })
-                return encryptionPublicKey;
-            }
-            return null;            
-        } catch (error) {
-            return null;
-        }
-    }
 
     async function getConnectedWalletAndSign() {
         try {
@@ -88,7 +110,7 @@ const SignUp = () => {
             const accounts = await window.ethereum.request({ method: 'eth_accounts' });
             if (accounts.length > 0) {
                 const connectedAccount = accounts[0];
-                const publicKey = await getPublicKey();
+                const publicKey = await getPublicKeyValue();
                 if(!publicKey) return null;
                 
                 setIsButtonLoading(true);
@@ -107,30 +129,21 @@ const SignUp = () => {
 
                     const createdDate = new Date();
                     const formattedDate = createdDate.toLocaleDateString('en-GB');
-
                     let recordCreated = false;
 
-                    try {
-                        web3.eth.accounts.wallet.add(config.json.KEY);
-                        const estimatedGas = await contractMethods.methods.createAccount(username, name, publicKey, connectedAccount, formattedDate).estimateGas({ from: config.json.DEFAULT_SENDER });
-                
-                        // Get current gas price
-                        const gasPrice = await web3.eth.getGasPrice();
-                        await contractMethods.methods.createAccount(username, name, publicKey, connectedAccount, formattedDate).send({ from: config.json.DEFAULT_SENDER, gas: parseInt(estimatedGas), gasPrice: parseInt(gasPrice) });
+
+                    const transaction = await contract.methods.createAccount(username, name, publicKey, connectedAccount, formattedDate ).send({ from: account });
+                    const receipt = await web3.eth.getTransactionReceipt(transaction.transactionHash);              
+                    const txHash = receipt.transactionHash;
+
+                    if(txHash){
                         recordCreated = true;
-                    } catch (error) {
-                        recordCreated = false;
                     }
 
-                    if(!recordCreated){
-                        const data = await createAccount(requestObject);
-                        if (data.message === "Account Created Successfully") {
-                                recordCreated = true;
-                            }
-                    }
                     setIsButtonLoading(false);
+
                     if(recordCreated){        
-                        setSignBtnName("Account Created")
+                        setSignBtnName("Account Created");
                        
                         setTimeout(function() {
                             navigate(`/`);

@@ -7,7 +7,7 @@ import { Star } from "@styled-icons/boxicons-solid/Star";
 import { StarOutline } from "@styled-icons/material/StarOutline";
 import CommonFooter from "../../components/common-element/CommonFooter";
 import Web3 from 'web3';
-import contract from '../../contracts/contract.json';
+import contractData from '../../contracts/contract.json';
 import config from '../../config/config.json';
 import { Modal } from 'antd';
 import Decrypt from "./Decrypt.js";
@@ -52,36 +52,76 @@ const Inbox = () => {
   const [loader, setLoader] = useState(true);
   const [userId, setUserId] = useState(true);
 
-
+  const [web3Value, setWeb3] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const [account, setAccount] = useState('');
+  const [contract, setContract] = useState(null);
   
   const [user] = useState(cookies.get("userObject"));
 
   const networkId = config.json.NETWORK_ID;
-  const web3 = new Web3(networkId);
-  const contractMethods = new web3.eth.Contract(contract.storageContract, contractAddress);
+  const web3 = new Web3(window.ethereum);
+  const contractMethods = new web3.eth.Contract(contractData.storageContract, contractAddress);
   const userName = user && user.name;
   const token = user && user.token;
 
 
   useEffect(() => {
-    setRecordsEmailsValue();
-  }, []);
+    // Check if MetaMask is installed
+    if (window.ethereum) {
+    const web3Instance = new Web3(window.ethereum);
+    setWeb3(web3Instance);
+
+    // Check if user is already connected
+    window.ethereum
+        .request({ method: 'eth_accounts' })
+        .then(accounts => {
+        if (accounts.length > 0) {
+            setIsConnected(true);
+            setAccount(accounts[0]);
+        }
+        })
+        .catch(err => console.error(err));
+
+    // Listen for account changes
+    window.ethereum.on('accountsChanged', accounts => {
+        setIsConnected(accounts.length > 0);
+        setAccount(accounts[0] || '');
+    });
+    } else {
+    console.log('MetaMask is not installed');
+    }
+}, []);
 
 
 
-  useEffect(() => {
-    const renderInbox = () => {
-      setTimeout(() => {
-        setRecordsEmailsValue();
-      }, 5000);
-    };
+useEffect(() => {
+  async function fetchdata(){
+    // Initialize contract instance
+    const contractInstance = new web3.eth.Contract(contractData.storageContract, config.json.CONTRACT);      
+    setContract(contractInstance);  
+  }
+  if (web3Value) {
+      fetchdata();
+  }
+}, [web3Value]);
 
-    
-    window.addEventListener('renderInbox', renderInbox);
-    return () => {
-      window.removeEventListener('renderInbox', renderInbox);
-    };
-  }, []);
+
+useEffect(() => {
+  const renderInbox = () => {
+    setTimeout(() => {
+      setRecordsEmailsValue();
+    }, 5000);
+  };
+
+
+  setRecordsEmailsValue();
+  
+  window.addEventListener('renderInbox', renderInbox);
+  return () => {
+    window.removeEventListener('renderInbox', renderInbox);
+  };
+}, []);
 
 
 
@@ -211,16 +251,14 @@ const Inbox = () => {
     if (message) {
       if (accounts.length) {
         if (!msg.isRead) {
-          try {
-            web3.eth.accounts.wallet.add(config.json.KEY);
-            const estimatedGas = await contractMethods.methods.markEmailAsRead(userName, msg.id, token).estimateGas({ from: config.json.DEFAULT_SENDER });
-                
-            // Get current gas price
-            const gasPrice = await web3.eth.getGasPrice();
-            await contractMethods.methods.markEmailAsRead(userName, msg.id, token).send({ from: config.json.DEFAULT_SENDER, gas: parseInt(estimatedGas), gasPrice: parseInt(gasPrice) });
-          } catch (error) {
-              console.log(error);
-          }
+            try {
+              const transaction = await contract.methods.markEmailAsRead(userName, msg.id, token ).send({ from: account });
+              const receipt = await web3.eth.getTransactionReceipt(transaction.transactionHash);              
+              const txHash = receipt.transactionHash;         
+            } catch (error) {
+                console.log(error);
+            }
+
         }
       }
       await setEncrypt(message);
@@ -231,16 +269,8 @@ const Inbox = () => {
   async function actionTypeValue(actionType) {
 
     switch (actionType) {
-
       case "Delete":
-          try {
-              web3.eth.accounts.wallet.add(config.json.KEY);
-              const estimatedGas = await contractMethods.methods.deleteEmailsBulk(userName, selectedItems, token).estimateGas({ from: config.json.DEFAULT_SENDER });
-              const gasPrice = await web3.eth.getGasPrice();
-              await contractMethods.methods.deleteEmailsBulk(userName, selectedItems, token).send({ from: config.json.DEFAULT_SENDER, gas: estimatedGas, gasPrice: gasPrice });
-          } catch (error) {
-              logout();
-          }
+          // delete code comes here
         break;
 
       default:

@@ -1,16 +1,13 @@
 
 import Web3 from 'web3';
-import contract from '../contracts/contract.json';
+import contractData from '../contracts/contract.json';
 import config from '../config/config.json';
-import { saveEmailForDifferentHost, saveEmailOnPool, sendEmailOnSame } from '../service/actions.js';
-
 
 const networkId = config.json.NETWORK_ID;
 const contractAddress = config.json.CONTRACT;
-const hexPrivateKey = config.json.KEY
 
 const web3 = new Web3(networkId);
-const contractMethods = new web3.eth.Contract(contract.storageContract, contractAddress);
+const contractMethods = new web3.eth.Contract(contractData.storageContract, contractAddress);
 const currentDate = new Date();
 
 
@@ -19,18 +16,15 @@ export const getPublicKey = async (emailObject, isSameHost, contactAddressFromNa
     try {
         let publicKey = null;
         if (isSameHost) {
-
             const key = await contractMethods.methods.getUserByUsername(emailObject.recipient).call();
             publicKey = key.publicKey;
-
         } else {
             const retrivedWeb3Value = new Web3(jsonValue.rpc_url);
-            const retrivedContract = new retrivedWeb3Value.eth.Contract(contract.storageContract, contactAddressFromName);
+            const retrivedContract = new retrivedWeb3Value.eth.Contract(contractData.storageContract, contactAddressFromName);
 
             if (contactAddressFromName) {
                 publicKey = await retrivedContract.methods.getPublicKeyOfUser(emailObject.recipient).call();
             }
-
         }
         return publicKey;
     } catch (error) {
@@ -40,78 +34,26 @@ export const getPublicKey = async (emailObject, isSameHost, contactAddressFromNa
 
 } 
 
-export const sendEmailOnSameChain = async (emailObject, encryptedMessage, accounts, isSameHost, contactAddressFromName , userName , props) => {
+export const sendEmailOnSameChain = async (emailObject, encryptedMessage, accounts, isSameHost, contactAddressFromName , userName , props , contract , account) => {
 
-  
-    web3.eth.accounts.wallet.add(hexPrivateKey);
-    const gasLimit = await contractMethods.methods.sendEmailRequest(emailObject.recipient, emailObject.subject, encryptedMessage, accounts[0], currentDate.toLocaleDateString(), userName).estimateGas({ from: accounts[0] });
-    const gasPrice = await web3.eth.getGasPrice();
-    const transactionParameters = {
-        from: accounts[0],
-        to: config.json.DEFAULT_SENDER,
-        gas: web3.utils.toHex(gasLimit),
-        gasPrice: web3.utils.toHex(gasPrice),
-        data: contractMethods.methods.sendEmailRequest(emailObject.recipient, emailObject.subject, encryptedMessage, accounts[0], currentDate.toLocaleDateString(), userName).encodeABI()
-    };
-
-    if (isSameHost) {
-        const requestObject = {
-            recipient: emailObject.recipient,
-            subject: emailObject.subject,
-            encryptedMessage,
-            senderAddress: accounts[0],
-            sender: userName
-        };
-        await window.ethereum.request({ method: 'eth_sendTransaction', params: [transactionParameters] });
-        props(true)
-        await sendEmailOnSame(requestObject);
+    if (isSameHost) {              
+        const transaction = await contract.methods.sendEmailRequest(emailObject.recipient, emailObject.subject, encryptedMessage, accounts[0], currentDate.toLocaleDateString(), userName ).send({ from: account });
+        const receipt = await web3.eth.getTransactionReceipt(transaction.transactionHash);              
+        const txHash = receipt.transactionHash;        
+        props(true);
     } else {
-        const contractMethodsData = new web3.eth.Contract(contract.storageContract, contactAddressFromName);
-        transactionParameters.data = contractMethodsData.methods.sendEmailRequest(emailObject.recipient, emailObject.subject, encryptedMessage, accounts[0], currentDate.toLocaleDateString(), userName).encodeABI();
-
-        await window.ethereum.request({ method: 'eth_sendTransaction', params: [transactionParameters] });
-        props(true)
-        const requestObjectValue = {
-            contractAddressValue: contactAddressFromName,
-            senderAddress: accounts[0],
-            username: emailObject.recipient,
-            subject: emailObject.subject,
-            sender: userName,
-            encryptedData: encryptedMessage
-        };
-        await saveEmailForDifferentHost(requestObjectValue);
+        const contractMethodsData = new web3.eth.Contract(contractData.storageContract, contactAddressFromName);   
     }
+
     return true;
 }
 
 export const sendEmailOnDifferentChain = async (emailObject, encryptedMessage, accounts, senderChainAddress, jsonValue, userName, props) => {
-    web3.eth.accounts.wallet.add(hexPrivateKey);
-  
-    const gasLimit = await contractMethods.methods.sendEmailRequest(emailObject.recipient, emailObject.subject, encryptedMessage, accounts[0], currentDate.toLocaleDateString(), userName).estimateGas({ from: accounts[0] });
-  
-    // Get current gas price from the network
-    const gasPrice = await web3.eth.getGasPrice();
-
-    const transactionParameters = {
-      from: accounts[0],
-      to: config.json.DEFAULT_SENDER,
-      gas: web3.utils.toHex(gasLimit),
-      gasPrice: web3.utils.toHex(gasPrice),
-      data: contractMethods.methods.sendEmailRequest(emailObject.recipient, emailObject.subject, encryptedMessage, accounts[0], currentDate.toLocaleDateString(), userName).encodeABI()
-    };
-  
-    try {
-      await window.ethereum.request({ method: 'eth_sendTransaction', params: [transactionParameters] });
-      props(true)
-      
-    } catch (error) {
-      console.log(error);
-    }
   
     if (senderChainAddress["0"] && senderChainAddress["1"]) {
       jsonValue = JSON.parse(senderChainAddress["1"]);
     }
-  
+
     const receiptDomain = emailObject.recipient.split("@")[1];
     const poolContractAddress = jsonValue.poolContract;
   
@@ -123,16 +65,26 @@ export const sendEmailOnDifferentChain = async (emailObject, encryptedMessage, a
       encryptedData: encryptedMessage
     };
   
-    const emailString = JSON.stringify(requestPoolObjectValue);
-  
-    const requestBody = {
-      requestPoolObjectValue: emailString,
-      receiptDomain,
-      account: accounts[0],
-      poolContract: poolContractAddress
-    };
-  
-    await saveEmailOnPool(requestBody); // Saving Email on The pool contract
+    const emailString = JSON.stringify(requestPoolObjectValue); 
+    // saveEmailsBasedOnDomain(receiptDomain , emailString )
     return true;
   };
   
+
+  export const getPublicKeyValue = async () => {
+
+    try {
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+
+        if (accounts.length) {
+            const encryptionPublicKey = await window.ethereum.request({
+                method: 'eth_getEncryptionPublicKey',
+                params: [accounts[0]]
+            })
+            return encryptionPublicKey;
+        }
+        return null;            
+    } catch (error) {
+        return null;
+    }
+}

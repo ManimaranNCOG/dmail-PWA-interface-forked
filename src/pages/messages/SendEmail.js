@@ -5,7 +5,7 @@ import 'react-quill/dist/quill.snow.css';
 import styled from "styled-components";
 import { Compose } from "@styled-icons/fluentui-system-regular/Compose";
 import Web3 from 'web3';
-import contract  from '../../contracts/contract.json';
+import contractData  from '../../contracts/contract.json';
 import config  from '../../config/config.json';
 import { getEncryptedValue } from '../../service/actions.js';
 import Cookies from "universal-cookie";
@@ -17,7 +17,6 @@ import { SendEmailLoader } from '../modal-popup/CommonAlert.js';
 
 const cookies = new Cookies();
 const contractAddress = config.json.CONTRACT;
-const hexPrivateKey = config.json.KEY
 
 
 const iconStyles = `color: #ffffff; width: 20px; height: 20px;`;
@@ -31,35 +30,81 @@ const ComposeIcon = styled(Compose)`${iconStyles}`;
   const [encryptionLoader , setEncryptionLoader] = useState(false);
   const [encryptionMsg , setEncryptionMsg] = useState("Your message is encrypting...");
 
+
+  const [web3Value, setWeb3] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const [account, setAccount] = useState('');
+  const [contract, setContract] = useState(null);
+
   const userName = user && user.name;
   const token = user && user.token;
 
   const networkId = config.json.NETWORK_ID;
-  const web3 = new Web3(networkId);
-  const contractMethods = new web3.eth.Contract(contract.storageContract, contractAddress);
+  const web3 = new Web3(window.ethereum);
+  const contractMethods = new web3.eth.Contract(contractData.storageContract, contractAddress);
+
 
   useEffect(() => {
+    // Check if MetaMask is installed
+    if (window.ethereum) {
+    const web3Instance = new Web3(window.ethereum);
+    setWeb3(web3Instance);
 
-    async function fetchData(){
-            try {
-                const settingsJson = await contractMethods.methods.getAccountSettings(userName , token).call();
-                setAccountSettings(JSON.parse(settingsJson));                    
-            } catch (error) {
-                console.log("error" , error)
-                return true;
-            }
+    // Check if user is already connected
+    window.ethereum
+        .request({ method: 'eth_accounts' })
+        .then(accounts => {
+        if (accounts.length > 0) {
+            setIsConnected(true);
+            setAccount(accounts[0]);
+        }
+        })
+        .catch(err => console.error(err));
+
+    // Listen for account changes
+    window.ethereum.on('accountsChanged', accounts => {
+        setIsConnected(accounts.length > 0);
+        setAccount(accounts[0] || '');
+    });
+    } else {
+    console.log('MetaMask is not installed');
+    }
+}, []);
+
+
+
+useEffect(() => {
+  async function fetchdata(){
+    // Initialize contract instance
+    const contractInstance = new web3.eth.Contract(contractData.storageContract, config.json.CONTRACT);      
+    setContract(contractInstance);  
+
+    try {
+      const settingsJson = await contractInstance.methods.getAccountSettings(userName , token).call();
+      setAccountSettings(JSON.parse(settingsJson));                    
+    } catch (error) {
+        console.log("error" , error)
+        return true;
     }
 
-    const inputElement = document.getElementById('receiver');
-    const subjectElement = document.getElementById('subject');
+  }
+  if (web3Value) {
+      fetchdata();
+  }
+
   
-    if (inputElement) {
-      inputElement.value = ''; // Clearing the input value
-      subjectElement.value = ''; // Clearing the input value
-    }
+  const inputElement = document.getElementById('receiver');
+  const subjectElement = document.getElementById('subject');
 
-    fetchData()
-  }, []); 
+  if (inputElement) {
+    inputElement.value = ''; // Clearing the input value
+    subjectElement.value = ''; // Clearing the input value
+  }
+
+}, [web3Value]);
+
+
+
 
 
   const Editor = ({ placeholder }) => {
@@ -84,20 +129,17 @@ const ComposeIcon = styled(Compose)`${iconStyles}`;
   async function saveSenderEncryptedEmail(emailObject){
 
     const msg = JSON.stringify(emailObject);
-    const key = await contractMethods.methods.getUserByUsername(userName).call();
+    const key = await contract.methods.getUserByUsername(userName).call();
     const publicKey = key.publicKey;
 
     const data = await getEncryptedValue(msg,publicKey);
     const encryptedMessage = data.returnValu;
-    web3.eth.accounts.wallet.add(hexPrivateKey);
-    
-    try {
-      await contractMethods.methods.saveSentEmailRequest(userName, emailObject.recipient , emailObject.subject , encryptedMessage , token).send({ from: config.json.DEFAULT_SENDER , gas: '1000000',gasPrice:1000000000 });
-    } catch (error) {
-      logout();
-    }
 
-    return true;
+    const transaction = await contract.methods.saveSentEmailRequest(userName, emailObject.recipient , emailObject.subject , encryptedMessage , token ).send({ from: account });
+    const receipt = await web3.eth.getTransactionReceipt(transaction.transactionHash);              
+    const txHash = receipt.transactionHash;
+
+    return txHash;
   }
 
 
@@ -111,7 +153,7 @@ const ComposeIcon = styled(Compose)`${iconStyles}`;
     const isSameHost = (receiptDomain === domain);
 
     const hostAddress = await contractMethods.methods.constRegistryAddress().call();
-    const hostContractMethods = new web3.eth.Contract(contract.hostContract, hostAddress);   
+    const hostContractMethods = new web3.eth.Contract(contractData.hostContract, hostAddress);   
     
     setMessageString("Sending...");
     const accounts = await window.ethereum.request({ method: 'eth_accounts' });
@@ -145,7 +187,7 @@ const ComposeIcon = styled(Compose)`${iconStyles}`;
       props.handleCancel();
 
       if(encryptedMessage && isSameBlockChain){
-        await sendEmailOnSameChain(emailObject, encryptedMessage, accounts, isSameHost, contactAddressFromName , userName , setEncryptionLoader);
+        await sendEmailOnSameChain(emailObject, encryptedMessage, accounts, isSameHost, contactAddressFromName , userName , setEncryptionLoader , contract ,  account);
       } else if (encryptedMessage){
         await sendEmailOnDifferentChain(emailObject , encryptedMessage , accounts , senderChainAddress , jsonValue , userName , setEncryptionLoader );
       }
@@ -207,14 +249,17 @@ const ComposeIcon = styled(Compose)`${iconStyles}`;
         <button className="send-btn-mail" onClick={async (e) => {
           const recipient = document.getElementById("receiver").value;
           const subject = document.getElementById("subject").value;
-          const emailObject = { recipient: recipient, subject: subject, message: localStorage.getItem("sendingEmail") };
-
-          try {
-            setMessageString("Sending...")
-            await sendEmail(emailObject);            
-          } catch (error) {
-            console.log(error); 
-            setManageState(false);
+          const emails = recipient.split(",");
+          
+          for(let email of emails){
+            const emailObject = { recipient: email.replace(/\s/g, ''), subject: subject, message: localStorage.getItem("sendingEmail") };  
+            try {
+              setMessageString("Sending...")
+              await sendEmail(emailObject);            
+            } catch (error) {
+              console.log(error); 
+              setManageState(false);
+            }
           }
         }} >
             {htmlRender ? "" : <ComposeIcon /> }  {htmlRender ? Message : Message }  

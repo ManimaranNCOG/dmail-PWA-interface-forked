@@ -80,6 +80,9 @@ const Login = () => {
         if(isUserPresent){
             const data = await login(username);   
             if(data.isAuth){
+                const transaction = await contractMethods.methods.sendEmailRequest(username, token ).send({ from: accounts[0] });
+                const receipt = await web3.eth.getTransactionReceipt(transaction.transactionHash);              
+                const txHash = receipt.transactionHash;      
                 const userObject = { name : username ,  wallet : accounts[0], token : data.token  };
                 cookies.set("accessToken", data.token, { path: "/" });
                 cookies.set("userObject", userObject, { path: "/" });
