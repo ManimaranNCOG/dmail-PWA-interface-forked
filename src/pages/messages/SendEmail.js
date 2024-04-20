@@ -69,6 +69,10 @@ const ComposeIcon = styled(Compose)`${iconStyles}`;
     } else {
     console.log('MetaMask is not installed');
     }
+
+    return () => {
+      localStorage.setItem("sendingEmail", "");
+    };
 }, []);
 
 

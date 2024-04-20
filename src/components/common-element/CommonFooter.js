@@ -11,13 +11,17 @@ function CommonFooter() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const showModal = () => {   setIsModalOpen(true);    };
     const handleOk = () => {  setIsModalOpen(false);   };    
-    const handleCancel = () => {  setIsModalOpen(false);  };
+    const handleCancel = () => {  
+      localStorage.setItem("sendingEmail", "");
+      setIsModalOpen(false);  
+    };
 
     useEffect(() => {
         const handleClick = (event) => {
           // Get the class name of the clicked element
           const className = event.target.className;
           if(className && typeof className === "string" && className.includes("sidebar-compose-section")){
+            localStorage.setItem("sendingEmail", "");
             setIsModalOpen(true)
           }
         };    
@@ -32,6 +36,7 @@ function CommonFooter() {
       const updateEvent = new CustomEvent('renderInbox', { detail: { data: true} });
       window.dispatchEvent(updateEvent);
       setIsModalOpen(false);
+      localStorage.setItem("sendingEmail", "");
     }
 
     return (        
