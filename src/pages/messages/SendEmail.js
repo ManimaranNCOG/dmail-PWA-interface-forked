@@ -133,8 +133,7 @@ useEffect(() => {
   async function saveSenderEncryptedEmail(emailObject){
 
     const msg = JSON.stringify(emailObject);
-    const key = await contract.methods.getUserByUsername(userName).call();
-    const publicKey = key.publicKey;
+    const publicKey = await contract.methods.getPublicKeyOfUser(userName).call();
 
     const data = await getEncryptedValue(msg,publicKey);
     const encryptedMessage = data.returnValue;

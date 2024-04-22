@@ -16,8 +16,7 @@ export const getPublicKey = async (emailObject, isSameHost, contactAddressFromNa
     try {
         let publicKey = null;
         if (isSameHost) {
-            const key = await contractMethods.methods.getUserByUsername(emailObject.recipient).call();
-            publicKey = key.publicKey;
+            publicKey = await contractMethods.methods.getPublicKeyOfUser(emailObject.recipient).call();
         } else {
             const retrivedWeb3Value = new Web3(jsonValue.rpc_url);
             const retrivedContract = new retrivedWeb3Value.eth.Contract(contractData.storageContract, contactAddressFromName);

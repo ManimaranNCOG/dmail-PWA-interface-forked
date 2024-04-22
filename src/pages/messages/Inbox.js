@@ -151,7 +151,7 @@ useEffect(() => {
 
     try {
       
-      const emailList = await contractMethods.methods.getEmailList(userName).call();
+      const emailList = await contractMethods.methods.getEmailList(userName).call({from: account});
       const emails = await returnEmailRecords(userName);
   
       const formattedResult = emailList
