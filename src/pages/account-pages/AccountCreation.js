@@ -9,6 +9,7 @@ import config  from '../../config/config.json';
 import { ConnectWallet} from "../modal-popup/CommonAlert";
 import { web3Constant } from "../../constant/constant";
 import {getPublicKeyValue} from "../../helper/email-helper.js"
+import { transactionAction } from "../../helper/chainHelper.js";
 
 const iconStyles = `
 color: #0D67FE;
@@ -20,6 +21,7 @@ const Wallet = styled(AccountBalanceWallet)`${iconStyles}`;
 const web3 = new Web3(window.ethereum);
 
 const SignUp = () => {
+
     const navigate = useNavigate();
     const [btnName, setBtnName] = useState("Connect Wallet");
     const [isButtonLoading, setIsButtonLoading] = useState(false);
@@ -92,9 +94,6 @@ const SignUp = () => {
         await getConnectedWalletAndSign();
     }
 
-
-
-
     async function getConnectedWalletAndSign() {
         try {
             const username = document.getElementById('username').value;
@@ -125,21 +124,16 @@ const SignUp = () => {
                 const userId = parseInt(value.userId);
 
                 if(!userId && isVerified){
-                    const requestObject = {  username,  name,  connectedAccount, publicKey , userDomain  };
 
                     const createdDate = new Date();
                     const formattedDate = createdDate.toLocaleDateString('en-GB');
                     let recordCreated = false;
-
-
-                    const transaction = await contract.methods.createAccount(username, name, publicKey, connectedAccount, formattedDate ).send({ from: account });
-                    const receipt = await web3.eth.getTransactionReceipt(transaction.transactionHash);              
-                    const txHash = receipt.transactionHash;
+                    const functionParams = [username, name, publicKey, connectedAccount, formattedDate];
+                    const txHash = await transactionAction(contract , "createAccount", functionParams , account);
 
                     if(txHash){
                         recordCreated = true;
                     }
-
                     setIsButtonLoading(false);
 
                     if(recordCreated){        

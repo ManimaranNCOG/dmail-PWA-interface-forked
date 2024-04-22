@@ -13,6 +13,7 @@ import { logout } from '../../auth/logout.js';
 import { getPublicKey, sendEmailOnDifferentChain, sendEmailOnSameChain } from '../../helper/email-helper.js';
 import { editorConstant } from '../../constant/constant.js';
 import { SendEmailLoader } from '../modal-popup/CommonAlert.js';
+import { transactionAction } from '../../helper/chainHelper.js';
 
 
 const cookies = new Cookies();
@@ -37,7 +38,6 @@ const ComposeIcon = styled(Compose)`${iconStyles}`;
   const [contract, setContract] = useState(null);
 
   const userName = user && user.name;
-  const token = user && user.token;
 
   const networkId = config.json.NETWORK_ID;
   const web3 = new Web3(window.ethereum);
@@ -84,7 +84,7 @@ useEffect(() => {
     setContract(contractInstance);  
 
     try {
-      const settingsJson = await contractInstance.methods.getAccountSettings(userName , token).call();
+      const settingsJson = await contractInstance.methods.getAccountSettings(userName).call();
       setAccountSettings(JSON.parse(settingsJson));                    
     } catch (error) {
         console.log("error" , error)
@@ -139,10 +139,8 @@ useEffect(() => {
     const data = await getEncryptedValue(msg,publicKey);
     const encryptedMessage = data.returnValue;
 
-    const transaction = await contract.methods.saveSentEmailRequest(userName, emailObject.recipient , emailObject.subject , encryptedMessage , token ).send({ from: account });
-    const receipt = await web3.eth.getTransactionReceipt(transaction.transactionHash);              
-    const txHash = receipt.transactionHash;
-
+    const functionParams = [userName, emailObject.recipient , emailObject.subject , encryptedMessage];
+    const txHash = await transactionAction(contract , "saveSentEmailRequest", functionParams , account);  
     return txHash;
   }
 
@@ -193,7 +191,7 @@ useEffect(() => {
       if(encryptedMessage && isSameBlockChain){
         await sendEmailOnSameChain(emailObject, encryptedMessage, accounts, isSameHost, contactAddressFromName , userName , setEncryptionLoader , contract ,  account);
       } else if (encryptedMessage){
-        await sendEmailOnDifferentChain(emailObject , encryptedMessage , accounts , senderChainAddress , jsonValue , userName , setEncryptionLoader );
+        await sendEmailOnDifferentChain(emailObject , encryptedMessage , accounts , senderChainAddress , jsonValue , userName , account );
       }
 
       setEncryptionMsg("Message Sent");

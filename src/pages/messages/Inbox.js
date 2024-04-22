@@ -18,6 +18,7 @@ import { logout } from '../../auth/logout.js';
 import db from '../../db/dbService.js';
 import { returnEmailRecords } from '../../db/dbHelper.js';
 import FbLoader from '../../components/loader/FbLoader.js';
+import { transactionAction } from '../../helper/chainHelper.js';
 
 const cookies = new Cookies();
 
@@ -59,12 +60,9 @@ const Inbox = () => {
   
   const [user] = useState(cookies.get("userObject"));
 
-  const networkId = config.json.NETWORK_ID;
   const web3 = new Web3(window.ethereum);
   const contractMethods = new web3.eth.Contract(contractData.storageContract, contractAddress);
   const userName = user && user.name;
-  const token = user && user.token;
-
 
   useEffect(() => {
     // Check if MetaMask is installed
@@ -252,9 +250,9 @@ useEffect(() => {
       if (accounts.length) {
         if (!msg.isRead) {
             try {
-              const transaction = await contract.methods.markEmailAsRead(userName, msg.id, token ).send({ from: account });
-              const receipt = await web3.eth.getTransactionReceipt(transaction.transactionHash);              
-              const txHash = receipt.transactionHash;         
+              const functionParams = [userName, msg.id];
+              const txHash = await transactionAction(contract , "markEmailAsRead", functionParams , account);  
+              console.log("txHash", txHash)  
             } catch (error) {
                 console.log(error);
             }

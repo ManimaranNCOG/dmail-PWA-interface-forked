@@ -1,139 +1,6 @@
 {
     "storageContract" : [
         {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "username",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "name",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "encryptedkey",
-                    "type": "string"
-                },
-                {
-                    "internalType": "address",
-                    "name": "senderAddress",
-                    "type": "address"
-                },
-                {
-                    "internalType": "string",
-                    "name": "creationDate",
-                    "type": "string"
-                }
-            ],
-            "name": "createAccount",
-            "outputs": [
-                {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
-                }
-            ],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "username",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "encrytedData",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "token",
-                    "type": "string"
-                }
-            ],
-            "name": "createAndUpdateAccountDetails",
-            "outputs": [
-                {
-                    "internalType": "string",
-                    "name": "",
-                    "type": "string"
-                }
-            ],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "username",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "encrytedData",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "token",
-                    "type": "string"
-                }
-            ],
-            "name": "createAndUpdateSettings",
-            "outputs": [
-                {
-                    "internalType": "string",
-                    "name": "",
-                    "type": "string"
-                }
-            ],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "username",
-                    "type": "string"
-                },
-                {
-                    "internalType": "uint256[]",
-                    "name": "emailIds",
-                    "type": "uint256[]"
-                },
-                {
-                    "internalType": "string",
-                    "name": "token",
-                    "type": "string"
-                }
-            ],
-            "name": "deleteEmailsBulk",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "_username",
-                    "type": "string"
-                }
-            ],
-            "name": "deleteTokenByUsername",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
             "anonymous": false,
             "inputs": [
                 {
@@ -197,218 +64,6 @@
             "type": "event"
         },
         {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "username",
-                    "type": "string"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "emailId",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "string",
-                    "name": "token",
-                    "type": "string"
-                }
-            ],
-            "name": "markEmailAsRead",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "user",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "emailString",
-                    "type": "string"
-                }
-            ],
-            "name": "saveEmailFromDifferentChain",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "sender",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "receiver",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "subject",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "encryptedData",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "token",
-                    "type": "string"
-                }
-            ],
-            "name": "saveSentEmailRequest",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "_username",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "_token",
-                    "type": "string"
-                }
-            ],
-            "name": "saveTokenForUsername",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "username",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "subject",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "encryptedData",
-                    "type": "string"
-                },
-                {
-                    "internalType": "address",
-                    "name": "walletAddress",
-                    "type": "address"
-                },
-                {
-                    "internalType": "string",
-                    "name": "dateValue",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "senderName",
-                    "type": "string"
-                }
-            ],
-            "name": "sendEmailRequest",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "hostRegistryAddress",
-                    "type": "string"
-                }
-            ],
-            "name": "setAddress",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "domain",
-                    "type": "string"
-                }
-            ],
-            "name": "setDomain",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "",
-                    "type": "string"
-                }
-            ],
-            "name": "accountDetails",
-            "outputs": [
-                {
-                    "internalType": "string",
-                    "name": "encryptedData",
-                    "type": "string"
-                },
-                {
-                    "internalType": "bool",
-                    "name": "exists",
-                    "type": "bool"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "ADMIN_ROLE",
-            "outputs": [
-                {
-                    "internalType": "bytes32",
-                    "name": "",
-                    "type": "bytes32"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "name": "allUsers",
-            "outputs": [
-                {
-                    "internalType": "address",
-                    "name": "",
-                    "type": "address"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
             "inputs": [],
             "name": "constDomain",
             "outputs": [
@@ -438,24 +93,39 @@
             "inputs": [
                 {
                     "internalType": "string",
-                    "name": "",
-                    "type": "string"
-                }
-            ],
-            "name": "emailSettings",
-            "outputs": [
-                {
-                    "internalType": "string",
-                    "name": "encryptedData",
+                    "name": "username",
                     "type": "string"
                 },
                 {
+                    "internalType": "string",
+                    "name": "name",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "encryptedkey",
+                    "type": "string"
+                },
+                {
+                    "internalType": "address",
+                    "name": "senderAddress",
+                    "type": "address"
+                },
+                {
+                    "internalType": "string",
+                    "name": "creationDate",
+                    "type": "string"
+                }
+            ],
+            "name": "createAccount",
+            "outputs": [
+                {
                     "internalType": "bool",
-                    "name": "exists",
+                    "name": "",
                     "type": "bool"
                 }
             ],
-            "stateMutability": "view",
+            "stateMutability": "nonpayable",
             "type": "function"
         },
         {
@@ -467,7 +137,50 @@
                 },
                 {
                     "internalType": "string",
-                    "name": "token",
+                    "name": "encrytedData",
+                    "type": "string"
+                }
+            ],
+            "name": "createAndUpdateAccountDetails",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "username",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "encrytedData",
+                    "type": "string"
+                }
+            ],
+            "name": "createAndUpdateSettings",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "username",
                     "type": "string"
                 }
             ],
@@ -487,11 +200,6 @@
                 {
                     "internalType": "string",
                     "name": "username",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "token",
                     "type": "string"
                 }
             ],
@@ -662,25 +370,6 @@
             "inputs": [
                 {
                     "internalType": "string",
-                    "name": "_username",
-                    "type": "string"
-                }
-            ],
-            "name": "getTokenByUsername",
-            "outputs": [
-                {
-                    "internalType": "string",
-                    "name": "",
-                    "type": "string"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
                     "name": "username",
                     "type": "string"
                 }
@@ -760,18 +449,69 @@
         {
             "inputs": [
                 {
-                    "internalType": "address",
-                    "name": "",
-                    "type": "address"
+                    "internalType": "string",
+                    "name": "username",
+                    "type": "string"
                 },
                 {
                     "internalType": "uint256",
-                    "name": "",
+                    "name": "emailId",
                     "type": "uint256"
                 }
             ],
-            "name": "users",
-            "outputs": [
+            "name": "markEmailAsRead",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "user",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "emailString",
+                    "type": "string"
+                }
+            ],
+            "name": "saveEmailFromDifferentChain",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "sender",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "receiver",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "subject",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "encryptedData",
+                    "type": "string"
+                }
+            ],
+            "name": "saveSentEmailRequest",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
                 {
                     "internalType": "string",
                     "name": "username",
@@ -779,17 +519,12 @@
                 },
                 {
                     "internalType": "string",
-                    "name": "domain",
+                    "name": "subject",
                     "type": "string"
                 },
                 {
                     "internalType": "string",
-                    "name": "name",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "publicKey",
+                    "name": "encryptedData",
                     "type": "string"
                 },
                 {
@@ -799,35 +534,44 @@
                 },
                 {
                     "internalType": "string",
-                    "name": "creationDate",
+                    "name": "dateValue",
                     "type": "string"
                 },
                 {
-                    "internalType": "uint256",
-                    "name": "userId",
-                    "type": "uint256"
+                    "internalType": "string",
+                    "name": "senderName",
+                    "type": "string"
                 }
             ],
-            "stateMutability": "view",
+            "name": "sendEmailRequest",
+            "outputs": [],
+            "stateMutability": "nonpayable",
             "type": "function"
         },
         {
             "inputs": [
                 {
-                    "internalType": "address",
-                    "name": "",
-                    "type": "address"
+                    "internalType": "string",
+                    "name": "hostRegistryAddress",
+                    "type": "string"
                 }
             ],
-            "name": "walletAddressExists",
-            "outputs": [
+            "name": "setAddress",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
                 {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
+                    "internalType": "string",
+                    "name": "domain",
+                    "type": "string"
                 }
             ],
-            "stateMutability": "view",
+            "name": "setDomain",
+            "outputs": [],
+            "stateMutability": "nonpayable",
             "type": "function"
         }
     ], 
