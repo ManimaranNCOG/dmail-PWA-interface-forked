@@ -4,11 +4,9 @@ import "./modal.css"
 import { web3Constant } from '../../constant/constant';
 import styled from "styled-components";
 import { Verified } from "@styled-icons/material/Verified";
-import lockloader from "../../asserts/gif-loader/lock-loader.gif";
-import key from "../../asserts/gif-loader/key.png";
-
+import key from "../../assets/gif-loader/key.png";
 import Web3 from 'web3';
-import { getChaindetailsFromHost } from "../../helper/walletHelper";
+import { getChaindetailsFromHost } from "../../helper/wallet-helper";
 import config  from '../../config/config.json';
 
 const web3 = new Web3(config.json.NETWORK_ID);

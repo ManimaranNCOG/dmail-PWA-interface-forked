@@ -2,10 +2,9 @@
 import Web3 from 'web3';
 import contractData from '../contracts/contract.json';
 import config from '../config/config.json';
-import { transactionAction } from './chainHelper';
+import { transactionAction } from './chain-helper';
 
 const contractAddress = config.json.CONTRACT;
-
 const web3 = new Web3(window.ethereum);
 const contractMethods = new web3.eth.Contract(contractData.storageContract, contractAddress);
 const currentDate = new Date();
@@ -44,7 +43,12 @@ export const sendEmailOnSameChain = async (emailObject, encryptedMessage, accoun
         userName
     ];
 
+
+    console.log("isSameHost", isSameHost);
+
     if (isSameHost) {                   
+
+        console.log("ssssssssssssss", contract , "sendEmailRequest", functionParams , account)
         const txHash = await transactionAction(contract , "sendEmailRequest", functionParams , account);   
         console.log("==========txHash=============", txHash);
         props(true);

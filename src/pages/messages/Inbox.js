@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import { Search2 } from "@styled-icons/remix-line/Search2";
-import SupportIcon from "../../asserts/menu-icons/filter-search.png";
+import SupportIcon from "../../assets/menu-icons/filter-search.png";
 import { EyeSlash } from "@styled-icons/bootstrap/EyeSlash";
 import { Star } from "@styled-icons/boxicons-solid/Star";
 import { StarOutline } from "@styled-icons/material/StarOutline";
@@ -14,11 +14,10 @@ import Decrypt from "./Decrypt.js";
 import Profile from '../profile-section/Profile.js';
 import { EyeOutline } from '@styled-icons/evaicons-outline/EyeOutline';
 import Cookies from "universal-cookie";
-import { logout } from '../../auth/logout.js';
 import db from '../../db/dbService.js';
 import { returnEmailRecords } from '../../db/dbHelper.js';
 import FbLoader from '../../components/loader/FbLoader.js';
-import { transactionAction } from '../../helper/chainHelper.js';
+import { transactionAction } from '../../helper/chain-helper.js';
 
 const cookies = new Cookies();
 
@@ -51,13 +50,10 @@ const Inbox = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
   const [loader, setLoader] = useState(true);
-  const [userId, setUserId] = useState(true);
-
   const [web3Value, setWeb3] = useState(null);
-  const [isConnected, setIsConnected] = useState(false);
   const [account, setAccount] = useState('');
   const [contract, setContract] = useState(null);
-  
+
   const [user] = useState(cookies.get("userObject"));
 
   const web3 = new Web3(window.ethereum);
@@ -67,59 +63,55 @@ const Inbox = () => {
   useEffect(() => {
     // Check if MetaMask is installed
     if (window.ethereum) {
-    const web3Instance = new Web3(window.ethereum);
-    setWeb3(web3Instance);
+      const web3Instance = new Web3(window.ethereum);
+      setWeb3(web3Instance);
 
-    // Check if user is already connected
-    window.ethereum
+      // Check if user is already connected
+      window.ethereum
         .request({ method: 'eth_accounts' })
         .then(accounts => {
-        if (accounts.length > 0) {
-            setIsConnected(true);
+          if (accounts.length > 0) {
             setAccount(accounts[0]);
-        }
+          }
         })
         .catch(err => console.error(err));
 
-    // Listen for account changes
-    window.ethereum.on('accountsChanged', accounts => {
-        setIsConnected(accounts.length > 0);
+      // Listen for account changes
+      window.ethereum.on('accountsChanged', accounts => {
         setAccount(accounts[0] || '');
-    });
+      });
     } else {
-    console.log('MetaMask is not installed');
+      console.log('MetaMask is not installed');
     }
-}, []);
+  }, []);
 
 
 
-useEffect(() => {
-  async function fetchdata(){
-    // Initialize contract instance
-    const contractInstance = new web3.eth.Contract(contractData.storageContract, config.json.CONTRACT);      
-    setContract(contractInstance);  
-  }
-  if (web3Value) {
+  useEffect(() => {
+    async function fetchdata() {
+      // Initialize contract instance
+      const contractInstance = new web3.eth.Contract(contractData.storageContract, config.json.CONTRACT);
+      setContract(contractInstance);
+    }
+    if (web3Value) {
       fetchdata();
-  }
-}, [web3Value]);
+    }
+  }, [web3Value]);
 
 
-useEffect(() => {
-  const renderInbox = () => {
-    setTimeout(() => {
-      setRecordsEmailsValue();
-    }, 5000);
-  };
+  useEffect(() => {
+    const renderInbox = () => {
+      setTimeout(() => {
+        setRecordsEmailsValue();
+      }, 5000);
+    };
+    setRecordsEmailsValue();
 
-
-  setRecordsEmailsValue();
-  
-  window.addEventListener('renderInbox', renderInbox);
-  return () => {
-    window.removeEventListener('renderInbox', renderInbox);
-  };
-}, []);
+    window.addEventListener('renderInbox', renderInbox);
+    return () => {
+      window.removeEventListener('renderInbox', renderInbox);
+    };
+  }, []);
 
 
 
@@ -150,10 +142,10 @@ useEffect(() => {
   async function setRecordsEmailsValue() {
 
     try {
-      
-      const emailList = await contractMethods.methods.getEmailList(userName).call({from: account});
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+      const emailList = await contractMethods.methods.getEmailList(userName).call({ from: accounts[0] });
       const emails = await returnEmailRecords(userName);
-  
+
       const formattedResult = emailList
         .filter(email => email.senderName)
         .map(email => ({
@@ -165,17 +157,18 @@ useEffect(() => {
           sender: email.senderName,
           isRead: email.isRead
         }));
-  
-        const array1Map = new Map(emails.map(item => [item.mailId, item.decryptedMail]));
-        const updatedArray2 = formattedResult.map(item => {
-              if (array1Map.has(item.id)) {
-                  return { ...item, decryptedMail: array1Map.get(item.id) };
-              }
-              return item;
-          });
-  
-        await setEmailObject(updatedArray2);
-        await setLoader(false);
+
+      const encryptedEmailList = new Map(emails.map(item => [item.mailId, item.decryptedMail]));
+
+      const decryptedEmailList = formattedResult.map(item => {
+        if (encryptedEmailList.has(item.id)) {
+          return { ...item, decryptedMail: encryptedEmailList.get(item.id) };
+        }
+        return item;
+      });
+
+      await setEmailObject(decryptedEmailList);
+      await setLoader(false);
     } catch (error) {
       console.log(error);
     }
@@ -190,22 +183,16 @@ useEffect(() => {
 
     if (accounts.length) {
       try {
-        const decMsg = await window.ethereum.request({
-          method: 'eth_decrypt',
-          params: [encryptedMsg, accounts[0]]
-        });
-
-        const emailListObj = emailObject;
-        const mailObject = emailListObj[index];
+        const decryptedMsg = await window.ethereum.request({ method: 'eth_decrypt', params: [encryptedMsg, accounts[0]] });
+        const mailObject = emailObject[index];
 
         const mailId = mailObject.id;
-        const decryptedMail = decMsg;
+        const decryptedMail = decryptedMsg;
 
-        const decryptedObject = {mailId , decryptedMail };
+        const decryptedObject = { mailId, decryptedMail };
         await indexedDb(decryptedObject);
 
-        // emailListObj[index].decryptedEmail = JSON.parse(decMsg);
-        const returnJson = JSON.parse(decMsg);
+        const returnJson = JSON.parse(decryptedMsg);
         return returnJson.message;
 
       } catch (error) {
@@ -218,23 +205,20 @@ useEffect(() => {
 
 
   const indexedDb = async (object) => {
-      const value = await db.emails.where("mailId").equals(object.mailId).toArray();
-      
-      if(value.length){
-        // update;
-        await db.emails.update(value[0].id, object);
-      }else{
-        // create;
-        await db.table('emails').add(object);
-      }
+    const value = await db.emails.where("mailId").equals(object.mailId).toArray();
+    if (value.length) {
+      // update;
+      await db.emails.update(value[0].id, object);
+    } else {
+      // create;
+      await db.table('emails').add(object);
+    }
   }
 
 
   const handleDecryptedClick = async (msg) => {
-
     try {
-
-      const jsonMessage = JSON.parse(msg.decryptedMail);      
+      const jsonMessage = JSON.parse(msg.decryptedMail);
       await setEncrypt(jsonMessage.message);
       setIsModalOpen(true);
     } catch (error) {
@@ -249,13 +233,13 @@ useEffect(() => {
     if (message) {
       if (accounts.length) {
         if (!msg.isRead) {
-            try {
-              const functionParams = [userName, msg.id];
-              const txHash = await transactionAction(contract , "markEmailAsRead", functionParams , account);  
-              console.log("txHash", txHash)  
-            } catch (error) {
-                console.log(error);
-            }
+          try {
+            const functionParams = [userName, msg.id];
+            const txHash = await transactionAction(contract, "markEmailAsRead", functionParams, account);
+            console.log("txHash", txHash)
+          } catch (error) {
+            console.log(error);
+          }
 
         }
       }
@@ -268,7 +252,7 @@ useEffect(() => {
 
     switch (actionType) {
       case "Delete":
-          // delete code comes here
+        // delete code comes here
         break;
 
       default:
@@ -279,7 +263,6 @@ useEffect(() => {
   const buttonActions = ["Delete", "Archive", "Report", "Sweep", "Move to", "Reply", "Mark all as read"];
 
   return (
-    
     <>
       <div className="header-inbox-common">
         <div className="search">
@@ -319,7 +302,7 @@ useEffect(() => {
 
         <div className="inbox-msg-check messages-web">
           {emailObject.map((msg, index) => (
-            <div  key={msg.id}  className={!msg.isRead ? "msg-row-inbox starred-msg" : "msg-row-inbox"}>
+            <div key={msg.id} className={!msg.isRead ? "msg-row-inbox starred-msg" : "msg-row-inbox"}>
               <div className="check-box">
                 <div className="checkboxOverride">
                   <input

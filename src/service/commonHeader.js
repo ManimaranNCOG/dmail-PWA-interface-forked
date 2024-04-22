@@ -1,6 +1,5 @@
 import axios from "axios";
 
-
 export const commonHeaders = () =>{
     axios.defaults.headers.common['Cache-control']='no-store';
     axios.defaults.headers.common['Pragma']='no-store';

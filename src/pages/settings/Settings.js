@@ -8,7 +8,7 @@ import { Tick } from "@styled-icons/typicons/Tick";
 import Cookies from "universal-cookie";
 import { logout } from '../../auth/logout';
 import useDarkMode from 'use-dark-mode';
-import { transactionAction } from '../../helper/chainHelper';
+import { transactionAction } from '../../helper/chain-helper.js';
 
 const cookies = new Cookies();
 
@@ -51,7 +51,6 @@ const Settings = () => {
             .request({ method: 'eth_accounts' })
             .then(accounts => {
             if (accounts.length > 0) {
-                setIsConnected(true);
                 setAccount(accounts[0]);
             }
             })

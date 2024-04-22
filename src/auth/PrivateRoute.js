@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { getCacheStorage } from '../helper/cacheHelper';
 import Cookies from "universal-cookie";
 import { verifyToken } from '../service/actions';
 import { logout } from './logout';

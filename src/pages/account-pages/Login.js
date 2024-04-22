@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 import { login } from "../../service/actions";
 import Web3 from 'web3';
 import contract  from '../../contracts/contract.json';
+import constant  from '../../constant/constant.js';
+
 import config  from '../../config/config.json';
-import { setCacheStorage } from "../../helper/cacheHelper";
+import { setCacheStorage } from "../../helper/cache-helper";
 import Cookies from "universal-cookie";
 
 const contractAddress = config.json.CONTRACT;
@@ -20,7 +22,6 @@ const Login = () => {
     const [toastMsg, setToastMsg] = useState('');
     const [errorType, setErrorType] = useState('');
 
-
     useEffect(() => {
         async function setDomain() {
             const domain = await contractMethods.methods.constDomain().call();
@@ -28,38 +29,26 @@ const Login = () => {
         }
         setDomain();
       }, []);
-
     
-    const handleFocus = () => {
-      setFocused(true);
-    };
-  
-    const handleBlur = () => {
-      setFocused(false);
-    };
-
+    const handleFocus = () => { setFocused(true) };  
+    const handleBlur = () => { setFocused(false) };
 
     async function handleSubmit(e){
-
         await setToastMsg("");
         await setErrorType("");
         e.preventDefault();
         await loginValidation();
     }
-
     
     async function loginValidation() {
         const userName = document.getElementById("email").value;
-
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        
         if (accounts.length > 0) {
             const connectedAccount = accounts[0];
-                const message = `I accept the ncog Terms of Service: \n\nURI:\nhttps://app.ncog.com\n\nVersion:\n1\n\nChain ID:\n1\n\n\n\n`;
+                const message = constant.web3Constant.loginMessage;
             try {
-                await window.ethereum.request({
-                    method: 'personal_sign',
-                    params: [message, connectedAccount]
-                });
+                await window.ethereum.request({ method: 'personal_sign', params: [message, connectedAccount] });
             } catch (error) {
                 console.log("error", error);
                 return true;
