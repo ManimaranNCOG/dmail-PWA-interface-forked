@@ -120,7 +120,7 @@ const SignUp = () => {
 
                 const userDomain = localStorage.getItem("domain");
                 const userNameWithDomain  = `${username}@${userDomain}`;
-                const value = await contractMethods.methods.getUserByUsername(userNameWithDomain).call();
+                const value = await contractMethods.methods.getUserByUsername(userNameWithDomain).call({from : connectedAccount });
                 const userId = parseInt(value.userId);
 
                 if(!userId && isVerified){

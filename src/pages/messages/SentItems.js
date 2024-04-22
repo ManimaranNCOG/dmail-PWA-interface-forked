@@ -55,7 +55,8 @@ const SentItems = () => {
     useEffect(() => {
 
         async function fetchValue(){
-            const getSendEmailList = await contractMethods.methods.getSendEmailList(userName).call();
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+            const getSendEmailList = await contractMethods.methods.getSendEmailList(userName).call({from: accounts[0]});
             setEmailObject(getSendEmailList);
         }
 
