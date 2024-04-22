@@ -42,20 +42,12 @@ export const sendEmailOnSameChain = async (emailObject, encryptedMessage, accoun
         currentDate.toLocaleDateString(),
         userName
     ];
-
-
-    console.log("isSameHost", isSameHost);
-
     if (isSameHost) {                   
-
-        console.log("ssssssssssssss", contract , "sendEmailRequest", functionParams , account)
         const txHash = await transactionAction(contract , "sendEmailRequest", functionParams , account);   
-        console.log("==========txHash=============", txHash);
         props(true);
     } else {
         const contractMethodsData = new web3.eth.Contract(contractData.storageContract, contactAddressFromName);  
         const txHash = await transactionAction(contractMethodsData , "sendEmailRequest", functionParams , account); 
-        console.log("==========txHash=============", txHash);
         props(true);
     }
     return true;
@@ -81,7 +73,6 @@ export const sendEmailOnDifferentChain = async (emailObject, encryptedMessage, a
     const functionParams = [receiptDomain , emailString];
     const contractMethodsEmailPool = new web3.eth.Contract(contractData.poolContract, poolContractAddress);  
     const txHash = await transactionAction(contractMethodsEmailPool , "saveEmailsBasedOnDomain", functionParams , account); 
-    console.log("==========txHash=============", txHash);
     return txHash;
   };
   

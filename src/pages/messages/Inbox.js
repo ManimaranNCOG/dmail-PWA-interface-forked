@@ -235,8 +235,7 @@ const Inbox = () => {
         if (!msg.isRead) {
           try {
             const functionParams = [userName, msg.id];
-            const txHash = await transactionAction(contract, "markEmailAsRead", functionParams, account);
-            console.log("txHash", txHash)
+            await transactionAction(contract, "markEmailAsRead", functionParams, account);
           } catch (error) {
             console.log(error);
           }
