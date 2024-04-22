@@ -9,13 +9,9 @@ import config  from '../../config/config.json';
 import { ConnectWallet} from "../modal-popup/CommonAlert";
 import { web3Constant } from "../../constant/constant";
 import {getPublicKeyValue} from "../../helper/email-helper.js"
-import { transactionAction } from "../../helper/chainHelper.js";
+import { transactionAction } from "../../helper/chain-helper.js";
 
-const iconStyles = `
-color: #0D67FE;
-width: 30px;
-height: 30px;
-`;
+const iconStyles = `color: #0D67FE; width: 30px; height: 30px; `;
 
 const Wallet = styled(AccountBalanceWallet)`${iconStyles}`;
 const web3 = new Web3(window.ethereum);
@@ -30,9 +26,7 @@ const SignUp = () => {
     const [connectWalletModal, setConnectWalletModal] = useState(false);
     const [sign, setSign] = useState('');
     const [signBtnName, setSignBtnName] = useState("Sign Up");
-
     const [web3Value, setWeb3] = useState(null);
-    const [isConnected, setIsConnected] = useState(false);
     const [account, setAccount] = useState('');
     const [contract, setContract] = useState(null);
 
@@ -49,7 +43,6 @@ const SignUp = () => {
             .request({ method: 'eth_accounts' })
             .then(accounts => {
               if (accounts.length > 0) {
-                setIsConnected(true);
                 setAccount(accounts[0]);
               }
             })
@@ -57,7 +50,6 @@ const SignUp = () => {
     
           // Listen for account changes
           window.ethereum.on('accountsChanged', accounts => {
-            setIsConnected(accounts.length > 0);
             setAccount(accounts[0] || '');
           });
         } else {

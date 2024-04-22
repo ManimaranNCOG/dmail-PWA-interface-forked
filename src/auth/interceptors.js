@@ -13,7 +13,6 @@ export async function setHeaderToken(){
         return response;
     },
     function (error) {
-        console.log("error", error);
-               
+        console.log("error", error);               
     })
 } 

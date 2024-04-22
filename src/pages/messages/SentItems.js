@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import { Search2 } from "@styled-icons/remix-line/Search2";
-import SupportIcon from "../../asserts/menu-icons/filter-search.png";
+import SupportIcon from "../../assets/menu-icons/filter-search.png";
 import {EyeSlash} from "@styled-icons/bootstrap/EyeSlash";
 import {Star} from "@styled-icons/boxicons-solid/Star";
 import {StarOutline} from "@styled-icons/material/StarOutline";

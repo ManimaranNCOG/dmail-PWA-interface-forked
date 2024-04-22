@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from 'react';
+import React from 'react';
 import styled from "styled-components";
 import { Youtube } from "@styled-icons/boxicons-logos/Youtube";
 import { Tiktok } from "@styled-icons/fa-brands/Tiktok";    

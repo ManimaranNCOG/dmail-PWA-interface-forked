@@ -1,95 +1,6 @@
 {
     "storageContract" : [
         {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": true,
-                    "internalType": "string",
-                    "name": "user",
-                    "type": "string"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "string",
-                    "name": "email",
-                    "type": "string"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "uint256",
-                    "name": "id",
-                    "type": "uint256"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "uint256",
-                    "name": "createdDate",
-                    "type": "uint256"
-                }
-            ],
-            "name": "EmailAdded",
-            "type": "event"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "sender",
-                    "type": "address"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "string",
-                    "name": "encryptedData",
-                    "type": "string"
-                }
-            ],
-            "name": "EncryptedDataEmit",
-            "type": "event"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": false,
-                    "internalType": "string",
-                    "name": "errorMessage",
-                    "type": "string"
-                }
-            ],
-            "name": "ErrorOccurred",
-            "type": "event"
-        },
-        {
-            "inputs": [],
-            "name": "constDomain",
-            "outputs": [
-                {
-                    "internalType": "string",
-                    "name": "",
-                    "type": "string"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "constRegistryAddress",
-            "outputs": [
-                {
-                    "internalType": "string",
-                    "name": "",
-                    "type": "string"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
             "inputs": [
                 {
                     "internalType": "string",
@@ -174,6 +85,223 @@
                 }
             ],
             "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "string",
+                    "name": "user",
+                    "type": "string"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "string",
+                    "name": "email",
+                    "type": "string"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint256",
+                    "name": "id",
+                    "type": "uint256"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint256",
+                    "name": "createdDate",
+                    "type": "uint256"
+                }
+            ],
+            "name": "EmailAdded",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "sender",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "string",
+                    "name": "encryptedData",
+                    "type": "string"
+                }
+            ],
+            "name": "EncryptedDataEmit",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": false,
+                    "internalType": "string",
+                    "name": "errorMessage",
+                    "type": "string"
+                }
+            ],
+            "name": "ErrorOccurred",
+            "type": "event"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "username",
+                    "type": "string"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "emailId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "markEmailAsRead",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "user",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "emailString",
+                    "type": "string"
+                }
+            ],
+            "name": "saveEmailFromDifferentChain",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "sender",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "receiver",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "subject",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "encryptedData",
+                    "type": "string"
+                }
+            ],
+            "name": "saveSentEmailRequest",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "username",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "subject",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "encryptedData",
+                    "type": "string"
+                },
+                {
+                    "internalType": "address",
+                    "name": "walletAddress",
+                    "type": "address"
+                },
+                {
+                    "internalType": "string",
+                    "name": "dateValue",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "senderName",
+                    "type": "string"
+                }
+            ],
+            "name": "sendEmailRequest",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "hostRegistryAddress",
+                    "type": "string"
+                }
+            ],
+            "name": "setAddress",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "domain",
+                    "type": "string"
+                }
+            ],
+            "name": "setDomain",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "constDomain",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "constRegistryAddress",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
             "type": "function"
         },
         {
@@ -444,134 +572,6 @@
                 }
             ],
             "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "username",
-                    "type": "string"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "emailId",
-                    "type": "uint256"
-                }
-            ],
-            "name": "markEmailAsRead",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "user",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "emailString",
-                    "type": "string"
-                }
-            ],
-            "name": "saveEmailFromDifferentChain",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "sender",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "receiver",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "subject",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "encryptedData",
-                    "type": "string"
-                }
-            ],
-            "name": "saveSentEmailRequest",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "username",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "subject",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "encryptedData",
-                    "type": "string"
-                },
-                {
-                    "internalType": "address",
-                    "name": "walletAddress",
-                    "type": "address"
-                },
-                {
-                    "internalType": "string",
-                    "name": "dateValue",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "senderName",
-                    "type": "string"
-                }
-            ],
-            "name": "sendEmailRequest",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "hostRegistryAddress",
-                    "type": "string"
-                }
-            ],
-            "name": "setAddress",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "domain",
-                    "type": "string"
-                }
-            ],
-            "name": "setDomain",
-            "outputs": [],
-            "stateMutability": "nonpayable",
             "type": "function"
         }
     ], 

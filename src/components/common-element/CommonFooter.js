@@ -1,15 +1,10 @@
 import React, { useState , useEffect } from 'react';
-import styled from "styled-components";
-import { Compose } from "@styled-icons/fluentui-system-regular/Compose";
-import { Button, Modal } from 'antd';
+import { Modal } from 'antd';
 import 'react-quill/dist/quill.snow.css';
 import SendEmail from "../../pages/messages/SendEmail.js";
-const iconStyles = `color: #ffffff; width: 20px; height: 20px;`;
-const ComposeIcon = styled(Compose)`${iconStyles}`;
 
 function CommonFooter() {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const showModal = () => {   setIsModalOpen(true);    };
     const handleOk = () => {  setIsModalOpen(false);   };    
     const handleCancel = () => {  
       localStorage.setItem("sendingEmail", "");

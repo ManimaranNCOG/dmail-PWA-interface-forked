@@ -2,22 +2,16 @@ import React, { useState , useEffect } from 'react';
 import { Outlet } from "react-router-dom";
 import Sidebar from "../sidebar/Sidebar";
 import InitialFooter from "../common-element/InitialFooter";
-import Profile from '../../pages/profile-section/Profile';
 import styled from "styled-components";
 import { Menu } from "@styled-icons/entypo/Menu";
 
-const iconStyles = `
-  color: #4a88c5;
-  width: 50px;
-  height: 30px;
-`;
-
+const iconStyles = `color: #4a88c5; width: 50px; height: 30px;`;
 const MenuIcon = styled(Menu)`${iconStyles}`;
 
 
 const AppLayout = () => {
-  const curPath = window.location.pathname.split("/")[1];
-  const pageCondition = (!curPath || curPath ===  'register');
+  const currentPath = window.location.pathname.split("/")[1];
+  const pageCondition = (!currentPath || currentPath ===  'register');
 
     const [isModalOpen, setIsModalOpen] = useState(!pageCondition);
 
@@ -26,14 +20,11 @@ const AppLayout = () => {
           setIsModalOpen(false);
         };    
         window.addEventListener('isMenuClicked', handleClick);    
-
-        const pageCondition = (!curPath || curPath ===  'register');
+        const pageCondition = (!currentPath || currentPath ===  'register');
         if(!pageCondition) setIsModalOpen(true);
         return () => {
           window.removeEventListener('isMenuClicked', handleClick);
         };
-
-
       }, []); // Empty dependency array to run effect only once
 
 
@@ -47,11 +38,11 @@ const AppLayout = () => {
 
     }else{
 
-      const curPath = window.location.pathname.split("/")[1];
+      const currentPath = window.location.pathname.split("/")[1];
       let isButtonRender = true;
       
 
-      if(!curPath || curPath ===  'register'){
+      if(!currentPath || currentPath ===  'register'){
         isButtonRender = false;
       }
 
@@ -61,10 +52,8 @@ const AppLayout = () => {
                 {isButtonRender && 
                   <div className='no-menu-top-header absolute'> 
                   <button className='open-btn-menu-home absolute' onClick={(e)=> { setIsModalOpen(true) }}><MenuIcon /></button>
-                  {/* <Profile /> */}
                   </div>
                 }
-                {/* <Sidebar className={false} /> */}
                 <Outlet />
                 {!isButtonRender && <InitialFooter /> }                
             </div>

@@ -1,13 +1,10 @@
 import Cookies from "universal-cookie";
-import { deleteCacheStorage } from "../helper/cacheHelper";
-import db from "../db/dbService";
+import { deleteCacheStorage } from "../helper/cache-helper";
 import { deleteDatabase } from "../db/dbHelper";
 let cookies = new Cookies;
 
 
-export const logout = () => {
-
-    
+export const logout = () => {    
     deleteDatabase();
     deleteCacheStorage("inbox");
     cookies.set("userObject", '', { path: "/", maxAge: 0 });

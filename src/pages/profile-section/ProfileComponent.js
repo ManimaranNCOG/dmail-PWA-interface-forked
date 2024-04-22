@@ -8,8 +8,8 @@ const ProfileComponent = () => {
     const handleGoBack = () => {
         window.history.back();
     };
-    const curPath = window.location.pathname.split('/')[1];
-    const ComponentToRender = curPath === 'settings' ? Settings : UserProfile;
+    const currentPath = window.location.pathname.split('/')[1];
+    const ComponentToRender = currentPath === 'settings' ? Settings : UserProfile;
 
     return (
         <div>

@@ -31,8 +31,8 @@ export const getCacheStorage = async (cacheName) => {
 
 export const deleteCacheStorage = async (cacheName) => {
     try {
-        const hasDeleted = await caches.delete(cacheName);
-        return hasDeleted;        
+        const deleteStatus = await caches.delete(cacheName);
+        return deleteStatus;        
     } catch (error) {
         return false;
     }
