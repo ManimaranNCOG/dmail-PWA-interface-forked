@@ -7,7 +7,6 @@ import contract  from '../../contracts/contract.json';
 import config  from '../../config/config.json';
 import { setCacheStorage } from "../../helper/cacheHelper";
 import Cookies from "universal-cookie";
-import { transactionAction } from "../../helper/chainHelper";
 
 const contractAddress = config.json.CONTRACT;
 const web3 = new Web3(window.ethereum);
@@ -79,13 +78,9 @@ const Login = () => {
         if(isUserPresent){
             const data = await login(username);   
             if(data.isAuth){
-                const functionParams = [username, data.token];
-                const txHash = await transactionAction(contractMethods , "saveTokenForUsername", functionParams , accounts[0]);
-                console.log("===========txHash============",txHash)
                 const userObject = { name : username ,  wallet : accounts[0], token : data.token  };
                 cookies.set("accessToken", data.token, { path: "/" });
                 cookies.set("userObject", userObject, { path: "/" });
-
                 setCacheStorage("loggedUser" , userObject);
                 window.open(`/emails`, "_self");
                 return true;

@@ -38,7 +38,6 @@ const ComposeIcon = styled(Compose)`${iconStyles}`;
   const [contract, setContract] = useState(null);
 
   const userName = user && user.name;
-  const token = user && user.token;
 
   const networkId = config.json.NETWORK_ID;
   const web3 = new Web3(window.ethereum);
@@ -85,7 +84,7 @@ useEffect(() => {
     setContract(contractInstance);  
 
     try {
-      const settingsJson = await contractInstance.methods.getAccountSettings(userName , token).call();
+      const settingsJson = await contractInstance.methods.getAccountSettings(userName).call();
       setAccountSettings(JSON.parse(settingsJson));                    
     } catch (error) {
         console.log("error" , error)
@@ -140,7 +139,7 @@ useEffect(() => {
     const data = await getEncryptedValue(msg,publicKey);
     const encryptedMessage = data.returnValue;
 
-    const functionParams = [userName, emailObject.recipient , emailObject.subject , encryptedMessage , token];
+    const functionParams = [userName, emailObject.recipient , emailObject.subject , encryptedMessage];
     const txHash = await transactionAction(contract , "saveSentEmailRequest", functionParams , account);  
     return txHash;
   }

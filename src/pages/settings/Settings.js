@@ -37,11 +37,8 @@ const Settings = () => {
     const [contract, setContract] = useState(null);
 
     const darkMode = useDarkMode(false);
-
-    const networkId = config.json.NETWORK_ID;
     const web3 = new Web3(window.ethereum);
     const userName = user && user.name; 
-    const token = user && user.token;
     
     useEffect(() => {
         // Check if MetaMask is installed
@@ -77,7 +74,7 @@ const Settings = () => {
           const contractInstance = new web3.eth.Contract(contractData.storageContract, config.json.CONTRACT);      
           setContract(contractInstance);
           try {
-                const settingsJson = await contractInstance.methods.getAccountSettings(userName , token).call();
+                const settingsJson = await contractInstance.methods.getAccountSettings(userName).call();
                 setSettings(JSON.parse(settingsJson));                    
             } catch (error) {
                 return true;
@@ -97,7 +94,7 @@ const Settings = () => {
         setButtonClass('loading');
 
         if (buttonClass === "success") return;
-        const functionParams = [ userName, JSON.stringify(settings), token ] ;
+        const functionParams = [ userName, JSON.stringify(settings) ] ;
         const txHash = await transactionAction(contract , "createAndUpdateSettings", functionParams , account);  
 
         if(txHash){

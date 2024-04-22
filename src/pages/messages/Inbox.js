@@ -60,12 +60,9 @@ const Inbox = () => {
   
   const [user] = useState(cookies.get("userObject"));
 
-  const networkId = config.json.NETWORK_ID;
   const web3 = new Web3(window.ethereum);
   const contractMethods = new web3.eth.Contract(contractData.storageContract, contractAddress);
   const userName = user && user.name;
-  const token = user && user.token;
-
 
   useEffect(() => {
     // Check if MetaMask is installed
@@ -253,7 +250,7 @@ useEffect(() => {
       if (accounts.length) {
         if (!msg.isRead) {
             try {
-              const functionParams = [userName, msg.id, token];
+              const functionParams = [userName, msg.id];
               const txHash = await transactionAction(contract , "markEmailAsRead", functionParams , account);  
               console.log("txHash", txHash)  
             } catch (error) {
