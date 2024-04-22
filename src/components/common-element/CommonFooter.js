@@ -41,12 +41,6 @@ function CommonFooter() {
 
     return (        
             <>            
-                {/* <div className="common-footer-ele">
-                    <button className="common-compose-footer-btn"  onClick={showModal} > 
-                        <ComposeIcon /> Compose
-                    </button>
-                </div> */}
-
                 <Modal className="modal-send-email-header" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} >
                         <div className='send-email-body-content'>
                               <SendEmail placeholder="Write something..." handleCancel={handleCancel} reRenderIt={reload} />

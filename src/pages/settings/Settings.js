@@ -8,6 +8,7 @@ import { Tick } from "@styled-icons/typicons/Tick";
 import Cookies from "universal-cookie";
 import { logout } from '../../auth/logout';
 import useDarkMode from 'use-dark-mode';
+import { transactionAction } from '../../helper/chainHelper';
 
 const cookies = new Cookies();
 
@@ -96,9 +97,8 @@ const Settings = () => {
         setButtonClass('loading');
 
         if (buttonClass === "success") return;
-        const transaction = await contract.methods.createAndUpdateSettings(userName, JSON.stringify(settings), token ).send({ from: account });
-        const receipt = await web3.eth.getTransactionReceipt(transaction.transactionHash);              
-        const txHash = receipt.transactionHash;
+        const functionParams = [ userName, JSON.stringify(settings), token ] ;
+        const txHash = await transactionAction(contract , "createAndUpdateSettings", functionParams , account);  
 
         if(txHash){
             setButtonClass("success");

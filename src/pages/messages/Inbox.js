@@ -18,6 +18,7 @@ import { logout } from '../../auth/logout.js';
 import db from '../../db/dbService.js';
 import { returnEmailRecords } from '../../db/dbHelper.js';
 import FbLoader from '../../components/loader/FbLoader.js';
+import { transactionAction } from '../../helper/chainHelper.js';
 
 const cookies = new Cookies();
 
@@ -252,9 +253,9 @@ useEffect(() => {
       if (accounts.length) {
         if (!msg.isRead) {
             try {
-              const transaction = await contract.methods.markEmailAsRead(userName, msg.id, token ).send({ from: account });
-              const receipt = await web3.eth.getTransactionReceipt(transaction.transactionHash);              
-              const txHash = receipt.transactionHash;         
+              const functionParams = [userName, msg.id, token];
+              const txHash = await transactionAction(contract , "markEmailAsRead", functionParams , account);  
+              console.log("txHash", txHash)  
             } catch (error) {
                 console.log(error);
             }

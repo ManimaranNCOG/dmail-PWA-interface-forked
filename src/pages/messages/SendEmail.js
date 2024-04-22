@@ -13,6 +13,7 @@ import { logout } from '../../auth/logout.js';
 import { getPublicKey, sendEmailOnDifferentChain, sendEmailOnSameChain } from '../../helper/email-helper.js';
 import { editorConstant } from '../../constant/constant.js';
 import { SendEmailLoader } from '../modal-popup/CommonAlert.js';
+import { transactionAction } from '../../helper/chainHelper.js';
 
 
 const cookies = new Cookies();
@@ -139,10 +140,8 @@ useEffect(() => {
     const data = await getEncryptedValue(msg,publicKey);
     const encryptedMessage = data.returnValue;
 
-    const transaction = await contract.methods.saveSentEmailRequest(userName, emailObject.recipient , emailObject.subject , encryptedMessage , token ).send({ from: account });
-    const receipt = await web3.eth.getTransactionReceipt(transaction.transactionHash);              
-    const txHash = receipt.transactionHash;
-
+    const functionParams = [userName, emailObject.recipient , emailObject.subject , encryptedMessage , token];
+    const txHash = await transactionAction(contract , "saveSentEmailRequest", functionParams , account);  
     return txHash;
   }
 
@@ -193,7 +192,7 @@ useEffect(() => {
       if(encryptedMessage && isSameBlockChain){
         await sendEmailOnSameChain(emailObject, encryptedMessage, accounts, isSameHost, contactAddressFromName , userName , setEncryptionLoader , contract ,  account);
       } else if (encryptedMessage){
-        await sendEmailOnDifferentChain(emailObject , encryptedMessage , accounts , senderChainAddress , jsonValue , userName , setEncryptionLoader );
+        await sendEmailOnDifferentChain(emailObject , encryptedMessage , accounts , senderChainAddress , jsonValue , userName , account );
       }
 
       setEncryptionMsg("Message Sent");

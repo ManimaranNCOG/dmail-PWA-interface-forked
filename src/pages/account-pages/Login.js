@@ -7,10 +7,9 @@ import contract  from '../../contracts/contract.json';
 import config  from '../../config/config.json';
 import { setCacheStorage } from "../../helper/cacheHelper";
 import Cookies from "universal-cookie";
+import { transactionAction } from "../../helper/chainHelper";
 
 const contractAddress = config.json.CONTRACT;
-
-const networkId = config.json.NETWORK_ID;
 const web3 = new Web3(window.ethereum);
 const contractMethods = new web3.eth.Contract(contract.storageContract, contractAddress);
 const cookies = new Cookies();
@@ -80,9 +79,9 @@ const Login = () => {
         if(isUserPresent){
             const data = await login(username);   
             if(data.isAuth){
-                const transaction = await contractMethods.methods.saveTokenForUsername(username, data.token ).send({ from: accounts[0] });
-                const receipt = await web3.eth.getTransactionReceipt(transaction.transactionHash);              
-                const txHash = receipt.transactionHash;      
+                const functionParams = [username, data.token];
+                const txHash = await transactionAction(contractMethods , "saveTokenForUsername", functionParams , accounts[0]);
+                console.log("===========txHash============",txHash)
                 const userObject = { name : username ,  wallet : accounts[0], token : data.token  };
                 cookies.set("accessToken", data.token, { path: "/" });
                 cookies.set("userObject", userObject, { path: "/" });
@@ -121,9 +120,6 @@ const Login = () => {
                     <button type="submit"> {isButtonLoading ? "Please Wait" : "Log In" }</button>
                 </div>
              <hr className='seperation-tag-attribute' />
-                <div className='Login-wallet-btn'> 
-                        Wallet Login
-                </div> 
                 <div className="signup-link">
                     Don't have an account?  <Link to="/register"> Sign Up</Link>
                 </div>
