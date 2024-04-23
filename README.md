@@ -1,7 +1,7 @@
-# bmail-ui-frontend
+# dmail-ui-frontend
 
 ## Overview
-bmail-ui-frontend is a React.js-based frontend application for interacting with emails, designed to support both Web3 and Web2 technologies. It provides a user-friendly interface for managing email interactions in a modern web environment.
+dmail-ui-frontend is a React.js-based frontend application for interacting with emails, designed to support both Web3 and Web2 technologies. It provides a user-friendly interface for managing email interactions in a modern web environment.
 
 ## Configuration
 Before running the application, you need to set up your configuration values. Locate the `config.js` file in the project root and update it with your specific values:
@@ -22,7 +22,7 @@ Replace the placeholder values (`YOUR_CONTRACT_ADDRESS`, `YOUR_NETWORK_ID`, `YOU
    ```
 2. Navigate to the project directory:
    ```
-   cd bmail-ui-frontend
+   cd dmail-ui-frontend
    ```
 3. Install dependencies:
    ```
