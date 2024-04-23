@@ -4,14 +4,11 @@
 bmail-ui-frontend is a React.js-based frontend application for interacting with emails, designed to support both Web3 and Web2 technologies. It provides a user-friendly interface for managing email interactions in a modern web environment.
 
 ## Configuration
-Before running the application, you need to set up your configuration values. Locate the `config.json` file in the project root and update it with your specific values:
+Before running the application, you need to set up your configuration values. Locate the `config.js` file in the project root and update it with your specific values:
 
 ```json
 {
-    "CONTRACT": "YOUR_CONTRACT_ADDRESS",
-    "NETWORK_ID": "YOUR_NETWORK_ID",
-    "KEY": "YOUR_API_KEY",
-    "DEFAULT_SENDER": "YOUR_DEFAULT_SENDER_ADDRESS"
+    "CONTRACT": "YOUR_CONTRACT_ADDRESS"
 }
 ```
 
@@ -47,4 +44,4 @@ Replace the placeholder values (`YOUR_CONTRACT_ADDRESS`, `YOUR_NETWORK_ID`, `YOU
 
 ```
 
-In this updated README file, I've included a "Configuration" section with instructions for users to update their `config.json` file with their own values before running the application.
+In this updated README file, I've included a "Configuration" section with instructions for users to update their `config.js` file with their own values before running the application.

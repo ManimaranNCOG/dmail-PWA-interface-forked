@@ -1,9 +1,7 @@
 {
     "json" : {
         "CONTRACT" : "-" ,
-        "NETWORK_ID" : "-" , 
         "CHAIN_ID" : "-",
-        "DOMAIN" : "-",
         "EMAIL_API" : "-"
     }
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import './signup.css';
 import { Link } from "react-router-dom";
-import { login } from "../../service/actions";
+import { login } from "../../service/api-actions";
 import Web3 from 'web3';
 import contract  from '../../contracts/contract.json';
 import constant  from '../../constant/constant.js';

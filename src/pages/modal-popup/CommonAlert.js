@@ -8,8 +8,9 @@ import key from "../../assets/gif-loader/key.png";
 import Web3 from 'web3';
 import { getChaindetailsFromHost } from "../../helper/wallet-helper";
 import config  from '../../config/config.json';
+import { getCacheStorage } from "../../helper/cache-helper.js";
 
-const web3 = new Web3(config.json.NETWORK_ID);
+const web3 = new Web3(window.ethereum);
 const iconStyles = `color: #0f7929; width: 20px; height: 20px;`;
 const VerifiedIcon = styled(Verified)`${iconStyles}`;
 const chainId = config.json.CHAIN_ID;
@@ -41,7 +42,8 @@ async function connectWallet(){
             // Requesting MetaMask to connect
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
 
-            const chainJson = await getChaindetailsFromHost();
+            const domainObject = await getCacheStorage("domain");        
+            const chainJson = await getChaindetailsFromHost(domainObject.domain);
 
             if (window.ethereum.networkVersion !== chainId) {
                 try {

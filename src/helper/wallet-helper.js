@@ -2,16 +2,14 @@ import Web3 from 'web3';
 import contract from '../contracts/contract.json';
 import config from '../config/config.json';
 
-const networkId = config.json.NETWORK_ID;
 const contractAddress = config.json.CONTRACT;
-const web3 = new Web3(networkId);
+const web3 = new Web3(window.ethereum);
 
-export const getChaindetailsFromHost = async (contractAdd = null, domainToGet = null) => {
-
+export const getChaindetailsFromHost = async (domain) => {
     const contractMethods = new web3.eth.Contract(contract.storageContract, contractAddress);
     const hostAddress = await contractMethods.methods.constRegistryAddress().call();
     const hostContractMethods = new web3.eth.Contract(contract.hostContract, hostAddress);
-    const retrivedAddress = await hostContractMethods.methods.getChainDetails(config.json.DOMAIN).call();
+    const retrivedAddress = await hostContractMethods.methods.getChainDetails(domain).call();
 
     try {
         const chainJson = JSON.parse(retrivedAddress["1"]);

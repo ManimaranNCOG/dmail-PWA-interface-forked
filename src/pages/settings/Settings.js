@@ -6,7 +6,6 @@ import config  from '../../config/config.json';
 import styled from "styled-components";
 import { Tick } from "@styled-icons/typicons/Tick";
 import Cookies from "universal-cookie";
-import { logout } from '../../auth/logout';
 import useDarkMode from 'use-dark-mode';
 import { transactionAction } from '../../helper/chain-helper.js';
 
@@ -23,7 +22,6 @@ const accountSettings = [
     { label: "Dark Mode", value: false , id : 2 },
     { label: "Notifications", value: false , id : 3 }
 ];
-const contractAddress = config.json.CONTRACT;
 
 const Settings = () => {
 
@@ -32,7 +30,6 @@ const Settings = () => {
     const [buttonClass, setButtonClass] = useState('');
     const [user] = useState(cookies.get("userObject"));
     const [web3Value, setWeb3] = useState(null);
-    const [isConnected, setIsConnected] = useState(false);
     const [account, setAccount] = useState('');
     const [contract, setContract] = useState(null);
 
@@ -58,7 +55,6 @@ const Settings = () => {
 
         // Listen for account changes
         window.ethereum.on('accountsChanged', accounts => {
-            setIsConnected(accounts.length > 0);
             setAccount(accounts[0] || '');
         });
         } else {

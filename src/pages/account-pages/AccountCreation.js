@@ -10,6 +10,7 @@ import { ConnectWallet} from "../modal-popup/CommonAlert";
 import { web3Constant } from "../../constant/constant";
 import {getPublicKeyValue} from "../../helper/email-helper.js"
 import { transactionAction } from "../../helper/chain-helper.js";
+import { setCacheStorage } from "../../helper/cache-helper.js";
 
 const iconStyles = `color: #0D67FE; width: 30px; height: 30px; `;
 
@@ -63,6 +64,8 @@ const SignUp = () => {
           // Initialize contract instance
           const contractInstance = new web3.eth.Contract(contractData.storageContract, config.json.CONTRACT);
           const domain = await contractInstance.methods.constDomain().call();
+          const domainObject = { domain }
+          setCacheStorage("domain" , domainObject);
           localStorage.setItem("domain", domain);
           setContract(contractInstance);
         }

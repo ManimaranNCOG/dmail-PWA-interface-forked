@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import Cookies from "universal-cookie";
-import { verifyToken } from '../service/actions';
+import { verifyToken } from '../service/api-actions';
 import { logout } from './logout';
 
 const cookies = new Cookies();
