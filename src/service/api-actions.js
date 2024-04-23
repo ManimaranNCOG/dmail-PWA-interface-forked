@@ -1,8 +1,9 @@
 // apiActions.js
 import axios from 'axios';
 import {commonHeaders} from './commonHeader';
-import config  from '../config/config.json';
-const BASE_URL = config.json.EMAIL_API;
+import config from '../config/config.json';                 
+
+const BASE_URL = config["EMAIL_API"];
 commonHeaders();
 
 async function fetchAPI(endpoint, method, body) {
@@ -10,7 +11,7 @@ async function fetchAPI(endpoint, method, body) {
         const response = await axios({
             method: method,
             url: `${BASE_URL}/${endpoint}`,
-            headers: {
+            headers: {                              
                 'Content-Type': 'application/json'
             },
             data: body

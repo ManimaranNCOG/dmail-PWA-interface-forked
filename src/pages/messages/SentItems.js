@@ -46,8 +46,7 @@ const SentItems = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [user] = useState(cookies.get("userObject"));
 
-    const networkId = config.json.NETWORK_ID;
-    const web3 = new Web3(networkId);
+    const web3 = new Web3(window.ethereum);
     const contractMethods = new web3.eth.Contract(contract.storageContract, contractAddress);
     const userName = user && user.name;
 

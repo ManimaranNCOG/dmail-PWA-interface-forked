@@ -7,7 +7,7 @@ import { Compose } from "@styled-icons/fluentui-system-regular/Compose";
 import Web3 from 'web3';
 import contractData from '../../contracts/contract.json';
 import config from '../../config/config.json';
-import { getEncryptedValue } from '../../service/actions.js';
+import { getEncryptedValue } from '../../service/api-actions.js';
 import Cookies from "universal-cookie";
 import { getPublicKey, sendEmailOnDifferentChain, sendEmailOnSameChain } from '../../helper/email-helper.js';
 import { editorConstant } from '../../constant/constant.js';
