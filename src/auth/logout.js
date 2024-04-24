@@ -4,6 +4,7 @@ import { deleteDatabase } from "../db/dbHelper";
 let cookies = new Cookies;
 
 
+// Delete all the storage from the browser when the user logged out
 export const logout = () => {    
     deleteDatabase();
     deleteCacheStorage("inbox");

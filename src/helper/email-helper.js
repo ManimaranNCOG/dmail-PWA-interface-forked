@@ -9,7 +9,7 @@ const web3 = new Web3(window.ethereum);
 const contractMethods = new web3.eth.Contract(contractData.storageContract, contractAddress);
 const currentDate = new Date();
 
-
+// Function to get public key from smartcontract asynchronously
 export const getPublicKey = async (emailObject, isSameHost, contactAddressFromName, jsonValue) => {
 
     try {
@@ -32,6 +32,7 @@ export const getPublicKey = async (emailObject, isSameHost, contactAddressFromNa
 
 } 
 
+// Function to send email on the same blockchain chain
 export const sendEmailOnSameChain = async (emailObject, encryptedMessage, accounts, isSameHost, contactAddressFromName , userName , props , contract , account) => {
 
     const functionParams = [
@@ -43,16 +44,17 @@ export const sendEmailOnSameChain = async (emailObject, encryptedMessage, accoun
         userName
     ];
     if (isSameHost) {                   
-        const txHash = await transactionAction(contract , "sendEmailRequest", functionParams , account);   
+        await transactionAction(contract , "sendEmailRequest", functionParams , account);   
         props(true);
     } else {
         const contractMethodsData = new web3.eth.Contract(contractData.storageContract, contactAddressFromName);  
-        const txHash = await transactionAction(contractMethodsData , "sendEmailRequest", functionParams , account); 
+        await transactionAction(contractMethodsData , "sendEmailRequest", functionParams , account); 
         props(true);
     }
     return true;
 }
 
+// Function to send email on the different blockchain chain
 export const sendEmailOnDifferentChain = async (emailObject, encryptedMessage, accounts, senderChainAddress, jsonValue, userName, account) => {
   
     if (senderChainAddress["0"] && senderChainAddress["1"]) {
@@ -76,7 +78,7 @@ export const sendEmailOnDifferentChain = async (emailObject, encryptedMessage, a
     return txHash;
   };
   
-
+// Function to get public key from metamask asynchronously
   export const getPublicKeyValue = async () => {
 
     try {

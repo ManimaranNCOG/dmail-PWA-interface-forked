@@ -1,5 +1,7 @@
 import axios from 'axios';
 import Cookies from "universal-cookie";
+
+// Common header token append method
 export async function setHeaderToken(){
     axios.interceptors.request.use(function (config) {
         const cookies = new Cookies;

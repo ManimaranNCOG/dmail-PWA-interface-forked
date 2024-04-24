@@ -1,4 +1,6 @@
 import { optionalValidation } from "./object-validation-helper.js";
+
+// Function is used to store the object on the cache browser storage.
 export const setCacheStorage = (cacheName, dataValue) => {
     if ('caches' in window) {
         caches.open(cacheName)
@@ -18,6 +20,7 @@ export const setCacheStorage = (cacheName, dataValue) => {
     }
 }
 
+// Function is used to return the object from cache browser storage.
 export const getCacheStorage = async (cacheName) => {
     if ('caches' in window) {
         const cache = await caches.open(cacheName)
@@ -29,6 +32,7 @@ export const getCacheStorage = async (cacheName) => {
     }
 }
 
+// Function is used to delete the object from cache browser storage.
 export const deleteCacheStorage = async (cacheName) => {
     try {
         const deleteStatus = await caches.delete(cacheName);

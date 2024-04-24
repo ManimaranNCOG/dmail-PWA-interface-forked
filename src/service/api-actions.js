@@ -3,7 +3,7 @@ import axios from 'axios';
 import {commonHeaders} from './commonHeader';
 import config from '../config/config.json';                 
 
-const BASE_URL = config["EMAIL_API"];
+const BASE_URL = config.json["EMAIL_API"];
 commonHeaders();
 
 async function fetchAPI(endpoint, method, body) {

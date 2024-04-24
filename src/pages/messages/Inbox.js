@@ -88,8 +88,8 @@ const Inbox = () => {
 
 
   useEffect(() => {
+    // Initialize contract instance
     async function fetchdata() {
-      // Initialize contract instance
       const contractInstance = new web3.eth.Contract(contractData.storageContract, config.json.CONTRACT);
       setContract(contractInstance);
     }
@@ -115,19 +115,16 @@ const Inbox = () => {
 
 
 
+  // function to check & uncheck the emails
   const handleCheckboxChange = (event, msg) => {
-
     const { checked } = event.target;
-
     const emailId = msg.id;
     let selectedMailIds = selectedItems;
-
     if (checked) {
       selectedMailIds.push(emailId);
     } else {
       selectedMailIds = selectedMailIds.filter(item => item !== emailId);
     }
-
     setSelectedItems(selectedMailIds);
     return true;
   };
@@ -139,6 +136,7 @@ const Inbox = () => {
   };
 
 
+  // function to get & format the emails 
   async function setRecordsEmailsValue() {
 
     try {
@@ -175,9 +173,7 @@ const Inbox = () => {
   }
 
 
-
-
-
+// function to append the decypted email on the existing list
   async function getDecrypValue(encryptedMsg, index) {
     const accounts = await window.ethereum.request({ method: 'eth_accounts' });
 
@@ -203,7 +199,7 @@ const Inbox = () => {
     return null;
   }
 
-
+// function to save the decrypted email on the indexedDb 
   const indexedDb = async (object) => {
     const value = await db.emails.where("mailId").equals(object.mailId).toArray();
     if (value.length) {
@@ -215,7 +211,7 @@ const Inbox = () => {
     }
   }
 
-
+// function to display the decrypted email
   const handleDecryptedClick = async (msg) => {
     try {
       const jsonMessage = JSON.parse(msg.decryptedMail);
@@ -226,6 +222,7 @@ const Inbox = () => {
     }
   };
 
+  // function to display the decrypted email by decrypting from metamask
   const handleEncryptedClick = async (msg, index) => {
 
     const accounts = await window.ethereum.request({ method: 'eth_accounts' });
@@ -247,20 +244,18 @@ const Inbox = () => {
     }
   };
 
+  // function for email action TODO
   async function actionTypeValue(actionType) {
-
     switch (actionType) {
       case "Delete":
         // delete code comes here
-        break;
-
+        break;      
       default:
         break;
     }
   }
 
   const buttonActions = ["Delete", "Archive", "Report", "Sweep", "Move to", "Reply", "Mark all as read"];
-
   return (
     <>
       <div className="header-inbox-common">
