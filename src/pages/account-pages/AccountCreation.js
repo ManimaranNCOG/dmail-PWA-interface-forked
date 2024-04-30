@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useRef  } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import './signup.css';
 import styled from "styled-components";
@@ -13,12 +13,13 @@ import { transactionAction } from "../../helper/chain-helper.js";
 import { setCacheStorage } from "../../helper/cache-helper.js";
 
 const iconStyles = `color: #0D67FE; width: 30px; height: 30px; `;
-
 const Wallet = styled(AccountBalanceWallet)`${iconStyles}`;
 const web3 = new Web3(window.ethereum);
 
 const SignUp = () => {
 
+    const usernameRef = useRef(null);
+    const nameRef = useRef(null);
     const navigate = useNavigate();
     const [btnName, setBtnName] = useState("Connect Wallet");
     const [isButtonLoading, setIsButtonLoading] = useState(false);
@@ -76,12 +77,20 @@ const SignUp = () => {
 
 
 
+    // function to initialise the wallet connection
     async function connectMetaMask() {
-        await setToastMsg("");
-        await setErrorType("")
-        setConnectWalletModal(true);
+        if(window.ethereum){
+            await setToastMsg("");
+            await setErrorType("");
+            setConnectWalletModal(true);
+        }else{
+            await setToastMsg("Please Install Metamask");
+            await setErrorType("wallet");
+        }
     }
 
+
+    // form submission
     async function handleSubmit(e){
         e.preventDefault();
         setToastMsg("")
@@ -89,6 +98,7 @@ const SignUp = () => {
         await getConnectedWalletAndSign();
     }
 
+    // function to create a account on the smart contract
     async function getConnectedWalletAndSign() {
         try {
             const username = document.getElementById('username').value;
@@ -122,9 +132,12 @@ const SignUp = () => {
 
                     const createdDate = new Date();
                     const formattedDate = createdDate.toLocaleDateString('en-GB');
+                    const createdUser = { userNameWithDomain };
+                    await setCacheStorage("createdUser" , createdUser);
                     let recordCreated = false;
                     const functionParams = [username, name, publicKey, connectedAccount, formattedDate];
                     const txHash = await transactionAction(contract , "createAccount", functionParams , account);
+                    await new Promise(resolve => setTimeout(resolve, 5000));  // Wait for 2 seconds for completing the transaction
 
                     if(txHash){
                         recordCreated = true;
@@ -132,8 +145,7 @@ const SignUp = () => {
                     setIsButtonLoading(false);
 
                     if(recordCreated){        
-                        setSignBtnName("Account Created");
-                       
+                        setSignBtnName("Account Created");                       
                         setTimeout(function() {
                             navigate(`/`);
                         }, 1000);
@@ -157,17 +169,27 @@ const SignUp = () => {
             await setToastMsg("Please Connect Your metamask wallet");
             await setErrorType("wallet");
         }
+        setSignBtnName("Sign Up");
         setIsButtonLoading(false);
     }
 
+    // function to save the signed signature value from metamask
     const saveSignature =(signature)=> {
-
         if(signature){
             setSign(signature);
             setConnectWalletModal(false);
             setBtnName("Connected");
         }
     }
+
+    // function to prevent the unwanted text on the input field
+    const handleInputChange = (ref) => {
+        const inputValue = ref.current.value;
+        const regex = /^[a-zA-Z0-9]*$/; // Regex to allow only alphanumeric characters
+        if (!regex.test(inputValue)) {
+            ref.current.value = inputValue.slice(0, -1); // Remove the last character if it's not alphanumeric
+        }
+    };
 
     return (
         <div className="wrapper">
@@ -176,11 +198,11 @@ const SignUp = () => {
             </div>
             <form onSubmit={handleSubmit} style={{ opacity: isButtonLoading ? "50%" : "100%" }}>
                 <div className={`field ${errorType}`}>
-                    <input type="text" id="username" required />
+                    <input type="text" id="username" required ref={usernameRef} onInput={() => handleInputChange(usernameRef)} />
                     <label>Username</label>
                 </div>
                 <div className={`field ${errorType}`}>
-                    <input type="text" id="name" required />
+                    <input type="text" id="name" ref={nameRef} onInput={() => handleInputChange(nameRef)} required />
                     <label>Name</label>
                 </div>
 

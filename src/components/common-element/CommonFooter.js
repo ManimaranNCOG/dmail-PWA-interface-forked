@@ -27,6 +27,7 @@ function CommonFooter() {
         };
       }, []); 
 
+    // render the inbox component
     function reload(){
       const updateEvent = new CustomEvent('renderInbox', { detail: { data: true} });
       window.dispatchEvent(updateEvent);

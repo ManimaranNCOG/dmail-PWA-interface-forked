@@ -97,6 +97,7 @@ const SendEmail = (props) => {
   }, [web3Value]);
 
 
+  // compose editor
   const Editor = ({ placeholder }) => {
     const [editorHtml, setEditorHtml] = useState(localStorage.getItem("sendingEmail") || "");
     const [theme] = useState('snow');
@@ -129,6 +130,7 @@ const SendEmail = (props) => {
   }
 
 
+  // function to send email based on the chain
   async function sendEmail(emailObject) { // Sending Email
     
     setManageState(true);

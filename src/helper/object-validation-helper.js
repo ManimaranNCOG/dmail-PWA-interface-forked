@@ -1,5 +1,5 @@
+// Function to operate the optional validation customizingly
 export const optionalValidation = (obj, path, defaultValue=null) => {
-
     try{
         const properties = path.split(".");
         let result = obj;

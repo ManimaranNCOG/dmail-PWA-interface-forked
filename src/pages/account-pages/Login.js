@@ -7,7 +7,7 @@ import contract  from '../../contracts/contract.json';
 import constant  from '../../constant/constant.js';
 
 import config  from '../../config/config.json';
-import { setCacheStorage } from "../../helper/cache-helper";
+import { setCacheStorage , getCacheStorage } from "../../helper/cache-helper";
 import Cookies from "universal-cookie";
 
 const contractAddress = config.json.CONTRACT;
@@ -18,14 +18,21 @@ const cookies = new Cookies();
 const Login = () => {
     const [isButtonLoading, setIsButtonLoading] = useState(false);
     const [focused, setFocused] = useState(false);
-    const [domainValue , setDomainValue ] = useState( localStorage.getItem("domain") || "domain.com");
+    const [domainValue , setDomainValue ] = useState('');
     const [toastMsg, setToastMsg] = useState('');
     const [errorType, setErrorType] = useState('');
+    const [userNameWithDomain, setUserName] = useState('');
 
     useEffect(() => {
+        // save the domain on browser from the host smart contract
         async function setDomain() {
             const domain = await contractMethods.methods.constDomain().call();
             setDomainValue(domain);
+            const createdUser = await getCacheStorage("createdUser");
+            if(createdUser && createdUser.userNameWithDomain) {
+                setUserName(createdUser.userNameWithDomain);
+                handleBlur();
+            } 
         }
         setDomain();
       }, []);
@@ -33,6 +40,7 @@ const Login = () => {
     const handleFocus = () => { setFocused(true) };  
     const handleBlur = () => { setFocused(false) };
 
+    // form submission
     async function handleSubmit(e){
         await setToastMsg("");
         await setErrorType("");
@@ -40,6 +48,7 @@ const Login = () => {
         await loginValidation();
     }
     
+    // Initiating the login method.    
     async function loginValidation() {
         const userName = document.getElementById("email").value;
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
@@ -58,8 +67,8 @@ const Login = () => {
     }
 
 
+    // function to check the user and authenticate to our dmail
     async function userLogin(username) {
-
         setIsButtonLoading(true);
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
         const isUserPresent = await contractMethods.methods.loginUser(userName, accounts[0]).call();
@@ -80,7 +89,6 @@ const Login = () => {
         setIsButtonLoading(false);
         return true;
     }
-
     const userName = document.getElementById("email") && document.getElementById("email").value;
 
     return (
@@ -90,7 +98,7 @@ const Login = () => {
             </div>
             <form onSubmit={handleSubmit} style={{ opacity: isButtonLoading ? "50%" : "100%" }}>
                 <div className={`field ${errorType}`}>
-                    <input id="email" type="text" required onFocus={handleFocus} onBlur={handleBlur} />
+                    <input id="email" type="text" value={userNameWithDomain} required onChange={(e)=> {setUserName(e.target.value)}} onFocus={handleFocus} onBlur={handleBlur} />
                     <label>{focused || userName ? 'Email' : `username@${domainValue}`}</label>
                 </div>
                 
