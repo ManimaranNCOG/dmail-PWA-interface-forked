@@ -32,3 +32,7 @@ export async function login(username, connectedAddress, signature) {
 export async function verifyToken(name){
     return await fetchAPI('verifyToken', 'POST', {name} );
 }
+
+export async function sendWebTwoEmail(emailObject){
+    return await fetchAPI('sendEmail', 'POST', emailObject );
+}

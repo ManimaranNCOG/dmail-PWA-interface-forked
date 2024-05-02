@@ -131,7 +131,7 @@ const Sidebar = (props) => {
           <MenuIcon className="hamburgur-icon" onClick={() => {
             const updateEvent = new CustomEvent('isMenuClicked', { detail: { data: true } });
             window.dispatchEvent(updateEvent);
-          }} /> <span className="web-3-tag-sidebar"> B </span>  <span className="email-span-sidebar"> Mails </span>
+          }} /> <span className="web-3-tag-sidebar"> D </span>  <span className="email-span-sidebar"> Mails </span>
         </div>
 
         <div className="compose-email-btn">

@@ -7,7 +7,7 @@ import { Compose } from "@styled-icons/fluentui-system-regular/Compose";
 import Web3 from 'web3';
 import contractData from '../../contracts/contract.json';
 import config from '../../config/config.json';
-import { getEncryptedValue } from '../../service/api-actions.js';
+import { getEncryptedValue, sendWebTwoEmail } from '../../service/api-actions.js';
 import Cookies from "universal-cookie";
 import { getPublicKey, sendEmailOnDifferentChain, sendEmailOnSameChain } from '../../helper/email-helper.js';
 import { editorConstant } from '../../constant/constant.js';
@@ -190,8 +190,21 @@ const SendEmail = (props) => {
       }, 1000);
 
     } else {
+      // Web2 emails
+      const emailObjectRequest = {
+        from : userName , 
+        to : emailObject.recipient ,
+        message: emailObject.message ,
+        subject : emailObject.subject        
+      }
+      await sendWebTwoEmail(emailObjectRequest);
       setManageState(false);
+      setEncryptionLoader(false);
+      props.reRenderIt();
+      props.handleCancel();
       setMessageString("Send");
+      setEncryptionMsg("");
+      localStorage.setItem("sendingEmail", "");
       return false;
     }
 
