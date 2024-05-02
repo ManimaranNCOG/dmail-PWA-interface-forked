@@ -172,6 +172,44 @@
             "inputs": [
                 {
                     "internalType": "string",
+                    "name": "username",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "subject",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "encryptedData",
+                    "type": "string"
+                },
+                {
+                    "internalType": "address",
+                    "name": "walletAddress",
+                    "type": "address"
+                },
+                {
+                    "internalType": "string",
+                    "name": "dateValue",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "senderName",
+                    "type": "string"
+                }
+            ],
+            "name": "saveEmailForUser",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
                     "name": "user",
                     "type": "string"
                 },
@@ -210,44 +248,6 @@
                 }
             ],
             "name": "saveSentEmailRequest",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "username",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "subject",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "encryptedData",
-                    "type": "string"
-                },
-                {
-                    "internalType": "address",
-                    "name": "walletAddress",
-                    "type": "address"
-                },
-                {
-                    "internalType": "string",
-                    "name": "dateValue",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "senderName",
-                    "type": "string"
-                }
-            ],
-            "name": "sendEmailRequest",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
@@ -456,7 +456,7 @@
                     "type": "string"
                 }
             ],
-            "name": "getSendEmailList",
+            "name": "getSentEmailList",
             "outputs": [
                 {
                     "components": [

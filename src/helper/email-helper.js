@@ -44,11 +44,11 @@ export const sendEmailOnSameChain = async (emailObject, encryptedMessage, accoun
         userName
     ];
     if (isSameHost) {                   
-        await transactionAction(contract , "sendEmailRequest", functionParams , account);   
+        await transactionAction(contract , "saveEmailForUser", functionParams , account);   
         props(true);
     } else {
         const contractMethodsData = new web3.eth.Contract(contractData.storageContract, contactAddressFromName);  
-        await transactionAction(contractMethodsData , "sendEmailRequest", functionParams , account); 
+        await transactionAction(contractMethodsData , "saveEmailForUser", functionParams , account); 
         props(true);
     }
     return true;

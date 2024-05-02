@@ -53,6 +53,7 @@ const Inbox = () => {
   const [web3Value, setWeb3] = useState(null);
   const [account, setAccount] = useState('');
   const [contract, setContract] = useState(null);
+  const [openMessage, setOpenMessage] = useState(null);
 
   const [user] = useState(cookies.get("userObject"));
 
@@ -216,7 +217,8 @@ const Inbox = () => {
     try {
       const jsonMessage = JSON.parse(msg.decryptedMail);
       await setEncrypt(jsonMessage.message);
-      setIsModalOpen(true);
+      await setOpenMessage(msg)
+      await setIsModalOpen(true);
     } catch (error) {
       console.log("SOMETHING WENT WRONG")
     }
@@ -240,6 +242,7 @@ const Inbox = () => {
         }
       }
       await setEncrypt(message);
+      await setOpenMessage(msg)
       setIsModalOpen(true);
     }
   };
@@ -337,7 +340,7 @@ const Inbox = () => {
 
       <Modal className="modal-send-email-header" open={isModalOpen} onOk={handleOk} onCancel={handleOk} footer={null} >
         <div className='send-email-body-content'>
-          <Decrypt data={encrypt} />
+          <Decrypt data={encrypt} emailObject={openMessage} />
         </div>
       </Modal>
     </>
