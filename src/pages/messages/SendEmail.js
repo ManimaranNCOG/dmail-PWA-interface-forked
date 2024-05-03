@@ -9,7 +9,7 @@ import contractData from '../../contracts/contract.json';
 import config from '../../config/config.json';
 import { getEncryptedValue, sendWebTwoEmail } from '../../service/api-actions.js';
 import Cookies from "universal-cookie";
-import { getPublicKey, sendEmailOnDifferentChain, sendEmailOnSameChain } from '../../helper/email-helper.js';
+import { formatDate, getPublicKey, sendEmailOnDifferentChain, sendEmailOnSameChain } from '../../helper/email-helper.js';
 import { editorConstant } from '../../constant/constant.js';
 import { SendEmailLoader } from '../modal-popup/CommonAlert.js';
 import { transactionAction } from '../../helper/chain-helper.js';
@@ -21,6 +21,23 @@ const contractAddress = config.json.CONTRACT;
 
 const iconStyles = `color: #ffffff; width: 20px; height: 20px;`;
 const ComposeIcon = styled(Compose)`${iconStyles}`;
+
+
+const currentDateValue = new Date();
+const formattedDateTime = currentDateValue.toLocaleDateString('en-US', {
+  month: 'numeric',
+  day: 'numeric',
+  year: 'numeric'
+}) + ' ' + currentDateValue.toLocaleTimeString('en-US', {
+  hour: 'numeric',
+  minute: 'numeric',
+  hour12: true
+});
+
+
+
+console.log("formattedDateTime", formatDate(formattedDateTime))
+
 
 const SendEmail = (props) => {
   const [htmlRender, setManageState] = useState(false);
