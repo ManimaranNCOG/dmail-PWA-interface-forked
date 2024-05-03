@@ -7,7 +7,16 @@ import { transactionAction } from './chain-helper';
 const contractAddress = config.json.CONTRACT;
 const web3 = new Web3(window.ethereum);
 const contractMethods = new web3.eth.Contract(contractData.storageContract, contractAddress);
-const currentDate = new Date();
+const currentDateValue = new Date();
+const formattedDateTime = currentDateValue.toLocaleDateString('en-US', {
+  month: 'numeric',
+  day: 'numeric',
+  year: 'numeric'
+}) + ' ' + currentDateValue.toLocaleTimeString('en-US', {
+  hour: 'numeric',
+  minute: 'numeric',
+  hour12: true
+});
 
 // Function to get public key from smartcontract asynchronously
 export const getPublicKey = async (emailObject, isSameHost, contactAddressFromName, jsonValue) => {
@@ -40,9 +49,10 @@ export const sendEmailOnSameChain = async (emailObject, encryptedMessage, accoun
         emailObject.subject,
         encryptedMessage,
         accounts[0],
-        currentDate.toLocaleDateString(),
+        formattedDateTime ,
         userName
     ];
+
     if (isSameHost) {                   
         await transactionAction(contract , "saveEmailForUser", functionParams , account);   
         props(true);
@@ -96,3 +106,34 @@ export const sendEmailOnDifferentChain = async (emailObject, encryptedMessage, a
         return null;
     }
 }
+
+export const formatDate = (dateString) => {
+    // Convert the dateString to a Date object
+    const date = new Date(dateString);
+    // Get the day of the week
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const dayOfWeek = days[date.getDay()];
+    // Get the month
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const month = months[date.getMonth()];
+    // Get the day of the month
+    const day = date.getDate();
+    // Get the hours and minutes
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    // Get the current date and time
+    const currentDate = new Date();
+    // Calculate the difference in milliseconds
+    const difference = currentDate - date;
+    // Convert milliseconds to days, hours, and minutes
+    const daysAgo = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hoursAgo = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutesAgo = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    
+    // Check if the date is today
+    if (daysAgo === 0) {
+      return `${hours}:${minutes < 10 ? '0' + minutes : minutes} (${hoursAgo === 0 ? minutesAgo + ' minutes ago' : hoursAgo + ' hours ago'})`;
+    } else {
+      return `${dayOfWeek}, ${day} ${month}, ${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes} (${daysAgo === 1 ? '1 day ago' : daysAgo + ' days ago'})`;
+    }
+  }
