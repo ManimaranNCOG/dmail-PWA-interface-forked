@@ -56,8 +56,8 @@ const SentItems = () => {
     // function to get the sent email list from the smart contract
     async function fetchValue() {
       const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-      const getSendEmailList = await contractMethods.methods.getSendEmailList(userName).call({ from: accounts[0] });
-      setEmailObject(getSendEmailList);
+      const getSentEmailList = await contractMethods.methods.getSentEmailList(userName).call({ from: accounts[0] });
+      setEmailObject(getSentEmailList);
     }
 
     fetchValue();
