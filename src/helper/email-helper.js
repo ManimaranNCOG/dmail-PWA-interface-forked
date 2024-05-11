@@ -42,7 +42,7 @@ export const getPublicKey = async (emailObject, isSameHost, contactAddressFromNa
 } 
 
 // Function to send email on the same blockchain chain
-export const sendEmailOnSameChain = async (emailObject, encryptedMessage, accounts, isSameHost, contactAddressFromName , userName , props , contract , account) => {
+export const sendEmailOnSameChain = async (emailObject, encryptedMessage, accounts, isSameHost, contactAddressFromName , userName , props , contract , account , isSavedOn=false , sentEncryptedMessage="") => {
 
     const functionParams = [
         emailObject.recipient,
@@ -50,7 +50,9 @@ export const sendEmailOnSameChain = async (emailObject, encryptedMessage, accoun
         encryptedMessage,
         accounts[0],
         formattedDateTime ,
-        userName
+        userName , 
+        isSavedOn , 
+        sentEncryptedMessage
     ];
 
     if (isSameHost) {                   

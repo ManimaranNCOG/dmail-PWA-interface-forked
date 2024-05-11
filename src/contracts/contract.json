@@ -238,6 +238,16 @@
                     "internalType": "string",
                     "name": "senderName",
                     "type": "string"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "isSavedOn",
+                    "type": "bool"
+                },
+                {
+                    "internalType": "string",
+                    "name": "sentEncryptedMessage",
+                    "type": "string"
                 }
             ],
             "name": "saveEmailForUser",
@@ -267,26 +277,16 @@
             "inputs": [
                 {
                     "internalType": "string",
-                    "name": "sender",
+                    "name": "username",
                     "type": "string"
                 },
                 {
                     "internalType": "string",
-                    "name": "receiver",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "subject",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "encryptedData",
+                    "name": "email",
                     "type": "string"
                 }
             ],
-            "name": "saveSentEmailRequest",
+            "name": "saveSenderAddress",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
@@ -362,6 +362,25 @@
             "type": "function"
         },
         {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "name": "addressExists",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
             "inputs": [],
             "name": "constDomain",
             "outputs": [
@@ -420,6 +439,25 @@
                     "internalType": "string",
                     "name": "",
                     "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "username",
+                    "type": "string"
+                }
+            ],
+            "name": "getAllAddresses",
+            "outputs": [
+                {
+                    "internalType": "string[]",
+                    "name": "",
+                    "type": "string[]"
                 }
             ],
             "stateMutability": "view",
@@ -567,6 +605,11 @@
                             "internalType": "uint256",
                             "name": "id",
                             "type": "uint256"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "receivedDate",
+                            "type": "string"
                         }
                     ],
                     "internalType": "struct UserRegistryName.SendEmail[]",
