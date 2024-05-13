@@ -21,7 +21,6 @@ h2.flex.flex-wrap.address-element {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 20px;
 }
 
 span.text-gray-800 {
@@ -42,4 +41,12 @@ time.text-gray-700 span {
     display: block;
     line-height: 20px;
     margin: 0;
+}
+
+h2.flex.flex-wrap.address-element.address-element-header-content span {
+    font-size: 10px;
+}
+
+.space-y-4 {
+    padding-top: 15px;
 }

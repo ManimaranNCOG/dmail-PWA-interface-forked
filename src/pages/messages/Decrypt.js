@@ -5,7 +5,12 @@ import { formatDate } from '../../helper/email-helper';
 
 // decrypted message will be displayed here
 const Decrypt = (props) => {
-    console.log("props", props);
+    const headerDetails = props.emailObject && props.emailObject.header;
+    let headerJson = null;
+    if(headerDetails){
+      headerJson = JSON.parse(headerDetails);
+    }
+
     return (
 
         <div class="px-6 py-5 bg-white shadow rounded-lg mb-4 md:mb-8">
@@ -20,6 +25,28 @@ const Decrypt = (props) => {
                 <span>{formatDate(props.emailObject.created_at)}</span>
               </time>
                 </h2>
+
+                {headerJson && headerJson.to.toString()  &&                 
+                  <h2 class="flex flex-wrap address-element address-element-header-content">
+                    <span>to</span>
+                    <span>{headerJson.to.toString()}</span>
+                  </h2>
+                }
+
+                {headerJson && headerJson.cc.toString() && 
+                  <h2 class="flex flex-wrap address-element address-element-header-content">
+                    <span>cc</span>
+                    <span>{headerJson.cc.toString()}</span>
+                  </h2>                
+                }
+
+              {headerJson && headerJson.bcc.toString() && props.emailObject.isBCC &&
+                  <h2 class="flex flex-wrap address-element address-element-header-content">
+                    <span>bcc</span>
+                    <span>{headerJson.bcc.toString()}</span>
+                  </h2>
+              }
+
               </div>
             </header>
           </div>
