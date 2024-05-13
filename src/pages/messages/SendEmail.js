@@ -13,6 +13,7 @@ import { getPublicKey, sendEmailOnDifferentChain, sendEmailOnSameChain } from '.
 import { editorConstant } from '../../constant/constant.js';
 import { SendEmailLoader } from '../modal-popup/CommonAlert.js';
 import { transactionAction } from '../../helper/chain-helper.js';
+import { sendEmails } from '../../helper/send-email-helper.js';
 
 
 const cookies = new Cookies();
@@ -33,6 +34,11 @@ const SendEmail = (props) => {
   const [account, setAccount] = useState('');
   const [contract, setContract] = useState(null);
   const [senderAddress, setSenderAddress] = useState([]);
+  const [showCC, setShowCC] = useState(false);
+  const [showBCC, setShowBCC] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(''); // State to manage selected option
+  const [isOpen, setIsOpen] = useState(false); // State to manage dropdown visibility
+  const [toEmail, setTomail] = useState("");
 
 
   const userName = user && user.name;
@@ -82,7 +88,7 @@ const SendEmail = (props) => {
         // return true;
       }
       try {
-        const allAddresses = await contractInstance.methods.getAllAddresses(userName).call();
+        const allAddresses = await contractInstance.methods.getAddressBookForUser(userName).call();
         setSenderAddress(allAddresses);
       } catch (error) {
         return true;
@@ -93,13 +99,7 @@ const SendEmail = (props) => {
     }
 
 
-    const inputElement = document.getElementById('receiver');
-    const subjectElement = document.getElementById('subject');
-
-    if (inputElement) {
-      inputElement.value = ''; // Clearing the input value
-      subjectElement.value = ''; // Clearing the input value
-    }
+    clear();
 
   }, [web3Value]);
 
@@ -230,26 +230,102 @@ const SendEmail = (props) => {
     }, 1000);
 
 
+    clear();
+
+  }
+
+
+  const clear =()=> {
+
+    setManageState(false);
+    setEncryptionLoader(false);
+    props.reRenderIt();
+    props.handleCancel();
+    setMessageString("Send");
+    setEncryptionMsg("");
+    localStorage.setItem("sendingEmail", "");
+    setShowBCC(false);
+    setShowCC(false);
+    setTomail("")
     const inputElement = document.getElementById('receiver');
+    const inputCCElement = document.getElementById('receiver-cc');
+    const inputBCCElement = document.getElementById('receiver-bcc');
     const subjectElement = document.getElementById('subject');
 
     if (inputElement) {
       inputElement.value = ''; // Clearing the input value
       subjectElement.value = ''; // Clearing the input value
+      if(inputCCElement) inputCCElement.value = ''; // Clearing the input value
+      if(inputBCCElement) inputBCCElement.value = ''; // Clearing the input value
     }
 
+  }
+  const renderDropdown =(toEmail)=> {   // todo
+
+    if(!senderAddress.length) return false; 
+    
+    const result = senderAddress.filter(item => item.includes(toEmail)).map((item, index, arr) => ({
+      value: item,
+      label: arr[(index + 1) % arr.length]
+    }));
+
+    const handleOptionClick = (value) => {
+      setSelectedOption(value);
+      setIsOpen(false);
+    };
+  
+    return (
+      <div className='dropdown'>
+        {result.length > 0 && (
+          <ul className='dropdown-menu'>
+            {result.map((option, index) => (
+              <li key={index} onClick={() => handleOptionClick(option.value)}>{option.label}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+    );
   }
 
   return (
     <div className='email-to-from-element'>
-    {console.log("senderAddress" , senderAddress)}
       <div className='email-to-from-common'>
         <div className='to-element'>
           <div className='box-elememt'> To </div>
-          <input id="receiver" placeholder='' />
-          <div className='cc'> Cc </div>
-          <div className='bcc'> Bcc </div>
+          <input id="receiver" placeholder='' onChange={(e)=> {
+            setTomail(e.target.value);
+          }} value={toEmail} />
+          <div className='cc' onClick={()=> setShowCC(!showCC)}> {showCC ? "" : "Cc"} </div>
+          <div className='bcc' onClick={()=> setShowBCC(!showBCC)} > {showBCC ? "" : "Bcc"} </div>
         </div>
+
+        {showCC && 
+          <div className='to-element cc-element'>
+            <div className='box-elememt'> CC </div>  <input id="receiver-cc" placeholder='' /> <div className='cc'> </div>   <div className='bcc' onClick={()=>{
+                  const inputElement = document.getElementById('receiver-cc');
+                  if (inputElement) {
+                    inputElement.value = ''; // Clearing the input value
+                  }
+                  setShowCC(!showCC);
+            }}> X </div>
+          </div>        
+        }
+
+        {showBCC && 
+          <div className='to-element cc-element'>
+            <div className='box-elememt'> Bcc </div>
+            <input id="receiver-bcc" placeholder='' />
+            <div className='cc'> </div>
+            <div className='bcc' onClick={()=> {
+              const inputElement = document.getElementById('receiver-bcc');
+              if (inputElement) {
+                inputElement.value = ''; // Clearing the input value
+              }
+              setShowBCC(!showBCC);
+            } } > X </div>
+          </div>        
+        }
+
         <input id="subject" className="input-class-common" placeholder='Add a Subject' />
       </div>
 
@@ -258,18 +334,20 @@ const SendEmail = (props) => {
         <button className="send-btn-mail" onClick={async (e) => {
           const recipient = document.getElementById("receiver").value;
           const subject = document.getElementById("subject").value;
-          const emails = recipient.split(",");
+          const cc = document.getElementById("receiver-cc") && document.getElementById("receiver-cc").value || "";
+          const bcc = document.getElementById("receiver-bcc") && document.getElementById("receiver-bcc").value || "";
 
-          for (let email of emails) {
-            const emailObject = { recipient: email.replace(/\s/g, ''), subject: subject, message: localStorage.getItem("sendingEmail") };
-            try {
-              setMessageString("Sending...")
-              await sendEmail(emailObject);
-            } catch (error) {
-              console.log(error);
-              setManageState(false);
-            }
-          }
+          setMessageString("Sending...");
+          await sendEmails(recipient.replace(/\s/g, '').split(",") , cc.replace(/\s/g, '').split(",") , bcc.replace(/\s/g, '').split(",") , subject, localStorage.getItem("sendingEmail") , props);
+
+
+          setEncryptionLoader(true);
+          setEncryptionMsg("Message Sent");
+
+          setTimeout(() => {
+            clear();
+          }, 1000);
+
         }} >
           {htmlRender ? "" : <ComposeIcon />}  {htmlRender ? Message : Message}
         </button>

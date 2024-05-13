@@ -212,3 +212,51 @@ button.open-btn-menu-home {
 .common-footer-ele {
     position: relative;
 }
+
+.to-element.cc-element {
+    padding-top: 10px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-toggle {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 4px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    z-index: 1;
+  }
+  
+  .dropdown-menu li {
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .dropdown-menu li:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .to-element div {
+    cursor: pointer;
+}
+
+h2.flex.flex-wrap.address-element.address-element-header-content {
+    justify-content: flex-start;
+    gap: 10px;
+}

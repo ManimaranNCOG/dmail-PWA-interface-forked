@@ -154,7 +154,10 @@ const Inbox = () => {
           created_at: email.receivedDate,
           isStarred: true,
           sender: email.senderName,
-          isRead: email.isRead
+          isRead: email.isRead , 
+          header :  email.emailDetails , 
+          isCC :  email.isCC , 
+          isBCC :  email.isBCC 
         }));
 
       const encryptedEmailList = new Map(emails.map(item => [item.mailId, item.decryptedMail]));
