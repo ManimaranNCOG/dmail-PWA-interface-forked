@@ -44,6 +44,7 @@ const SentItems = () => {
   const [emailObject, setEmailObject] = useState([]);
   const [encrypt, setEncrypt] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [openMessage, setOpenMessage] = useState(null);
   const [user] = useState(cookies.get("userObject"));
 
   const web3 = new Web3(window.ethereum);
@@ -72,6 +73,7 @@ const SentItems = () => {
   // function to save the decypted emails
   const handleEncryptedClick = async (msg, index) => {
     const message = await getDecrypValue(msg.encryptedData, index);
+    await setOpenMessage(msg)
     await setEncrypt(message);
     setIsModalOpen(true);
   };
@@ -88,6 +90,9 @@ const SentItems = () => {
           method: 'eth_decrypt',
           params: [encryptedMsg, accounts[0]]
         })
+
+
+        console.log("decMsg",decMsg)
 
         const emailListObj = emailObject;
         emailListObj[index].decryptedEmail = JSON.parse(decMsg);
@@ -179,7 +184,7 @@ const SentItems = () => {
 
       <Modal className="modal-send-email-header" open={isModalOpen} onOk={handleOk} onCancel={handleOk} footer={null} >
         <div className='send-email-body-content'>
-          <Decrypt data={encrypt} />
+          <Decrypt data={encrypt} emailObject={openMessage} />
         </div>
       </Modal>
     </>

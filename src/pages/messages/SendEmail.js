@@ -32,6 +32,8 @@ const SendEmail = (props) => {
   const [web3Value, setWeb3] = useState(null);
   const [account, setAccount] = useState('');
   const [contract, setContract] = useState(null);
+  const [senderAddress, setSenderAddress] = useState([]);
+
 
   const userName = user && user.name;
   const web3 = new Web3(window.ethereum);
@@ -77,7 +79,12 @@ const SendEmail = (props) => {
         const settingsJson = await contractInstance.methods.getAccountSettings(userName).call();
         setAccountSettings(JSON.parse(settingsJson));
       } catch (error) {
-        console.log("error", error)
+        // return true;
+      }
+      try {
+        const allAddresses = await contractInstance.methods.getAllAddresses(userName).call();
+        setSenderAddress(allAddresses);
+      } catch (error) {
         return true;
       }
     }
@@ -124,9 +131,7 @@ const SendEmail = (props) => {
     const data = await getEncryptedValue(msg, publicKey);
     const encryptedMessage = data.returnValue;
 
-    const functionParams = [userName, emailObject.recipient, emailObject.subject, encryptedMessage];
-    const txHash = await transactionAction(contract, "saveSentEmailRequest", functionParams, account);
-    return txHash;
+    return encryptedMessage;
   }
 
 
@@ -137,9 +142,12 @@ const SendEmail = (props) => {
     const isSavedOn = accountSettings.find(item => item.id === 1)?.value;
     const domain = await contractMethods.methods.constDomain().call();
     const receiptDomain = emailObject.recipient.split("@")[1];
-    const isSameHost = (receiptDomain === domain);
+    const isSameHost = (receiptDomain === domain);    
 
     const hostAddress = await contractMethods.methods.constRegistryAddress().call();
+    const functionParams = [userName, emailObject.recipient];
+    await transactionAction(contractMethods , "saveSenderAddress", functionParams , account); 
+
     const hostContractMethods = new web3.eth.Contract(contractData.hostContract, hostAddress);
 
     setMessageString("Sending...");
@@ -159,7 +167,9 @@ const SendEmail = (props) => {
 
     const isSameBlockChain = (receiptentChainId === parseInt(loggedChainId));
 
-    if (isSavedOn) saveSenderEncryptedEmail(emailObject, accounts);
+    let defaultEncryptedMessage = "Not Sent Item";
+    if (isSavedOn) defaultEncryptedMessage = await saveSenderEncryptedEmail(emailObject, accounts);
+
     const publicKey = await getPublicKey(emailObject, isSameHost, contactAddressFromName, jsonValue);
 
     // Encrypt The data here
@@ -173,7 +183,7 @@ const SendEmail = (props) => {
       props.handleCancel();
 
       if (encryptedMessage && isSameBlockChain) {
-        await sendEmailOnSameChain(emailObject, encryptedMessage, accounts, isSameHost, contactAddressFromName, userName, setEncryptionLoader, contract, account);
+        await sendEmailOnSameChain(emailObject, encryptedMessage, accounts, isSameHost, contactAddressFromName, userName, setEncryptionLoader, contract, account , isSavedOn, defaultEncryptedMessage);
       } else if (encryptedMessage) {
         await sendEmailOnDifferentChain(emailObject, encryptedMessage, accounts, senderChainAddress, jsonValue, userName, account);
       }
@@ -232,6 +242,7 @@ const SendEmail = (props) => {
 
   return (
     <div className='email-to-from-element'>
+    {console.log("senderAddress" , senderAddress)}
       <div className='email-to-from-common'>
         <div className='to-element'>
           <div className='box-elememt'> To </div>
