@@ -158,7 +158,7 @@ export const copyEmail = async (type , destinationFolderData , userName) => {
             returnEmailList.push(JSON.stringify(emailObject));
         }
 
-        const functionParams = [userName , parseInt(destinationFolderData.id) , destinationFolderData.name , destinationFolderData.date , destinationFolderData.isSearch , destinationFolderData.filterType , destinationFolderData.filterValue , returnEmailList  ];
+        const functionParams = [userName , parseInt(destinationFolderData.id) , destinationFolderData.name , destinationFolderData.date , destinationFolderData.filterType , destinationFolderData.filterValue , returnEmailList  ];
         const txHash = await transactionAction(contractMethods , "updateFolder", functionParams , accounts[0]); 
       }
 

@@ -98,7 +98,7 @@ const Sidebar = (props) => {
 
 
   async function addFoldedOnChain(folderJSON){
-    const functionParams  = [user.name , folderJSON.name , getCurrentDate() , false , "todo" , "todo" , []];
+    const functionParams  = [user.name , folderJSON.name , getCurrentDate() , "todo" , "todo" , []];
     const txHash = await transactionAction(SC, "addFolder", functionParams, account);
     return txHash;
   }
