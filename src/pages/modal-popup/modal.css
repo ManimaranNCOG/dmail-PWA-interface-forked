@@ -198,3 +198,32 @@ img.profile-drop-imgchain.key {
   height: 100px;
   width: 100px;
 }
+
+form.form-class{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+input.input-class {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+button.button-class {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.button-class:hover {
+  background-color: #0056b3;
+}

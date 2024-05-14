@@ -7,6 +7,7 @@ import config from '../../config/config.json';
 import Cookies from "universal-cookie";
 import db from '../../db/dbService.js';
 import FbLoader from '../../components/loader/FbLoader.js';
+import { validateTheWebReturedValues } from '../../helper/object-validation-helper.js';
 const contractAddress = config.json.CONTRACT;
 
 const UserProfile = () => {
@@ -68,14 +69,8 @@ const UserProfile = () => {
     async function fetchcontractdata() {
 
       // Initialize contract instance
-      const userDetails = await contract.methods.getUserByUsername(userName).call({ from: account });
-
-      const filteredData = {};
-      for (const key in userDetails) {
-        if (!isNaN(key)) continue; // Skip if the key is a number
-        filteredData[key] = userDetails[key];
-      }
-
+      const userDetails = await contract.methods.getUserByUsername(userName).call({ from: account });    
+      const filteredData = validateTheWebReturedValues(userDetails);
       setUserObject(filteredData)
     }
     if (contract) {

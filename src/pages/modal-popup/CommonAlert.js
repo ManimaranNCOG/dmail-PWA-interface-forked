@@ -122,7 +122,42 @@ const SendEmailLoader =(params) => {
     )
 }
 
+
+const AddFolderModal = (params) =>{
+  const [folderName, setFolderName] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!folderName.trim()) return;    
+    const json ={name : folderName}
+    await params.addFolder(json);
+    params.action(false);
+    setFolderName('');
+  };
+  
+  return (
+    <div>
+        <Modal className="modal-alert-header connect-wallet-account email-add-folder" open={params.isOpen}  closable={false} footer={null} >
+            <div className='send-alert-body-content connect-wallet-account-div add-folder'>
+                  <form className="form-class" onSubmit={handleSubmit}>
+                    <input
+                      type="text"
+                      placeholder="Enter folder name"
+                      value={folderName}
+                      onChange={(e) => setFolderName(e.target.value)}
+                      className="input-class"
+                    />
+                    <button className="button-class" type="submit">Add Folder</button>
+                  </form>
+
+            </div>
+        </Modal>
+    </div>
+)
+}
+
 export {
     ConnectWallet,
-    SendEmailLoader
+    SendEmailLoader,
+    AddFolderModal
 }

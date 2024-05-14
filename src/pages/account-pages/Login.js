@@ -50,7 +50,7 @@ const Login = () => {
     
     // Initiating the login method.    
     async function loginValidation() {
-        const userName = document.getElementById("email").value;
+        const userName = userNameWithDomain;
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
         
         if (accounts.length > 0) {
@@ -62,6 +62,7 @@ const Login = () => {
                 console.log("error", error);
                 return true;
             }
+            console.log("userName", userName);
             await userLogin(userName);
         }
     }
@@ -71,8 +72,7 @@ const Login = () => {
     async function userLogin(username) {
         setIsButtonLoading(true);
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-        const isUserPresent = await contractMethods.methods.loginUser(userName, accounts[0]).call();
-
+        const isUserPresent = await contractMethods.methods.loginUser(userNameWithDomain, accounts[0]).call();
         if(isUserPresent){
             const data = await login(username);   
             if(data.isAuth){
@@ -99,7 +99,7 @@ const Login = () => {
             <form onSubmit={handleSubmit} style={{ opacity: isButtonLoading ? "50%" : "100%" }}>
                 <div className={`field ${errorType}`}>
                     <input id="email" type="text" value={userNameWithDomain} required onChange={(e)=> {setUserName(e.target.value)}} onFocus={handleFocus} onBlur={handleBlur} />
-                    <label>{focused || userName ? 'Email' : `username@${domainValue}`}</label>
+                    <label>{focused || userNameWithDomain ? 'Email' : `username@${domainValue}`}</label>
                 </div>
                 
                 {toastMsg && 

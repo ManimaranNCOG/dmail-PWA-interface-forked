@@ -20,6 +20,28 @@ module.exports = {
             'list', 'bullet', 'indent',
             'link', 'image', 'video'
           ]
+    } , 
+    sidebar : {
+        sidebarNavItemsValues : [
+            {
+              display: "Inbox",
+              to: "inbox",
+              isOpen: true,
+              isHeader: true
+            },
+            {
+              display: "Sent Item",
+              to: "sent-item",
+              isOpen: false,
+              isHeader: true
+            },
+            {
+              display: "Trash",
+              to: "trash",
+              isOpen: false,
+              isHeader: true
+            },
+          ]
     }
 
 }

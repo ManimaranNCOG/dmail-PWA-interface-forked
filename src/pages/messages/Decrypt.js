@@ -5,11 +5,11 @@ import { formatDate } from '../../helper/email-helper';
 
 // decrypted message will be displayed here
 const Decrypt = (props) => {
-    const headerDetails = props.emailObject && props.emailObject.header;
+
+    const headerDetails = props.emailObject && (props.emailObject.header ||  props.emailObject.receiver);
     let headerJson = null;
-    if(headerDetails){
-      headerJson = JSON.parse(headerDetails);
-    }
+
+    if(headerDetails) headerJson = JSON.parse(headerDetails);
 
     return (
 
@@ -22,7 +22,7 @@ const Decrypt = (props) => {
                 <h2 class="flex flex-wrap address-element">
                   <span class="text-gray-800">{`${props.emailObject.sender.split("@")[0]}`} <span className='address-spn'> { `<${props.emailObject.sender}>` }</span></span>
               <time class="flex flex-col items-end md:items-start xl:items-end text-xs xl:text-sm text-gray-700">
-                <span>{formatDate(props.emailObject.created_at)}</span>
+                <span>{formatDate(props.emailObject.created_at || props.emailObject.receivedDate)}</span>
               </time>
                 </h2>
 
@@ -40,7 +40,7 @@ const Decrypt = (props) => {
                   </h2>                
                 }
 
-              {headerJson && headerJson.bcc.toString() && props.emailObject.isBCC &&
+              {headerJson && headerJson.bcc.toString() && (props.emailObject.isBCC || props.sentItem) &&
                   <h2 class="flex flex-wrap address-element address-element-header-content">
                     <span>bcc</span>
                     <span>{headerJson.bcc.toString()}</span>

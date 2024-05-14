@@ -26,7 +26,7 @@
     position: relative;
     max-height: 25rem;
     overflow-y: auto;
-    height: 30rem;
+    height: 12rem;
     padding-top: 20px;
     user-select: none;
 }
@@ -259,4 +259,25 @@ button span.compose {
 button.open-btn-menu-home.absolute {
     background: transparent;
     display: flex;
+}
+
+.folder-header {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 15px;
+    color: white;
+    padding-bottom: 15px;
+}
+.folder-div {
+    height: 13rem;
+}
+
+.folder-header h4 {
+    cursor: pointer;
+}
+
+.folder-header button {
+    background: transparent;
+    border: none;
+    color: white;
 }
