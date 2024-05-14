@@ -139,6 +139,10 @@ const AddFolderModal = (params) =>{
     <div>
         <Modal className="modal-alert-header connect-wallet-account email-add-folder" open={params.isOpen}  closable={false} footer={null} >
             <div className='send-alert-body-content connect-wallet-account-div add-folder'>
+              <span className="cursor-pointer span-close" onClick={()=> {
+                params.action(false);
+                setFolderName('');
+              }} >X</span>
                   <form className="form-class" onSubmit={handleSubmit}>
                     <input
                       type="text"

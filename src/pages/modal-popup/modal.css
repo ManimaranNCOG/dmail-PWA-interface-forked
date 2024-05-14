@@ -227,3 +227,8 @@ button.button-class {
 button.button-class:hover {
   background-color: #0056b3;
 }
+
+span.cursor-pointer.span-close {
+  display: flex;
+  justify-content: right;
+}
