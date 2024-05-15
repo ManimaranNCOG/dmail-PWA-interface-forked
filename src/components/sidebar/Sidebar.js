@@ -12,7 +12,7 @@ import { web3AccountCheck } from "../../helper/web3-helper.js";
 import contractData from '../../contracts/contract.json';
 import config from '../../config/config.json';
 import { getCurrentDate, validateTheWebReturedValues } from "../../helper/object-validation-helper.js";
-import { AddFolderModal } from "../../pages/modal-popup/CommonAlert.js";
+import { AddFolderModal, AddQuickAccessUser } from "../../pages/modal-popup/CommonAlert.js";
 import { transactionAction } from "../../helper/chain-helper.js";
 import ContextMenu from "../layout/ContextMenu.js";
 
@@ -35,6 +35,9 @@ const Sidebar = (props) => {
   const [folderModal, setFolderModal] = useState(false);
   const [SC, setSC] = useState(false);
   const [selectedContext, setContext] = useState(false);
+  const [quickSend, setQuickSend] = useState(false);
+  const [quick, setAddQuick] = useState(false);
+  const [quickUsers, setQuickUsers] = useState([]);
 
   const [contextMenuVisible, setContextMenuVisible] = useState(false); // State to manage context menu visibility
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 }); // State to manage context menu position
@@ -61,25 +64,29 @@ const Sidebar = (props) => {
   useEffect(() => { }, [currentPath]);
 
   useEffect(() => {
-
-    async function fetchData(){
-      const contractInstance = new web3Value.eth.Contract(contractData.storageContract, config.json.CONTRACT);
-      setSC(contractInstance);
-      const folderRecords = await contractInstance.methods.getUserFolders(user.name).call();  
-
-      let returnList = [];
-
-      for (let value of folderRecords) {
-        const filteredData = validateTheWebReturedValues(value);
-        returnList.push(filteredData);
-      }
-      
-      setFolderJson(returnList);
-    }
-
     if(web3Value) fetchData();
+  }, [web3Value , account]);
 
-  }, [web3Value]);
+
+  async function fetchData(){
+    const contractInstance = new web3Value.eth.Contract(contractData.storageContract, config.json.CONTRACT);
+    setSC(contractInstance);
+
+    if(account){
+            const folderRecords = await contractInstance.methods.getUserFolders(user.name).call({from : account});  
+            let returnList = [];        
+            for (let value of folderRecords) {
+              const filteredData = validateTheWebReturedValues(value);
+              returnList.push(filteredData);
+            }
+            setFolderJson(returnList);
+            const quickUsers = await contractInstance.methods.getUsersQuickSend(user.name).call({from : account});
+            setQuickSend(true);
+            setQuickUsers(quickUsers);
+            
+    }
+  }
+
 
   useEffect(() => {
     // Check if MetaMask is installed
@@ -100,6 +107,14 @@ const Sidebar = (props) => {
   async function addFoldedOnChain(folderJSON){
     const functionParams  = [user.name , folderJSON.name , getCurrentDate() , "todo" , "todo" , []];
     const txHash = await transactionAction(SC, "addFolder", functionParams, account);
+    fetchData();
+    return txHash;
+  }
+
+  async function addQuickAccessOnChain(quickAccessJSON){
+    const functionParams  = [user.name , quickAccessJSON.email , quickAccessJSON.name ];
+    const txHash = await transactionAction(SC, "saveQuickSend", functionParams, account);
+    fetchData();
     return txHash;
   }
 
@@ -183,6 +198,34 @@ const Sidebar = (props) => {
           ))}
         </div>
 
+        <div className="quicksend-div">
+            <div className="folder-header">
+                <h4>Quick Send to : {quickUsers.length}</h4>
+                <button onClick={()=> {
+                  setQuickSend(true)
+                }}>Edit list</button>
+            </div>
+
+            {quickSend && 
+              <div className="div-class-foot-quick cursor-pointer"> 
+                 {quickUsers.length > 0 && quickUsers.map((itemValue, keyIndex) => (
+                  <div key={keyIndex} className="div-class-foot-quick-child" >
+                    <div className="circle-add-user">{itemValue.userName[0].toUpperCase()} </div> 
+                    <div>
+                      <div className="quick-user name"> {itemValue.userName} </div>
+                      <div className="quick-user email"> {itemValue.userEmail} </div>
+                    </div>            
+                  </div>
+                ))}
+                  <div className="div-class-foot-quick-child" onClick={() => {
+                  setAddQuick(true)
+                 }}>
+                    <div className="circle-add-user">+</div> Add New User
+                 </div>
+              </div>
+            } 
+        </div>
+
         <div className="folder-div"> 
             <div className="folder-header">
                 <h4>Folder</h4>
@@ -206,9 +249,6 @@ const Sidebar = (props) => {
         }}> Logout </button>
       </div>
 
-
-        <AddFolderModal isOpen={folderModal} action ={setFolderModal} addFolder={addFoldedOnChain} /> 
-
         {contextMenuVisible && (
                 <ContextMenu 
                     x={contextMenuPosition.x} 
@@ -219,7 +259,8 @@ const Sidebar = (props) => {
                 />
             )}
 
-
+            <AddFolderModal isOpen={folderModal} close={() => setFolderModal(false)} action ={setFolderModal} addFolder={addFoldedOnChain} /> 
+            <AddQuickAccessUser isModalOpen ={quick} close={() => setAddQuick(false)} addQuickAccessUser ={addQuickAccessOnChain} />
     </div>
   );
 };

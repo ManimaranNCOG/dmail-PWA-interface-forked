@@ -161,6 +161,37 @@
             "inputs": [
                 {
                     "internalType": "string",
+                    "name": "recipient",
+                    "type": "string"
+                }
+            ],
+            "name": "deleteAllEmailsPermanently",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "recipient",
+                    "type": "string"
+                },
+                {
+                    "internalType": "uint256[]",
+                    "name": "ids",
+                    "type": "uint256[]"
+                }
+            ],
+            "name": "deleteEmailsById",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
                     "name": "_user",
                     "type": "string"
                 },
@@ -176,97 +207,22 @@
             "type": "function"
         },
         {
-            "anonymous": false,
             "inputs": [
                 {
-                    "indexed": true,
                     "internalType": "string",
-                    "name": "user",
+                    "name": "recipient",
                     "type": "string"
                 },
                 {
-                    "indexed": false,
-                    "internalType": "string",
-                    "name": "email",
-                    "type": "string"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "uint256",
-                    "name": "id",
-                    "type": "uint256"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "uint256",
-                    "name": "createdDate",
-                    "type": "uint256"
+                    "internalType": "uint256[]",
+                    "name": "emailIds",
+                    "type": "uint256[]"
                 }
             ],
-            "name": "EmailAdded",
-            "type": "event"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": false,
-                    "internalType": "string[]",
-                    "name": "to",
-                    "type": "string[]"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "string[]",
-                    "name": "cc",
-                    "type": "string[]"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "string[]",
-                    "name": "bcc",
-                    "type": "string[]"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "string[]",
-                    "name": "toEncrypted",
-                    "type": "string[]"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "string[]",
-                    "name": "ccEncrypted",
-                    "type": "string[]"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "string[]",
-                    "name": "bccEncrypted",
-                    "type": "string[]"
-                }
-            ],
-            "name": "EmailSent",
-            "type": "event"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "sender",
-                    "type": "address"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "string",
-                    "name": "encryptedData",
-                    "type": "string"
-                }
-            ],
-            "name": "EncryptedDataEmit",
-            "type": "event"
+            "name": "deletePermanentlyById",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
         },
         {
             "anonymous": false,
@@ -279,63 +235,6 @@
                 }
             ],
             "name": "ErrorOccurred",
-            "type": "event"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": true,
-                    "internalType": "string",
-                    "name": "user",
-                    "type": "string"
-                },
-                {
-                    "indexed": true,
-                    "internalType": "uint256",
-                    "name": "folderId",
-                    "type": "uint256"
-                }
-            ],
-            "name": "FolderAdded",
-            "type": "event"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": true,
-                    "internalType": "string",
-                    "name": "user",
-                    "type": "string"
-                },
-                {
-                    "indexed": true,
-                    "internalType": "uint256",
-                    "name": "folderId",
-                    "type": "uint256"
-                }
-            ],
-            "name": "FolderDeleted",
-            "type": "event"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": true,
-                    "internalType": "string",
-                    "name": "user",
-                    "type": "string"
-                },
-                {
-                    "indexed": true,
-                    "internalType": "uint256",
-                    "name": "folderId",
-                    "type": "uint256"
-                }
-            ],
-            "name": "FolderUpdated",
             "type": "event"
         },
         {
@@ -377,6 +276,29 @@
                 }
             ],
             "name": "saveEmailFromDifferentChain",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "userName",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "quickAccessUserEmail",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "quickAccessUserName",
+                    "type": "string"
+                }
+            ],
+            "name": "saveQuickSend",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
@@ -479,6 +401,29 @@
                 }
             ],
             "name": "setDomain",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "recipient",
+                    "type": "string"
+                },
+                {
+                    "internalType": "uint256[]",
+                    "name": "ids",
+                    "type": "uint256[]"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "starStatus",
+                    "type": "bool"
+                }
+            ],
+            "name": "updateEmailsToStar",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
@@ -619,30 +564,6 @@
             "inputs": [
                 {
                     "internalType": "string",
-                    "name": "_str",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "_substring",
-                    "type": "string"
-                }
-            ],
-            "name": "customIncludeFunction",
-            "outputs": [
-                {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
-                }
-            ],
-            "stateMutability": "pure",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
                     "name": "",
                     "type": "string"
                 }
@@ -710,6 +631,82 @@
                     "internalType": "string[]",
                     "name": "",
                     "type": "string[]"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "recipient",
+                    "type": "string"
+                }
+            ],
+            "name": "getDeletedEmails",
+            "outputs": [
+                {
+                    "components": [
+                        {
+                            "internalType": "string",
+                            "name": "subject",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "encryptedData",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "id",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "receivedDate",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "senderName",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "bool",
+                            "name": "isRead",
+                            "type": "bool"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "emailDetails",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "bool",
+                            "name": "isCC",
+                            "type": "bool"
+                        },
+                        {
+                            "internalType": "bool",
+                            "name": "isBCC",
+                            "type": "bool"
+                        },
+                        {
+                            "internalType": "bool",
+                            "name": "isDeleted",
+                            "type": "bool"
+                        },
+                        {
+                            "internalType": "bool",
+                            "name": "isStarred",
+                            "type": "bool"
+                        }
+                    ],
+                    "internalType": "struct UserRegistryName.Email[]",
+                    "name": "",
+                    "type": "tuple[]"
                 }
             ],
             "stateMutability": "view",
@@ -806,6 +803,16 @@
                         {
                             "internalType": "bool",
                             "name": "isBCC",
+                            "type": "bool"
+                        },
+                        {
+                            "internalType": "bool",
+                            "name": "isDeleted",
+                            "type": "bool"
+                        },
+                        {
+                            "internalType": "bool",
+                            "name": "isStarred",
                             "type": "bool"
                         }
                     ],
@@ -987,6 +994,42 @@
                         }
                     ],
                     "internalType": "struct UserRegistryName.Folder[]",
+                    "name": "",
+                    "type": "tuple[]"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "_user",
+                    "type": "string"
+                }
+            ],
+            "name": "getUsersQuickSend",
+            "outputs": [
+                {
+                    "components": [
+                        {
+                            "internalType": "uint256",
+                            "name": "id",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "userName",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "userEmail",
+                            "type": "string"
+                        }
+                    ],
+                    "internalType": "struct UserRegistryName.QuickSend[]",
                     "name": "",
                     "type": "tuple[]"
                 }

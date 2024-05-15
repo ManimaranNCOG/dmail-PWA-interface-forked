@@ -18,12 +18,14 @@ import db from '../../db/dbService.js';
 import { returnEmailRecords } from '../../db/dbHelper.js';
 import FbLoader from '../../components/loader/FbLoader.js';
 import { transactionAction } from '../../helper/chain-helper.js';
+import { getAccountBalance, web3AccountCheck } from '../../helper/web3-helper.js';
 
 const cookies = new Cookies();
 
 const contractAddress = config.json.CONTRACT;
 const iconStyles = `color: #4a88c5; width: 20px; height: 20px;`;
-const iconColorStyles = `color: #ffbe00; width: 20px; height: 20px;`;
+const iconColorStyles = `color: #ffbe00; width: 25px; height: 25px;`;
+const iconNullColorStyles = `color: #4a88c5; width: 25px; height: 25px;`;
 
 const ComposeIcon = styled(Search2)`
   ${iconStyles}
@@ -37,7 +39,7 @@ const StarIcon = styled(Star)`
 `;
 
 const StarOutlineIcon = styled(StarOutline)`
-  ${iconStyles}
+  ${iconNullColorStyles}
 `;
 
 const EyeOutlineIcon = styled(EyeOutline)`
@@ -54,6 +56,8 @@ const Inbox = () => {
   const [account, setAccount] = useState('');
   const [contract, setContract] = useState(null);
   const [openMessage, setOpenMessage] = useState(null);
+  const [accountBalance, setAccountBalance] = useState(0);
+  const [starLoader, setStarLoader] = useState(false);
 
   const [user] = useState(cookies.get("userObject"));
 
@@ -64,28 +68,11 @@ const Inbox = () => {
   useEffect(() => {
     // Check if MetaMask is installed
     if (window.ethereum) {
-      const web3Instance = new Web3(window.ethereum);
-      setWeb3(web3Instance);
-
-      // Check if user is already connected
-      window.ethereum
-        .request({ method: 'eth_accounts' })
-        .then(accounts => {
-          if (accounts.length > 0) {
-            setAccount(accounts[0]);
-          }
-        })
-        .catch(err => console.error(err));
-
-      // Listen for account changes
-      window.ethereum.on('accountsChanged', accounts => {
-        setAccount(accounts[0] || '');
-      });
+      web3AccountCheck(setWeb3 , setAccount);
     } else {
       console.log('MetaMask is not installed');
     }
   }, []);
-
 
 
   useEffect(() => {
@@ -93,11 +80,17 @@ const Inbox = () => {
     async function fetchdata() {
       const contractInstance = new web3.eth.Contract(contractData.storageContract, config.json.CONTRACT);
       setContract(contractInstance);
+
+      if(account){
+        const availableBalance = await getAccountBalance(web3Value , account);
+        setAccountBalance(Number(availableBalance));
+      }
+
     }
     if (web3Value) {
       fetchdata();
     }
-  }, [web3Value]);
+  }, [web3Value , account]);
 
 
   useEffect(() => {
@@ -152,7 +145,7 @@ const Inbox = () => {
           subject: email.subject,
           encryptedData: email.encryptedData,
           created_at: email.receivedDate,
-          isStarred: true,
+          isStarred: email.isStarred,
           sender: email.senderName,
           isRead: email.isRead , 
           header :  email.emailDetails , 
@@ -277,6 +270,10 @@ const Inbox = () => {
         </div>
 
         <div className="account-section">
+          Balance : {accountBalance.toFixed(4)} NEC
+        </div>
+
+        <div className="account-section">
           <span> <Profile /> </span>
         </div>
       </div>
@@ -315,7 +312,16 @@ const Inbox = () => {
                   <label htmlFor="checkboxInputOverride"></label>
                 </div>
               </div>
-              <div className="star"> {msg.isStarred ? <StarIcon /> : <StarOutlineIcon />} </div>
+              <div className="star" onClick={async ()=> {
+                setStarLoader(true);
+                const functionParams = [userName, [msg.id], !msg.isStarred];
+                await transactionAction(contract, "updateEmailsToStar", functionParams, account);
+                setRecordsEmailsValue();
+                setStarLoader(false);
+              }} >
+                {starLoader && <div className="star-loader"></div>}
+                {!starLoader && (msg.isStarred ? <StarIcon /> : <StarOutlineIcon />)}                 
+                 </div>
               <div className="sender"> {msg.sender} </div>
               <div className="email-subject"> {msg.subject}</div>
               <div className="date-section"> {msg.created_at} </div>
