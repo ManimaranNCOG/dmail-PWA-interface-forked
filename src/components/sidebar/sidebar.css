@@ -323,7 +323,7 @@ button.open-btn-menu-home.absolute {
     color: white;
 }
 
-.ant-modal.css-dev-only-do-not-override-djtmh8.modal-alert-header.add-quick-user-send-email .ant-modal-content {
+.ant-modal.modal-alert-header.add-quick-user-send-email .ant-modal-content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -364,7 +364,7 @@ button.open-btn-menu-home.absolute {
     margin-top: 30px;
 }
 
-.ant-modal.css-dev-only-do-not-override-djtmh8.modal-alert-header.add-quick-user-send-email {
+.ant-modal.modal-alert-header.add-quick-user-send-email {
     top: 200px;
 }
 
