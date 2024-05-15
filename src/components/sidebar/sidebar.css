@@ -10,7 +10,7 @@
 
 .sidebar__logo {
     place-items: center;
-    height: 120px;
+    height: 60px;
     font-size: 1.5rem;
     font-weight: 700;
     font-family: 'Mochiy Pop P one', sans-serif;
@@ -26,7 +26,7 @@
     position: relative;
     max-height: 25rem;
     overflow-y: auto;
-    height: 30rem;
+    height: 12rem;
     padding-top: 20px;
     user-select: none;
 }
@@ -260,3 +260,151 @@ button.open-btn-menu-home.absolute {
     background: transparent;
     display: flex;
 }
+
+/* folder CSS */
+.folder-header {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 15px;
+    color: white;
+    padding-bottom: 15px;
+}
+.folder-div {
+    height: 13rem;
+}
+
+.folder-header h4 {
+    cursor: pointer;
+    height: 12px;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 15px;
+}
+
+.folder-header button {
+    background: transparent;
+    border: none;
+    color: white;
+}
+/* folder CSS */
+
+/* AddQuickAccessUser */
+.div-class-foot-quick {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 20px;
+    gap: 16px;
+    width: 80%;
+    height: 100%;
+    background: #FFFFFF;
+    margin: 0 32px 10px;
+    border-radius: 14px;
+    justify-content: center;
+}
+
+.div-class-foot-quick-child {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    content: 1;
+}
+
+.circle-add-user {
+    padding: 0px;
+    width: 30px;
+    height: 30px;
+    background: #A5A5A5;
+    border-radius: 1000px;
+    flex-grow: 0;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    color: white;
+}
+
+.ant-modal.css-dev-only-do-not-override-djtmh8.modal-alert-header.add-quick-user-send-email .ant-modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 10px;
+    width: 850px;
+    height: auto;
+    left: calc(50% - 850px / 2);
+    top: calc(50% - 540px / 2);
+    background: #DDDDDD;
+    box-shadow: 0px 29px 81.1px rgba(0, 0, 0, 0.29);
+    border-radius: 20px;
+}
+
+.email-username {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    gap: 10px;
+    width: 810px;
+    height: 53.46px;
+    background: #FFFFFF;
+    border-radius: 14px;
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+    margin-top: 20px;
+    border: none;
+    outline: none;
+}
+
+.send-alert-body-content.connect-wallet-account-div.footer-quick-send {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.ant-modal.css-dev-only-do-not-override-djtmh8.modal-alert-header.add-quick-user-send-email {
+    top: 200px;
+}
+
+button.save-quick-send-btn {
+    -webkit-font-smoothing: subpixel-antialiased;
+    -webkit-font-smoothing: subpixel-antialiased;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    width: 168px;
+    height: 53px;
+    background: #DDDDDD;
+    border-radius: 14px;
+    border: none;
+}
+div.quick-user.name {
+    width: 100%;
+    height: 15px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 15px;
+    color: #000000;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+div.quick-user.email {
+    width: 100%;
+    height: 10px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 9px;
+    line-height: 10px;
+    color: #000000;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    padding-top: 1px;
+}
+/* AddQuickAccessUser */

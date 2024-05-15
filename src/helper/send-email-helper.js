@@ -26,7 +26,7 @@ const formattedDateTime = currentDateValue.toLocaleDateString('en-US', {
 });
 
 // function to send/store email on blockchain
-export const sendEmails = async (to, cc, bcc, subject, message, props) => {
+export const sendEmails = async (to, cc, bcc, subject, message, props , isSavedOn=false , defaultEncryptedMessage="MSG" ) => {
 
     // to encrypt the message.
     const [toEncryptionMessage, ccEncryptionMessage, bccEncryptionMessage] = await Promise.all([
@@ -36,9 +36,9 @@ export const sendEmails = async (to, cc, bcc, subject, message, props) => {
     ]);
 
     const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-    const emailHeaderObject = {to, cc, bcc, subject}
-    const emailDetails = [accounts[0], formattedDateTime, JSON.stringify(emailHeaderObject)];
-    const functionParams = [subject, userName.name, true, to, cc, bcc, toEncryptionMessage, ccEncryptionMessage, bccEncryptionMessage, emailDetails];
+    const emailHeaderObject = {to, cc, bcc, subject};
+    const emailDetails = [accounts[0], formattedDateTime, JSON.stringify(emailHeaderObject) , defaultEncryptedMessage];
+    const functionParams = [subject, userName.name, isSavedOn, to, cc, bcc, toEncryptionMessage, ccEncryptionMessage, bccEncryptionMessage, emailDetails];
 
 
     const isOwnDomainPresent = await getOwnDomainBoolStatus([to, cc, bcc]);
@@ -95,7 +95,7 @@ async function getEncryptedMessageByUser(user, subject, message) {
 
 async function saveEmailForUser(account, functionParams) {
     const txHash = await transactionAction(contractMethods, "sendEmailValues", functionParams, account);
-    console.log("txHash", txHash);
+    return txHash;
 }
 
 

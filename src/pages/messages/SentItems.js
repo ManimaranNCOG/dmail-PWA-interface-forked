@@ -184,7 +184,7 @@ const SentItems = () => {
 
       <Modal className="modal-send-email-header" open={isModalOpen} onOk={handleOk} onCancel={handleOk} footer={null} >
         <div className='send-email-body-content'>
-          <Decrypt data={encrypt} emailObject={openMessage} />
+          <Decrypt data={encrypt} emailObject={openMessage} sentItem = {true} />
         </div>
       </Modal>
     </>

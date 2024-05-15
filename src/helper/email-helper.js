@@ -3,6 +3,7 @@ import Web3 from 'web3';
 import contractData from '../contracts/contract.json';
 import config from '../config/config.json';
 import { transactionAction } from './chain-helper';
+import { validateTheWebReturedValues } from './object-validation-helper';
 
 const contractAddress = config.json.CONTRACT;
 const web3 = new Web3(window.ethereum);
@@ -138,4 +139,33 @@ export const formatDate = (dateString) => {
     } else {
       return `${dayOfWeek}, ${day} ${month}, ${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes} (${daysAgo === 1 ? '1 day ago' : daysAgo + ' days ago'})`;
     }
+}
+
+
+export const copyEmail = async (type , destinationFolderData , userName) => {
+
+  const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+  switch (type) {
+    case "Inbox":
+      const emailList = await contractMethods.methods.getEmailList(userName).call({ from: accounts[0] });
+
+      if(emailList.length){       
+
+        const returnEmailList = [];
+        for (const email of emailList){
+            const emailObject = validateTheWebReturedValues(email);
+            emailObject.id = emailObject.id.toString();
+            returnEmailList.push(JSON.stringify(emailObject));
+        }
+
+        const functionParams = [userName , parseInt(destinationFolderData.id) , destinationFolderData.name , destinationFolderData.date , destinationFolderData.filterType , destinationFolderData.filterValue , returnEmailList  ];
+        const txHash = await transactionAction(contractMethods , "updateFolder", functionParams , accounts[0]); 
+      }
+
+      break;
+  
+    default:
+      break;
+
   }
+}

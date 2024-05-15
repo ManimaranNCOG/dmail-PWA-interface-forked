@@ -25,3 +25,9 @@ export const transactionAction = async (contract, functionName, functionParams, 
         return null;
     }
 }
+
+
+export const getEstimateGasFee = async(contract, functionName, functionParams, senderAccount)=> {
+    const gasLimit =  await contract.methods[functionName](...functionParams).estimateGas({ from: senderAccount });
+    return gasLimit;
+}

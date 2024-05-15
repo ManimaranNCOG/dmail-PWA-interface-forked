@@ -7,9 +7,9 @@ import WIP from '../pages/common/WIP';
 export const privateRoute = [
     { path : '/inbox' , element : <Inbox/> },
     { path : '/settings' , element : <ProfileComponent/> },
-    { path : '/sent-item' , element : <SentItems/> },
+    { path : '/sent-item' , element : <SentItems props={"Sent Items"} /> },
     { path : '/emails' , element : <Inbox/> },
     { path : '/profile' , element : <ProfileComponent/> },
-    { path : '/grid' , element : <WIP/> }
-
+    { path : '/grid' , element : <WIP/> },
+    { path : '/trash' , element : <SentItems props={"Deleted Items"} /> }
   ]

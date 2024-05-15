@@ -97,10 +97,7 @@ const SendEmail = (props) => {
     if (web3Value) {
       fetchdata();
     }
-
-
-    clear();
-
+    clear(true);
   }, [web3Value]);
 
 
@@ -235,12 +232,15 @@ const SendEmail = (props) => {
   }
 
 
-  const clear =()=> {
+  const clear =(boolValue = false)=> {
 
     setManageState(false);
     setEncryptionLoader(false);
-    props.reRenderIt();
-    props.handleCancel();
+
+    if(!boolValue){
+      props.reRenderIt();
+      props.handleCancel();
+    }
     setMessageString("Send");
     setEncryptionMsg("");
     localStorage.setItem("sendingEmail", "");
@@ -338,7 +338,16 @@ const SendEmail = (props) => {
           const bcc = document.getElementById("receiver-bcc") && document.getElementById("receiver-bcc").value || "";
 
           setMessageString("Sending...");
-          await sendEmails(recipient.replace(/\s/g, '').split(",") , cc.replace(/\s/g, '').split(",") , bcc.replace(/\s/g, '').split(",") , subject, localStorage.getItem("sendingEmail") , props);
+          const isSavedOn = accountSettings.find(item => item.id === 1)?.value;
+          let defaultEncryptedMessage = "MSG";
+
+          if(isSavedOn){
+            const emailObject = { recipient: recipient, subject: subject, message: localStorage.getItem("sendingEmail") };
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+            defaultEncryptedMessage = await saveSenderEncryptedEmail(emailObject, accounts);
+          }
+
+          await sendEmails(recipient.replace(/\s/g, '').split(",") , cc.replace(/\s/g, '').split(",") , bcc.replace(/\s/g, '').split(",") , subject, localStorage.getItem("sendingEmail") , props , isSavedOn , defaultEncryptedMessage);
 
 
           setEncryptionLoader(true);

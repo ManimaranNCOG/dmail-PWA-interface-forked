@@ -32,7 +32,7 @@
 
 .header-inbox-common {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 button.search-filter-btn {
@@ -260,3 +260,62 @@ h2.flex.flex-wrap.address-element.address-element-header-content {
     justify-content: flex-start;
     gap: 10px;
 }
+
+.cursor-pointer {
+    cursor : pointer
+}
+
+
+.contextMenu {
+    font-size: 1rem;
+    position: absolute;
+    min-width: 200px;
+    height: auto;
+    padding: 0;
+    border-radius: 5px;
+    top: 10;
+    left: 10;
+    color: #000;
+}
+
+.contextMenu--option.cursor-pointer {
+    margin: 5px;
+}
+
+.contextMenu--option.cursor-pointer {
+    margin: 5px;
+}
+.contextMenu--option.cursor-pointer:hover {
+    background-color: #f0f0f0; /* Change this to your desired hover background color */
+}
+
+.folder-name-index {
+    color: white;
+    margin-left: 10px;
+}
+
+.folder-name-index:hover {
+    background-color: #27399a; /* Change this to your desired hover background color */
+}
+
+.star-loader {
+    width: 25px;
+    aspect-ratio: 1;
+    position:relative;
+  }
+  .star-loader:before,
+  .star-loader:after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #ffb940;    
+    box-shadow: 0 0 0 50px;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  }
+  .star-loader:after {
+    animation: l5 1s infinite;
+    transform: perspective(300px) translateZ(0px)
+  }
+  @keyframes l5 {
+    to {transform:perspective(300px) translateZ(150px);opacity:0}
+  }
