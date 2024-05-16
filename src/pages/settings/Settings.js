@@ -19,8 +19,9 @@ const ComposeIcon = styled(Tick)`
 
 const accountSettings = [
     { label: "Save all sent emails", value: false  , id : 1},
-    { label: "Dark Mode", value: false , id : 2 },
-    { label: "Notifications", value: false , id : 3 }
+    { label: "Include Reply Message", value: false  , id : 2},
+    { label: "Dark Mode", value: false , id : 3 },
+    { label: "Notifications", value: false , id : 4 }
 ];
 
 const Settings = () => {
@@ -106,11 +107,11 @@ const Settings = () => {
     const handleChange = async (index) => {
         const updatedSettings = [...settings];
 
-        if(!updatedSettings[index].value && index === 1){
-            darkMode.enable();
-        }else if(index === 1){
-            darkMode.disable();
-        }
+        // if(!updatedSettings[index].value && index === 1){
+        //     darkMode.enable();
+        // }else if(index === 1){
+        //     darkMode.disable();
+        // }
 
         updatedSettings[index].value = !updatedSettings[index].value;
         setSettings(updatedSettings);

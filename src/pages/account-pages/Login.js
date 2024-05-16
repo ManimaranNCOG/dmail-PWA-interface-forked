@@ -9,11 +9,11 @@ import constant  from '../../constant/constant.js';
 import config  from '../../config/config.json';
 import { setCacheStorage , getCacheStorage } from "../../helper/cache-helper";
 import Cookies from "universal-cookie";
+import { userAuthLogin } from "../../helper/auth-helper.js";
 
 const contractAddress = config.json.CONTRACT;
 const web3 = new Web3(window.ethereum);
 const contractMethods = new web3.eth.Contract(contract.storageContract, contractAddress);
-const cookies = new Cookies();
 
 const Login = () => {
     const [isButtonLoading, setIsButtonLoading] = useState(false);
@@ -62,7 +62,6 @@ const Login = () => {
                 console.log("error", error);
                 return true;
             }
-            console.log("userName", userName);
             await userLogin(userName);
         }
     }
@@ -71,25 +70,14 @@ const Login = () => {
     // function to check the user and authenticate to our dmail
     async function userLogin(username) {
         setIsButtonLoading(true);
-        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-        const isUserPresent = await contractMethods.methods.loginUser(userNameWithDomain, accounts[0]).call();
-        if(isUserPresent){
-            const data = await login(username);   
-            if(data.isAuth){
-                const userObject = { name : username ,  wallet : accounts[0], token : data.token  };
-                cookies.set("accessToken", data.token, { path: "/" });
-                cookies.set("userObject", userObject, { path: "/" });
-                setCacheStorage("loggedUser" , userObject);
-                window.open(`/emails`, "_self");
-                return true;
-            }
+        const result = await userAuthLogin(username , contractMethods);
+        if(!result){
+            await setToastMsg("User Not Found");
+            await setErrorType("user");
+            setIsButtonLoading(false);
         }
-        await setToastMsg("User Not Found");
-        await setErrorType("user");
-        setIsButtonLoading(false);
         return true;
     }
-    const userName = document.getElementById("email") && document.getElementById("email").value;
 
     return (
         <div className="wrapper">
