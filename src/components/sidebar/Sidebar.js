@@ -131,6 +131,10 @@ const Sidebar = (props) => {
         <div className="compose-email-btn">
           <button className="sidebar-compose-section"> < ComposeIcon onClick={(e) => {
             e.stopPropagation();
+            const eventData = { email : "" }; 
+            const customEvent = new CustomEvent("quick_access", { detail: eventData });
+            window.dispatchEvent(customEvent);
+
             if (spanRef.current) { spanRef.current.click(); }
 
           }} /> <span ref={spanRef} className="compose sidebar-compose-section"> Compose </span></button>
@@ -206,9 +210,19 @@ const Sidebar = (props) => {
             {quickSend && 
               <div className="div-class-foot-quick cursor-pointer"> 
                  {quickUsers.length > 0 && quickUsers.map((itemValue, keyIndex) => (
-                  <div key={keyIndex} className="div-class-foot-quick-child" onClick={()=> {
-                      localStorage.setItem("sendUser", itemValue.userEmail);
-                      if (spanRef.current) { spanRef.current.click(); }
+                  <div key={keyIndex} className="div-class-foot-quick-child" onClick={async()=> {
+
+                    const eventData = { email : itemValue.userEmail }; 
+                    const customEvent = new CustomEvent("quick_access", { detail: eventData });
+                    window.dispatchEvent(customEvent);
+
+                    if (spanRef.current) {
+                      // Add extra class name
+                      spanRef.current.classList.add('extra-class-quick_access');                    
+                      // Trigger click event
+                      spanRef.current.click();                    
+                      spanRef.current.classList.remove('extra-class-quick_access');
+                    }
                   }} >
                     <div className="circle-add-user">{itemValue.userName[0].toUpperCase()} </div> 
                     <div>
@@ -236,7 +250,7 @@ const Sidebar = (props) => {
 
             <div className="folder-render">
                 {folderJson && folderJson.length > 0 &&  folderJson.map((item, index) => (
-                    <div className="folder-name-index"> {item.name} </div>
+                    <div key={index} className="folder-name-index"> {item.name} </div>
                 ))}
   
                 </div>

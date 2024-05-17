@@ -14,6 +14,7 @@ import { editorConstant } from '../../constant/constant.js';
 import { SendEmailLoader } from '../modal-popup/CommonAlert.js';
 import { transactionAction } from '../../helper/chain-helper.js';
 import { sendEmails } from '../../helper/send-email-helper.js';
+import { web3AccountCheck } from '../../helper/web3-helper.js';
 
 
 const cookies = new Cookies();
@@ -38,50 +39,31 @@ const SendEmail = (props) => {
   const [showBCC, setShowBCC] = useState(false);
   const [selectedOption, setSelectedOption] = useState(''); // State to manage selected option
   const [isOpen, setIsOpen] = useState(false); // State to manage dropdown visibility
-  const [toEmail, setTomail] = useState("");
+  const [toEmail, setTomail] = useState(props.toEmail || "");
 
 
   const userName = user && user.name;
   const web3 = new Web3(window.ethereum);
   const contractMethods = new web3.eth.Contract(contractData.storageContract, contractAddress);
 
-  useEffect(() => {
-    async function fetchdataProps() {
-      const userValue = localStorage.getItem("sendUser");      
-      if(userValue) setTomail(userValue);
-    }
-    fetchdataProps();
-  }, [props]);
 
   useEffect(() => {
-    // Check if MetaMask is installed
+    // Check if MetaMask is installed    
     if (window.ethereum) {
-      const web3Instance = new Web3(window.ethereum);
-      setWeb3(web3Instance);
-
-      // Check if user is already connected
-      window.ethereum
-        .request({ method: 'eth_accounts' })
-        .then(accounts => {
-          if (accounts.length > 0) {
-            setAccount(accounts[0]);
-          }
-        })
-        .catch(err => console.error(err));
-
-      // Listen for account changes
-      window.ethereum.on('accountsChanged', accounts => {
-        setAccount(accounts[0] || '');
-      });
+      web3AccountCheck(setWeb3 , setAccount);
     } else {
       console.log('MetaMask is not installed');
     }
+    setTomail(props.toEmail);
 
     return () => {
       localStorage.setItem("sendingEmail", "");
-      localStorage.setItem("sendUser", "");
     };
   }, []);
+
+  useEffect(() => {
+    setTomail(props.toEmail);
+  }, [props.toEmail]);
 
 
   useEffect(() => {
@@ -220,7 +202,6 @@ const SendEmail = (props) => {
       setMessageString("Send");
       setEncryptionMsg("");
       localStorage.setItem("sendingEmail", "");
-      localStorage.setItem("sendUser", "");
       return false;
     }
 
@@ -253,7 +234,6 @@ const SendEmail = (props) => {
     setMessageString("Send");
     setEncryptionMsg("");
     localStorage.setItem("sendingEmail", "");
-    localStorage.setItem("sendUser", "");
     setShowBCC(false);
     setShowCC(false);
     setTomail("")
@@ -281,7 +261,6 @@ const SendEmail = (props) => {
 
     const handleOptionClick = (value) => {
       setSelectedOption(value);
-      setIsOpen(false);
     };
   
     return (
@@ -304,7 +283,8 @@ const SendEmail = (props) => {
           <div className='box-elememt'> To </div>
           <input id="receiver" placeholder='' onChange={(e)=> {
             setTomail(e.target.value);
-          }} value={toEmail} />
+            setIsOpen(true)
+          }} value={isOpen ? toEmail : (props.toEmail || "")} />
           <div className='cc' onClick={()=> setShowCC(!showCC)}> {showCC ? "" : "Cc"} </div>
           <div className='bcc' onClick={()=> setShowBCC(!showBCC)} > {showBCC ? "" : "Bcc"} </div>
         </div>
