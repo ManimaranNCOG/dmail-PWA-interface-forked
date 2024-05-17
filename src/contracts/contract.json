@@ -299,25 +299,6 @@
             "inputs": [
                 {
                     "internalType": "string",
-                    "name": "",
-                    "type": "string"
-                }
-            ],
-            "name": "folderCount",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
                     "name": "username",
                     "type": "string"
                 }
@@ -439,7 +420,7 @@
                             "type": "bool"
                         }
                     ],
-                    "internalType": "struct UserRegistryName.Email[]",
+                    "internalType": "struct EmailHostContract.Email[]",
                     "name": "",
                     "type": "tuple[]"
                 }
@@ -515,7 +496,7 @@
                             "type": "bool"
                         }
                     ],
-                    "internalType": "struct UserRegistryName.Email[]",
+                    "internalType": "struct EmailHostContract.Email[]",
                     "name": "",
                     "type": "tuple[]"
                 }
@@ -585,7 +566,7 @@
                             "type": "string"
                         }
                     ],
-                    "internalType": "struct UserRegistryName.SendEmail[]",
+                    "internalType": "struct EmailHostContract.SendEmail[]",
                     "name": "",
                     "type": "tuple[]"
                 }
@@ -742,7 +723,7 @@
                             "type": "string[]"
                         }
                     ],
-                    "internalType": "struct UserRegistryName.Folder[]",
+                    "internalType": "struct Folder[]",
                     "name": "",
                     "type": "tuple[]"
                 }
@@ -778,7 +759,7 @@
                             "type": "string"
                         }
                     ],
-                    "internalType": "struct UserRegistryName.QuickSend[]",
+                    "internalType": "struct EmailHostContract.QuickSend[]",
                     "name": "",
                     "type": "tuple[]"
                 }
@@ -976,6 +957,19 @@
         {
             "inputs": [
                 {
+                    "internalType": "address",
+                    "name": "contractAddressValue",
+                    "type": "address"
+                }
+            ],
+            "name": "setHelperContractAddress",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
                     "internalType": "string",
                     "name": "recipient",
                     "type": "string"
@@ -1068,50 +1062,6 @@
             "name": "upgradeToAndCall",
             "outputs": [],
             "stateMutability": "payable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "",
-                    "type": "string"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "name": "userFolders",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "id",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "string",
-                    "name": "name",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "date",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "filterType",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "filterValue",
-                    "type": "string"
-                }
-            ],
-            "stateMutability": "view",
             "type": "function"
         }
     ], 
