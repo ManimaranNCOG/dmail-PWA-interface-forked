@@ -50,3 +50,11 @@ h2.flex.flex-wrap.address-element.address-element-header-content span {
 .space-y-4 {
     padding-top: 15px;
 }
+
+h1.text-lg.font-semibold.sender.reply {
+    padding: 0;
+    float: right;
+    margin-right: 35px;
+    font-size: 10px;
+    cursor: pointer;
+}

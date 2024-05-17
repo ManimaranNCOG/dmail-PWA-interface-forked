@@ -232,3 +232,108 @@ span.cursor-pointer.span-close {
   display: flex;
   justify-content: right;
 }
+
+
+.ant-modal.modal-send-email-header.parent-div-content-reply-mail {
+  width: auto;
+  height: 565px;
+  background: #DDDDDD;
+  box-shadow: 0px 29px 81.1px rgba(0, 0, 0, 0.29);
+  border-radius: 20px;
+}
+.ant-modal.modal-send-email-header.parent-div-content-reply-mail .ant-modal-content {
+  background: transparent;
+  box-shadow: none;
+}
+
+.email-username.reply-user {
+  width: 870px;
+  height: 40px;
+  margin-top: 17px;
+  display: flex;
+  justify-content: normal;
+}
+.send-alert-body-content.reply-email-user div {
+  text-align: center;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 0.1fr 1fr;
+}
+
+
+input.reply-user-input {
+  height: 23px;
+  border: none;
+  outline: none;
+  width: 45rem;
+}
+
+.quil-text-editor {
+  margin: 25px 0;
+  background: white;
+  border-radius: 15px;
+  position: relative;
+}
+
+.email-username.reply-user span {
+  display: flex;
+}
+.quil-text-editor .quill .ql-container.ql-snow .ql-editor {
+  height: 16rem !important;
+}
+
+.send-reply-email {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 25px;
+  background: #DDDDDD;
+  border-radius: 14px;
+  cursor: pointer;
+  width: 8rem;
+}
+
+/* ring loader */
+
+/* HTML: <div class="loader"></div> */
+.loader-ring-reply {
+  width: 20px;
+  aspect-ratio: 1;
+  display: grid;
+  border-radius: 50%;
+  background:
+    linear-gradient(0deg ,rgb(0 0 0/50%) 30%,#0000 0 70%,rgb(0 0 0/100%) 0) 50%/8% 100%,
+    linear-gradient(90deg,rgb(0 0 0/25%) 30%,#0000 0 70%,rgb(0 0 0/75% ) 0) 50%/100% 8%;
+  background-repeat: no-repeat;
+  animation: l23 1s infinite steps(12);
+}
+.loader-ring-reply::before,
+.loader-ring-reply::after {
+   content: "";
+   grid-area: 1/1;
+   border-radius: 50%;
+   background: inherit;
+   opacity: 0.915;
+   transform: rotate(30deg);
+}
+.loader-ring-reply::after {
+   opacity: 0.83;
+   transform: rotate(60deg);
+}
+@keyframes l23 {
+  100% {transform: rotate(1turn)}
+}
+
+.label-title-check-box {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-right: 40px;
+}
+
+.send-alert-body-content.connect-wallet-account-div.reply-email-user .email-username.reply-user {
+  display: flex;
+}

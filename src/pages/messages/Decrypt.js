@@ -1,14 +1,16 @@
+import React, { useState, useEffect } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import './decrypt.css'
 import { formatDate } from '../../helper/email-helper';
+import { ReplyModal } from '../modal-popup/CommonAlert';
   
 
 // decrypted message will be displayed here
 const Decrypt = (props) => {
+  const [replyModal, setReplyModal] = useState(false);
 
     const headerDetails = props.emailObject && (props.emailObject.header ||  props.emailObject.receiver);
     let headerJson = null;
-
     if(headerDetails) headerJson = JSON.parse(headerDetails);
 
     return (
@@ -18,6 +20,10 @@ const Decrypt = (props) => {
           <div class="flex-grow mr-2">
             <header class="flex md:flex-col xl:flex-row justify-between mr-2 mb-2 leading-snug">
               <div>
+                <h1 class="text-lg font-semibold sender reply" onClick={()=> {
+                  setReplyModal(true);
+                  props.onCancel();
+                }}>Reply Here</h1>
                 <h1 class="text-lg font-semibold sender">{props.emailObject.subject}</h1>
                 <h2 class="flex flex-wrap address-element">
                   <span class="text-gray-800">{`${props.emailObject.sender.split("@")[0]}`} <span className='address-spn'> { `<${props.emailObject.sender}>` }</span></span>
@@ -54,6 +60,7 @@ const Decrypt = (props) => {
         <div class="space-y-4">
          <div dangerouslySetInnerHTML={{ __html: props.data }} />
         </div>
+        <ReplyModal  isModalOpen ={replyModal} close={() => setReplyModal(false)} msg={props} decryptedMessage={props.data}/>
        </div>
     ) 
 }

@@ -1,7 +1,10 @@
-import React, { useState} from "react";
+import React, { useState , useEffect} from "react";
 import { Modal } from 'antd';
 import "./modal.css"
-import { web3Constant } from '../../constant/constant';
+import PropTypes from 'prop-types';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import { editorConstant, web3Constant } from '../../constant/constant';
 import styled from "styled-components";
 import { Verified } from "@styled-icons/material/Verified";
 import key from "../../assets/gif-loader/key.png";
@@ -10,6 +13,11 @@ import { getChainDetailsFromHost } from "../../helper/wallet-helper";
 import config  from '../../config/config.json';
 import { getCacheStorage } from "../../helper/cache-helper.js";
 import { Delete } from "@styled-icons/fluentui-system-regular/Delete";
+import { sendEmails } from "../../helper/send-email-helper.js";
+import { optionalValidation } from "../../helper/object-validation-helper.js";
+import Cookies from "universal-cookie";
+import moment from 'moment';
+const cookies = new Cookies();
 
 const web3 = new Web3(window.ethereum);
 const iconStyles = `color: #0f7929; width: 20px; height: 20px;`;
@@ -105,14 +113,18 @@ const ConnectWallet =(params) => {
 // Loader while sending email
 const SendEmailLoader =(params) => {
 
+
+  const successMessage = ["Message Sent" , "Account Switched"];
+
     return (
         <div>
             <Modal className="modal-alert-header connect-wallet-account email-loader-send" open={params.isOpen}  closable={false} footer={null} >
                 <div className='send-alert-body-content connect-wallet-account-div send-email'>
 
-                    {params.msg != "Message Sent" && 
-                                    <div className="img-key-lock key">   <img className="profile-drop-imgchain key" src={key} />  </div>                   
+                    {(!successMessage.includes(params.msg)) && 
+                        <div class="loader-value"></div>
                     }
+
                     <div className='label-title-metamask email-send-div key'> 
                     <div> {params.msg} </div>              
 
@@ -164,7 +176,7 @@ const AddQuickAccessUser = (params) =>{
 
           <>Add User</>
           <div className='send-alert-body-content connect-wallet-account-div'>
-                <input className="email-username" placeholder="User name" value={userName} onChange={(e)=> setUserName(e.target.value) }  />
+                <input className="email-username" placeholder="User Name" value={userName} onChange={(e)=> setUserName(e.target.value) }  />
                 <input className="email-username" placeholder="User Email" value={userEmail}  onChange={(e)=> setUserEmail(e.target.value) }   />            
           </div>
 
@@ -183,11 +195,139 @@ const AddQuickAccessUser = (params) =>{
   )
 }
 
+const ReplyModal = (params) =>{ 
 
+  const [sender, setSender] = useState('');
+  const [receiver, setReceiver] = useState('');
+  const [subject, setSubject] = useState('');
+  const [senderLoader, setSenderLoader] = useState('');  
+  const [check, setCheck] = useState(true);  
+  const [user] = useState(cookies.get("userObject"));
+
+  const headerJson = JSON.parse(optionalValidation(params , "msg.emailObject.header"));
+  const created_at = optionalValidation(params , "msg.emailObject.created_at");
+  const decryptedMessage = optionalValidation(params , "decryptedMessage");
+  const formattedDate = moment(created_at, 'M/D/YYYY h:mm A').format('DD-MM-YYYY hh:mm a');
+  
+  useEffect(() => {
+    setSender(user && user.name);
+    setReceiver(optionalValidation(params , "msg.emailObject.sender"));
+    if (headerJson.subject.startsWith("Re: ")) {
+      // Remove "Re: " from the beginning of the string
+      headerJson.subject = headerJson.subject.substring(4);
+  }
+    setSubject(`Re: ${headerJson.subject}`);
+  }, []);
+  
+  // compose editor
+  const Editor = ({ placeholder  , check }) => {
+
+    const [editorHtml, setEditorHtml] = useState(localStorage.getItem("replyEmail") || "");
+    const [isTyped, setIsTyped] = useState(false);
+    const [theme] = useState('snow');
+
+    const html = `<div>
+      <p><br></p> 
+        <p><br>---------------------------------------------------------------------</p>
+          <p>On ${formattedDate}, ${receiver} wrote:</p> 
+        <blockquote>${decryptedMessage} </blockquote>
+      <p></p>
+    </div>`;
+
+
+    useEffect(() => {
+      if(!check){
+        localStorage.setItem("replyEmail", "");
+        setIsTyped(true);   
+        setEditorHtml('');
+      }
+    }, [check]);
+
+
+    useEffect(() => {
+      const editor = document.querySelector('.ql-editor');
+      if (editor) {
+        editor.focus();
+      }
+    }, [document.querySelector('.ql-editor')]);
+
+
+    return (
+      <div className="quil-text-editor">
+        <ReactQuill theme={theme} onChange={async (e)=> {
+          if(!senderLoader){
+            setTimeout(function() {
+              setIsTyped(true);      
+            }, 1000);
+  
+            localStorage.setItem("replyEmail", e);
+            setEditorHtml(e);
+          }
+
+        } } value={isTyped ? editorHtml : html} modules={Editor.modules} formats={Editor.formats} placeholder={placeholder} />
+        <div className="send-reply-email" onClick={ async ()=> {
+          const recipient = receiver;
+          const cc = ""
+          const bcc = ""
+          const props = { handleCancel : params.close }
+          await sendEmails(recipient.replace(/\s/g, '').split(",") , cc.replace(/\s/g, '').split(",") , bcc.replace(/\s/g, '').split(",") , subject, localStorage.getItem("replyEmail") , props , false , "OK");
+          setSenderLoader(true);
+            setTimeout(function() {
+              setSenderLoader(false);      
+            }, 5000);
+        }}> {  senderLoader ? <div class="loader-ring-reply"></div> : "Send Reply"} </div>
+      </div>
+    );
+  };
+
+  // textbox editor spec
+  Editor.propTypes = { placeholder: PropTypes.string };
+  Editor.modules = { toolbar: editorConstant.toolBar };
+  Editor.formats = editorConstant.format;
+
+
+return (
+  <div>
+
+      <Modal className="modal-send-email-header parent-div-content-reply-mail" open={params.isModalOpen} onOk={params.close} onCancel={params.close} footer={null}>
+          <div className="parent-div-content-reply-mail-child">
+      <div className='label-title-check-box'> Include Reply Message                   
+                          <input
+                            type="checkbox"
+                            id ="check-box-reply-email"
+                            checked={check}
+                            onChange={()=> {
+                              setCheck(!check);                              
+                            }}
+                        />  
+                        
+                        </div>
+                <div className='send-alert-body-content connect-wallet-account-div reply-email-user'>
+                    <div className="email-username reply-user"> 
+                           <span>Sender :</span>
+                           <input className="reply-user-input" value={sender} />
+                     </div>
+                    <div className="email-username reply-user">
+                            <span>Recipient :</span>
+                            <input className="reply-user-input"  value={receiver} />                    
+                    </div>    
+
+                      <div className="email-username reply-user">
+                            <span>Topic :</span>
+                            <input className="reply-user-input"  value={subject} />                    
+                    </div>          
+                </div>
+                    <Editor placeholder="Write something..." check ={check} />
+          </div> 
+      </Modal>
+  </div>
+)
+}
 
 export {
     ConnectWallet,
     SendEmailLoader,
     AddFolderModal ,
-    AddQuickAccessUser
+    AddQuickAccessUser,
+    ReplyModal
 }

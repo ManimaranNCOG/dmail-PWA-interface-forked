@@ -91,9 +91,6 @@ const SentItems = () => {
           params: [encryptedMsg, accounts[0]]
         })
 
-
-        console.log("decMsg",decMsg)
-
         const emailListObj = emailObject;
         emailListObj[index].decryptedEmail = JSON.parse(decMsg);
         const returnJson = JSON.parse(decMsg);

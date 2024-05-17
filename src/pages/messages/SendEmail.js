@@ -46,6 +46,14 @@ const SendEmail = (props) => {
   const contractMethods = new web3.eth.Contract(contractData.storageContract, contractAddress);
 
   useEffect(() => {
+    async function fetchdataProps() {
+      const userValue = localStorage.getItem("sendUser");      
+      if(userValue) setTomail(userValue);
+    }
+    fetchdataProps();
+  }, [props]);
+
+  useEffect(() => {
     // Check if MetaMask is installed
     if (window.ethereum) {
       const web3Instance = new Web3(window.ethereum);
@@ -71,9 +79,9 @@ const SendEmail = (props) => {
 
     return () => {
       localStorage.setItem("sendingEmail", "");
+      localStorage.setItem("sendUser", "");
     };
   }, []);
-
 
 
   useEffect(() => {
@@ -212,6 +220,7 @@ const SendEmail = (props) => {
       setMessageString("Send");
       setEncryptionMsg("");
       localStorage.setItem("sendingEmail", "");
+      localStorage.setItem("sendUser", "");
       return false;
     }
 
@@ -244,6 +253,7 @@ const SendEmail = (props) => {
     setMessageString("Send");
     setEncryptionMsg("");
     localStorage.setItem("sendingEmail", "");
+    localStorage.setItem("sendUser", "");
     setShowBCC(false);
     setShowCC(false);
     setTomail("")
