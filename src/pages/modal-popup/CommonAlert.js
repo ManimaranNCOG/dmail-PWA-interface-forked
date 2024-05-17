@@ -15,6 +15,9 @@ import { getCacheStorage } from "../../helper/cache-helper.js";
 import { Delete } from "@styled-icons/fluentui-system-regular/Delete";
 import { sendEmails } from "../../helper/send-email-helper.js";
 import { optionalValidation } from "../../helper/object-validation-helper.js";
+import Cookies from "universal-cookie";
+import moment from 'moment';
+const cookies = new Cookies();
 
 const web3 = new Web3(window.ethereum);
 const iconStyles = `color: #0f7929; width: 20px; height: 20px;`;
@@ -173,7 +176,7 @@ const AddQuickAccessUser = (params) =>{
 
           <>Add User</>
           <div className='send-alert-body-content connect-wallet-account-div'>
-                <input className="email-username" placeholder="User name" value={userName} onChange={(e)=> setUserName(e.target.value) }  />
+                <input className="email-username" placeholder="User Name" value={userName} onChange={(e)=> setUserName(e.target.value) }  />
                 <input className="email-username" placeholder="User Email" value={userEmail}  onChange={(e)=> setUserEmail(e.target.value) }   />            
           </div>
 
@@ -199,13 +202,15 @@ const ReplyModal = (params) =>{
   const [subject, setSubject] = useState('');
   const [senderLoader, setSenderLoader] = useState('');  
   const [check, setCheck] = useState(true);  
-
+  const [user] = useState(cookies.get("userObject"));
 
   const headerJson = JSON.parse(optionalValidation(params , "msg.emailObject.header"));
-  const decryptedJson = JSON.parse(optionalValidation(params , "msg.emailObject.decryptedMail")); 
+  const created_at = optionalValidation(params , "msg.emailObject.created_at");
+  const decryptedMessage = optionalValidation(params , "decryptedMessage");
+  const formattedDate = moment(created_at, 'M/D/YYYY h:mm A').format('DD-MM-YYYY hh:mm a');
   
   useEffect(() => {
-    setSender(headerJson.to.toString());
+    setSender(user && user.name);
     setReceiver(optionalValidation(params , "msg.emailObject.sender"));
     if (headerJson.subject.startsWith("Re: ")) {
       // Remove "Re: " from the beginning of the string
@@ -215,7 +220,7 @@ const ReplyModal = (params) =>{
   }, []);
   
   // compose editor
-  const Editor = ({ placeholder }) => {
+  const Editor = ({ placeholder  , check }) => {
 
     const [editorHtml, setEditorHtml] = useState(localStorage.getItem("replyEmail") || "");
     const [isTyped, setIsTyped] = useState(false);
@@ -224,10 +229,20 @@ const ReplyModal = (params) =>{
     const html = `<div>
       <p><br></p> 
         <p><br>---------------------------------------------------------------------</p>
-          <p>On 09-05-2024 07:17 pm, ${receiver} wrote:</p> 
-        <blockquote>${optionalValidation(decryptedJson , "message")} </blockquote>
+          <p>On ${formattedDate}, ${receiver} wrote:</p> 
+        <blockquote>${decryptedMessage} </blockquote>
       <p></p>
-    </div>`
+    </div>`;
+
+
+    useEffect(() => {
+      if(!check){
+        localStorage.setItem("replyEmail", "");
+        setIsTyped(true);   
+        setEditorHtml('');
+      }
+    }, [check]);
+
 
     useEffect(() => {
       const editor = document.querySelector('.ql-editor');
@@ -251,14 +266,11 @@ const ReplyModal = (params) =>{
 
         } } value={isTyped ? editorHtml : html} modules={Editor.modules} formats={Editor.formats} placeholder={placeholder} />
         <div className="send-reply-email" onClick={ async ()=> {
-
           const recipient = receiver;
           const cc = ""
           const bcc = ""
           const props = { handleCancel : params.close }
           await sendEmails(recipient.replace(/\s/g, '').split(",") , cc.replace(/\s/g, '').split(",") , bcc.replace(/\s/g, '').split(",") , subject, localStorage.getItem("replyEmail") , props , false , "OK");
-
-          const messageValue = editorHtml;
           setSenderLoader(true);
             setTimeout(function() {
               setSenderLoader(false);      
@@ -279,15 +291,18 @@ return (
 
       <Modal className="modal-send-email-header parent-div-content-reply-mail" open={params.isModalOpen} onOk={params.close} onCancel={params.close} footer={null}>
           <div className="parent-div-content-reply-mail-child">
-      <div className='label-title-check-box'> Include Reply Message                          
+      <div className='label-title-check-box'> Include Reply Message                   
                           <input
                             type="checkbox"
+                            id ="check-box-reply-email"
                             checked={check}
-                            onChange={()=> {setCheck(!check)}}
+                            onChange={()=> {
+                              setCheck(!check);                              
+                            }}
                         />  
                         
                         </div>
-                <div className='send-alert-body-content connect-wallet-account-div'>
+                <div className='send-alert-body-content connect-wallet-account-div reply-email-user'>
                     <div className="email-username reply-user"> 
                            <span>Sender :</span>
                            <input className="reply-user-input" value={sender} />
@@ -302,7 +317,7 @@ return (
                             <input className="reply-user-input"  value={subject} />                    
                     </div>          
                 </div>
-                    <Editor placeholder="Write something..." />
+                    <Editor placeholder="Write something..." check ={check} />
           </div> 
       </Modal>
   </div>

@@ -60,7 +60,7 @@ const Decrypt = (props) => {
         <div class="space-y-4">
          <div dangerouslySetInnerHTML={{ __html: props.data }} />
         </div>
-        <ReplyModal  isModalOpen ={replyModal} close={() => setReplyModal(false)} msg={props} />
+        <ReplyModal  isModalOpen ={replyModal} close={() => setReplyModal(false)} msg={props} decryptedMessage={props.data}/>
        </div>
     ) 
 }

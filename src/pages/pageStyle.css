@@ -319,3 +319,10 @@ h2.flex.flex-wrap.address-element.address-element-header-content {
   @keyframes l5 {
     to {transform:perspective(300px) translateZ(150px);opacity:0}
   }
+
+  .msg-row-inbox .email-subject {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100vh;
+}

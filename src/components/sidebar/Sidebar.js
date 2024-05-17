@@ -122,13 +122,10 @@ const Sidebar = (props) => {
 
   return (
     
-    <div className={props.className ? 'sidebar sidebar-expanded' : 'sidebar sidebar-unexpanded'} style={{ transition: 'width 0.5s ease' }} >
+    <div className={'sidebar sidebar-expanded'}    >
       <div style={{ display: props.className ? 'block' : 'none' }} >
         <div className="sidebar__logo">
-          <MenuIcon className="hamburgur-icon" onClick={() => {
-            const updateEvent = new CustomEvent('isMenuClicked', { detail: { data: true } });
-            window.dispatchEvent(updateEvent);
-          }} /> <span className="web-3-tag-sidebar"> D </span>  <span className="email-span-sidebar"> Mails </span>
+          <MenuIcon className="hamburgur-icon" /> <span className="web-3-tag-sidebar"> D </span>  <span className="email-span-sidebar"> Mails </span>
         </div>
 
         <div className="compose-email-btn">
@@ -209,7 +206,10 @@ const Sidebar = (props) => {
             {quickSend && 
               <div className="div-class-foot-quick cursor-pointer"> 
                  {quickUsers.length > 0 && quickUsers.map((itemValue, keyIndex) => (
-                  <div key={keyIndex} className="div-class-foot-quick-child" >
+                  <div key={keyIndex} className="div-class-foot-quick-child" onClick={()=> {
+                      localStorage.setItem("sendUser", itemValue.userEmail);
+                      if (spanRef.current) { spanRef.current.click(); }
+                  }} >
                     <div className="circle-add-user">{itemValue.userName[0].toUpperCase()} </div> 
                     <div>
                       <div className="quick-user name"> {itemValue.userName} </div>

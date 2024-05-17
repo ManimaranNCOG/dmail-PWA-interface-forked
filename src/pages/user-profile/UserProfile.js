@@ -42,7 +42,7 @@ const UserProfile = () => {
           await setUserObject(null);
           await setAvailableAccount([]);
           await fetchcontractdata(userData.domain);
-          setEncryptionLoader(false);
+          setEncryptionLoader(false);          
     }, 2000);
   };
   
@@ -106,10 +106,6 @@ const UserProfile = () => {
 
 
   async function formatAccount(users , userNameValue){
-
-
-    console.log("userNameValue", userNameValue)
-
 
     const formattedAccount = users.map((mappingValue)=> {
       mappingValue.isCheck = false;

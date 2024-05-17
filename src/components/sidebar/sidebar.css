@@ -209,24 +209,6 @@ button span.compose {
     z-index: 2;
 }
 
-.sidebar.sidebar-expanded {
-    animation: mymove 0.5s ;
-}
-
-@keyframes mymove {
-     to{left: 0px;}
-     from {left: -400px;}
-}
-
-.sidebar.sidebar-unexpanded {
-    animation: mymmove 1s ;
-}
-
-@keyframes mymmove {
-    from{left: 0px;}
-     to {left: -400px;}
-}
-
 
 .chil-div-sidbar {
     position: relative;

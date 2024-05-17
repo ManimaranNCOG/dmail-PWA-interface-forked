@@ -253,7 +253,7 @@ span.cursor-pointer.span-close {
   display: flex;
   justify-content: normal;
 }
-.send-alert-body-content div {
+.send-alert-body-content.reply-email-user div {
   text-align: center;
   padding: 10px;
   display: grid;
@@ -332,4 +332,8 @@ input.reply-user-input {
   justify-content: flex-end;
   gap: 10px;
   margin-right: 40px;
+}
+
+.send-alert-body-content.connect-wallet-account-div.reply-email-user .email-username.reply-user {
+  display: flex;
 }
