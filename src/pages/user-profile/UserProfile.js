@@ -48,28 +48,7 @@ const UserProfile = () => {
   
 
   useEffect(() => {
-    // Check if MetaMask is installed
-    if (window.ethereum) {
-      const web3Instance = new Web3(window.ethereum);
-      setWeb3(web3Instance);
-
-      // Check if user is already connected
-      window.ethereum
-        .request({ method: 'eth_accounts' })
-        .then(accounts => {
-          if (accounts.length > 0) {
-            setAccount(accounts[0]);
-          }
-        })
-        .catch(err => console.error(err));
-
-      // Listen for account changes
-      window.ethereum.on('accountsChanged', accounts => {
-        setAccount(accounts[0] || '');
-      });
-    } else {
-      console.log('MetaMask is not installed');
-    }
+    web3AccountCheck(setWeb3 , setAccount);
   }, []);
 
 

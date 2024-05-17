@@ -5,6 +5,8 @@ import SendEmail from "../../pages/messages/SendEmail.js";
 
 function CommonFooter() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [toEmail, setToEmail] = useState("");
+
     const handleOk = () => {  setIsModalOpen(false);   };    
     const handleCancel = () => {  
       localStorage.setItem("sendingEmail", "");
@@ -16,6 +18,10 @@ function CommonFooter() {
           // Get the class name of the clicked element
           const className = event.target.className;
           if(className && typeof className === "string" && className.includes("sidebar-compose-section")){
+
+            if(!className.includes("extra-class-quick_access")){
+              setToEmail("");
+            }
             localStorage.setItem("sendingEmail", "");
             setIsModalOpen(true)
           }
@@ -26,6 +32,22 @@ function CommonFooter() {
             document.removeEventListener('click', handleClick);
         };
       }, []); 
+
+      useEffect(() => {
+        const handleQuickAccess = (e) => {
+            if (e.detail) {
+                setToEmail(e.detail.email);
+            }
+        };
+    
+        window.addEventListener("quick_access", handleQuickAccess);
+    
+        // Cleanup the event listener on component unmount
+        return () => {
+            window.removeEventListener("quick_access", handleQuickAccess);
+        };
+    }, [toEmail]);
+
 
     // render the inbox component
     function reload(){
@@ -39,7 +61,7 @@ function CommonFooter() {
             <>            
                 <Modal className="modal-send-email-header" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} >
                         <div className='send-email-body-content'>
-                              <SendEmail placeholder="Write something..." handleCancel={handleCancel} reRenderIt={reload} />
+                              <SendEmail placeholder="Write something..." handleCancel={handleCancel} reRenderIt={reload} toEmail ={toEmail} />
                         </div>             
                 </Modal>
             </>
