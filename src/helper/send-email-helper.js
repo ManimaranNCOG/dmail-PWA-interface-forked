@@ -3,7 +3,7 @@ import contractData from '../contracts/contract.json';
 import config from '../config/config.json';
 import Cookies from "universal-cookie";
 import { getPublicKey } from './email-helper';
-import { getEncryptedValue } from '../service/api-actions';
+import { getEncryptedValue, sendWebTwoEmail } from '../service/api-actions';
 import { transactionAction } from './chain-helper';
 
 const contractAddress = config.json.CONTRACT;
@@ -47,6 +47,17 @@ export const sendEmails = async (to, cc, bcc, subject, message, props , isSavedO
     if (isOwnDomainPresent) {
         props.handleCancel();
         await saveEmailForUser(accounts[0], functionParams); // send emails
+    }
+
+
+    for(const web2 of to){
+        const status = await domainAvailableCheck(web2.split("@")[1]);
+        const web2Object = [subject, userName.name, to, cc, bcc, message , []];
+
+        if(!status){
+            await sendWebTwoEmail(web2Object);
+            break ;
+        }
     }
 
     return true;
@@ -141,4 +152,14 @@ async function getChainDomainJson(userArray) {
     }
 
     return hostDetails;
+}
+
+async function domainAvailableCheck(userDomain){
+
+    const chainJson = await getChainDetails(userDomain);
+    if (chainJson["0"] && chainJson["1"]) {
+        return true;
+    }
+
+    return false;
 }
